@@ -34,7 +34,7 @@ export class AuthService {
       );
   }
 
-  login(username: string, password: string) {
+  login(email: string, password: string) {
     let deviceId = localStorage.getItem('device_id');
     if (!deviceId) {
       deviceId = v4();
@@ -42,7 +42,7 @@ export class AuthService {
     }
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/owner-car-wash/signIn`, {
-        username,
+        email,
         password,
         deviceId,
       })

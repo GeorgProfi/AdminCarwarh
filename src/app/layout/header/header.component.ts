@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -8,10 +9,24 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
   activeItemIndex = 0;
 
+  menu = [
+    { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
+    { name: 'Филиалы', icon: 'tuiIconFlag', link: 'filials' },
+    {
+      name: 'Система лояльности',
+      icon: 'tuiIconCard',
+      link: 'loyalty-system',
+    },
+    { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
+    { name: 'Настройки', icon: 'tuiIconDrag', link: 'setting' },
+    { name: 'Уведомления', icon: 'tuiIconBell', link: 'notification' },
+  ];
+
   async logout() {
+    this.authService.logout();
     await this.router.navigateByUrl('/auth');
   }
 }

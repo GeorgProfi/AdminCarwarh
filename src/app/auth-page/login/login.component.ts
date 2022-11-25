@@ -31,7 +31,7 @@ export class LoginComponent {
   constructor(private route: Router, private authService: AuthService) {}
 
   authForm = new FormGroup({
-    nickname: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
 
@@ -43,7 +43,7 @@ export class LoginComponent {
   }
 
   async onSubmit(): Promise<void> {
-    const nickname = this.authForm.value.nickname;
+    const nickname = this.authForm.value.email;
     const password = this.authForm.value.password;
     if (!nickname || !password) {
       this.enabledError = true;

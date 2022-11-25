@@ -17,6 +17,12 @@ import { HomeModule } from './modules/home/home.module';
 import { AuthService } from './auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { ClientsModule } from './modules/clients/clients.module';
+import { FilialsModule } from './modules/filials/filials.module';
+import { LoyaltySystemModule } from './modules/loyalty-system/loyalty-system.module';
+import { ServicesModule } from './modules/services/services.module';
+import { SettingModule } from './modules/setting/setting.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,6 +41,12 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     AuthModule,
     LayoutModule,
     HomeModule,
+    ClientsModule,
+    FilialsModule,
+    LoyaltySystemModule,
+    ServicesModule,
+    SettingModule,
+    NotificationModule,
   ],
   providers: [
     { provide: TUI_SANITIZER, useClass: NgDompurifySanitizer },

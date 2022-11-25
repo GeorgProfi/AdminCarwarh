@@ -1,20 +1,14 @@
 <tui-tabs [(activeItemIndex)]="activeItemIndex">
-  <button tuiTab>
-    <tui-svg src="tuiIconCardsLarge" class="tui-space_right-2"></tui-svg>
-    ДОМ
-  </button>
-  <button tuiTab>
-    <tui-svg src="tuiIconCardsLarge" class="tui-space_right-2"></tui-svg>
-    Филлиалы
-  </button>
-  <button tuiTab>
-    <tui-svg src="tuiIconSettingsLarge" class="tui-space_right-2"></tui-svg>
-    Настройки
-  </button>
   <button
-    class="tui-col-offset_lg-7 tui-col-offset_md-7 tui-col-offset_xs-7"
-    tuiButton
-    (click)="logout()">
+    tuiTab
+    *ngFor="let item of menu"
+    [routerLink]="item.link"
+    routerLinkActive>
+    <tui-svg [src]="item.icon" class="tui-space_right-2"></tui-svg>
+    {{ item.name }}
+  </button>
+
+  <button tuiButton (click)="logout()">
     <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
     Выход
   </button>
