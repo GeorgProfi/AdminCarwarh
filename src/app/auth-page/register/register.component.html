@@ -1,1 +1,26 @@
-reg
+<button tuiButton routerLink="/auth" type="button" appearance="secondary">
+  Авторизация
+</button>
+<form class="b-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+  <label>Регистрация</label>
+
+  <tui-input formControlName="nameCarWash">
+    nameCarWash
+    <input tuiTextfield />
+  </tui-input>
+
+  <tui-input formControlName="email">
+    mail
+    <input tuiTextfield />
+  </tui-input>
+
+  <tui-input formControlName="phone">
+    phone
+    <input tuiTextfield />
+  </tui-input>
+
+  <tui-input-password formControlName="password"> password </tui-input-password>
+
+  <tui-error [error]="computedError"></tui-error>
+  <button tuiButton type="submit" appearance="primary">Войти</button>
+</form>

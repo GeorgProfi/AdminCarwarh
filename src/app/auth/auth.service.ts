@@ -2,13 +2,37 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { v4 } from 'uuid';
 import { map, Observable } from 'rxjs';
-import { AuthResponse } from './auth-response.interface';
+import { AuthResponse } from './interfaces/auth-response.interface';
 import { environment } from '../../environments/environment';
+import { IRegister } from './interfaces/register.interface';
 
 // Сервис авторизации, может выставлять значения в localStorage, router он НЕ ТРОГАЕТ!
 @Injectable()
 export class AuthService {
   constructor(private http: HttpClient) {}
+
+  register(data: IRegister) {
+    let deviceId = localStorage.getItem('device_id');
+    if (!deviceId) {
+      deviceId = v4();
+      localStorage.setItem('device_id', deviceId);
+    }
+    return this.http
+      .post<AuthResponse>(
+        `${environment.apiUrl}/carWash/application/registration`,
+        {
+          ...data,
+          deviceId,
+        }
+      )
+      .pipe(
+        map(data => {
+          localStorage.setItem('access', data.access);
+          localStorage.setItem('refresh', data.refresh);
+          return data;
+        })
+      );
+  }
 
   login(username: string, password: string) {
     let deviceId = localStorage.getItem('device_id');
@@ -17,15 +41,15 @@ export class AuthService {
       localStorage.setItem('device_id', deviceId);
     }
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/admin/signIn`, {
+      .post<AuthResponse>(`${environment.apiUrl}/auth/owner-car-wash/signIn`, {
         username,
         password,
         deviceId,
       })
       .pipe(
         map(data => {
-          localStorage.setItem('access', data.accessToken);
-          localStorage.setItem('refresh', data.refreshToken);
+          localStorage.setItem('access', data.access);
+          localStorage.setItem('refresh', data.refresh);
           return data;
         })
       );
@@ -43,12 +67,11 @@ export class AuthService {
   get isLoggedIn(): boolean {
     // проверка наличия токена доступа
     const token = localStorage.getItem('access');
-    if (!token) return false;
-
+    return !!token;
     // проверка времени доступа
-    const exp = JSON.parse(atob(token.split('.')[1])).exp;
-    const expiry = Math.floor(new Date().getTime() / 1000) >= exp;
-    return !expiry;
+    // const exp = JSON.parse(atob(token.split('.')[1])).exp;
+    // const expiry = Math.floor(new Date().getTime() / 1000) >= exp;
+    // return !expiry;
   }
 
   refresh(): Observable<any> {
@@ -66,8 +89,8 @@ export class AuthService {
       })
       .pipe(
         map(data => {
-          localStorage.setItem('access', data.accessToken);
-          localStorage.setItem('refresh', data.refreshToken);
+          localStorage.setItem('access', data.access);
+          localStorage.setItem('refresh', data.refresh);
           return data;
         })
       );
