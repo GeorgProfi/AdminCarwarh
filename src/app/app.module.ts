@@ -11,9 +11,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginModule } from './login-page/login.module';
+import { AuthModule } from './auth-page/auth.module';
 import { LayoutModule } from './layout/layout.module';
 import { HomeModule } from './modules/home/home.module';
+import { AuthService } from './auth/auth.service';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,16 +25,26 @@ import { HomeModule } from './modules/home/home.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
+    HttpClientModule,
     // Taiga
     TuiRootModule,
     TuiDialogModule,
     TuiAlertModule,
     // My app
-    LoginModule,
+    AuthModule,
     LayoutModule,
     HomeModule,
   ],
-  providers: [{ provide: TUI_SANITIZER, useClass: NgDompurifySanitizer }],
+  providers: [
+    { provide: TUI_SANITIZER, useClass: NgDompurifySanitizer },
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

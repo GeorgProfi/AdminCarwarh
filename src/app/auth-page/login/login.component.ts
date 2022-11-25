@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TuiValidationError } from '@taiga-ui/cdk';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -27,7 +28,7 @@ import { TuiValidationError } from '@taiga-ui/cdk';
   ],
 })
 export class LoginComponent {
-  constructor(private route: Router) {}
+  constructor(private route: Router, private authService: AuthService) {}
 
   authForm = new FormGroup({
     nickname: new FormControl('', Validators.required),
@@ -42,7 +43,20 @@ export class LoginComponent {
   }
 
   async onSubmit(): Promise<void> {
-    console.log('Submit!');
-    await this.route.navigateByUrl('');
+    const nickname = this.authForm.value.nickname;
+    const password = this.authForm.value.password;
+    if (!nickname || !password) {
+      this.enabledError = true;
+      return;
+    }
+
+    this.authService.login(nickname, password).subscribe({
+      next: data => {
+        this.route.navigateByUrl('');
+      },
+      error: error => {
+        this.enabledError = true;
+      },
+    });
   }
 }

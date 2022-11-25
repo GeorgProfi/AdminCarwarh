@@ -1,0 +1,69 @@
+import { Injectable } from '@angular/core';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(private authService: AuthService, private router: Router) {}
+
+  private handle401Error(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<object>> {
+    const token = localStorage.getItem('refresh');
+    if (!token) {
+      this.authService.logout();
+      this.router.navigateByUrl('auth');
+      return throwError('no refresh');
+    }
+
+    return this.authService.refresh().pipe(
+      switchMap(data => {
+        localStorage.setItem('access', data.access);
+        localStorage.setItem('refresh', data.refresh);
+        return next.handle(
+          req.clone({
+            // FIXME: кринж так то, но так проще пока что
+            headers: req.headers.set('Authorization', `Bearer ${data.access}`),
+          })
+        );
+      }),
+      catchError(err => {
+        this.router.navigateByUrl('auth');
+        return throwError(err);
+      })
+    );
+  }
+
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<object>> {
+    const token = this.authService.authorization;
+
+    const authReq = req.clone({
+      headers: req.headers.set('Authorization', token),
+    });
+
+    return next.handle(authReq).pipe(
+      catchError(err => {
+        if (
+          err instanceof HttpErrorResponse &&
+          !authReq.url.includes('auth') &&
+          err.status === 401
+        ) {
+          return this.handle401Error(req, next);
+        }
+        return throwError(err);
+      })
+    );
+  }
+}

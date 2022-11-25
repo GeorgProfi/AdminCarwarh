@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TuiInputModule, TuiInputPasswordModule } from '@taiga-ui/kit';
 import { TuiButtonModule, TuiErrorModule } from '@taiga-ui/core';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { TuiButtonModule, TuiErrorModule } from '@taiga-ui/core';
     TuiErrorModule,
     TuiButtonModule,
   ],
-  declarations: [LoginComponent],
-  exports: [LoginComponent],
+  declarations: [LoginComponent, RegisterComponent],
+  exports: [LoginComponent, RegisterComponent],
 })
-export class LoginModule {}
+export class AuthModule {}
