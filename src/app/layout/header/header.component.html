@@ -1,0 +1,16 @@
+<tui-tabs [(activeItemIndex)]="activeItemIndex">
+  <button tuiTab routerLink="car-wash" routerLinkActive>
+    <tui-svg src="tuiIconCardsLarge" class="tui-space_right-2"></tui-svg>
+    Автомойки
+  </button>
+  <button tuiTab routerLink="setting" routerLinkActive>
+    <tui-svg src="tuiIconSettingsLarge" class="tui-space_right-2"></tui-svg>
+    Настройки
+  </button>
+  <button
+    class="tui-col-offset_lg-7 tui-col-offset_md-7 tui-col-offset_xs-7"
+    tuiButton>
+    <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
+    Выход
+  </button>
+</tui-tabs>
