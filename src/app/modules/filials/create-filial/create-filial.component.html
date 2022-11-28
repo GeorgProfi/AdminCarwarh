@@ -1,0 +1,15 @@
+<button tuiButton type="button" (click)="toggle()">Show/Hide</button>
+<tui-expand [expanded]="expanded">
+  <ng-template tuiExpandContent>
+    <tui-island size="l" textAlign="center">
+      <h3 class="title">Создание филиала</h3>
+      <form [formGroup]="formCreateFilial" (ngSubmit)="onSubmit()">
+        <tui-input formControlName="name">
+          Название
+          <input tuiTextfield />
+        </tui-input>
+        <button tuiButton type="submit" appearance="primary">Создать</button>
+      </form>
+    </tui-island>
+  </ng-template>
+</tui-expand>

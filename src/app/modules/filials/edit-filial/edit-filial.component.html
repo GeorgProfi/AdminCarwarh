@@ -1,0 +1,12 @@
+<tui-input tuiTextfieldSize="m" tuiAutoFocus [(ngModel)]="name">
+  Type a name
+</tui-input>
+
+<button
+  tuiButton
+  type="button"
+  size="m"
+  [disabled]="!hasValue"
+  (click)="submit()">
+  Submit
+</button>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { v4 } from 'uuid';
-import { map, Observable } from 'rxjs';
+import { map, Observable, throwError } from 'rxjs';
 import { AuthResponse } from './interfaces/auth-response.interface';
 import { environment } from '../../environments/environment';
 import { IRegister } from './interfaces/register.interface';
@@ -79,8 +79,9 @@ export class AuthService {
     const deviceId = localStorage.getItem('device_id');
     console.log(refresh);
     console.log(deviceId);
-    if (!deviceId || !refresh)
-      throw new Error('Отсутствует refresh или deviceId');
+    if (!deviceId || !refresh) {
+      return throwError('Отсутствует refresh или deviceId');
+    }
 
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/refresh`, {
