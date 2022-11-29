@@ -23,6 +23,8 @@ import { LoyaltySystemModule } from './modules/loyalty-system/loyalty-system.mod
 import { ServicesModule } from './modules/services/services.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { of } from 'rxjs';
+import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,6 +52,10 @@ import { NotificationModule } from './modules/notification/notification.module';
   ],
   providers: [
     { provide: TUI_SANITIZER, useClass: NgDompurifySanitizer },
+    {
+      provide: TUI_LANGUAGE,
+      useValue: of(TUI_RUSSIAN_LANGUAGE),
+    },
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,

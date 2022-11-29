@@ -26,4 +26,10 @@ export class FilialsService {
       name,
     });
   }
+
+  updateFilial(id: string, name: string): Observable<Filial> {
+    return this.http.put<Filial>(`${environment.apiUrl}/carWash/filial/${id}`, {
+      name,
+    });
+  }
 }

@@ -5,7 +5,7 @@ import {
   Injector,
 } from '@angular/core';
 import { TuiComparator, tuiDefaultSort } from '@taiga-ui/addon-table';
-import { TUI_DEFAULT_MATCHER, TuiDay, tuiIsPresent } from '@taiga-ui/cdk';
+import { TUI_DEFAULT_MATCHER, tuiIsPresent } from '@taiga-ui/cdk';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import {
   debounceTime,
@@ -21,22 +21,7 @@ import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditFilialComponent } from './edit-filial/edit-filial.component';
 
-const DATA: readonly Filial[] = [
-  { id: '1', name: 'LOL' },
-  { id: '2', name: 'Kek' },
-  { id: '3', name: 'Ffff' },
-];
-
-// DATA EXAMPLE:
-
-const TODAY = TuiDay.currentLocal();
-
 type Key = 'name' | 'id';
-
-const KEYS: Record<string, Key> = {
-  name: `name`,
-  id: `id`,
-};
 
 @Component({
   selector: 'app-filials',
@@ -50,6 +35,9 @@ export class FilialsComponent {
     @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
     @Inject(Injector) private readonly injector: Injector
   ) {}
+
+  columns = ['id', 'name', 'actions'];
+  search = ``;
 
   private readonly size$ = new BehaviorSubject(10);
   private readonly page$ = new BehaviorSubject(0);
@@ -69,14 +57,6 @@ export class FilialsComponent {
     share()
   );
 
-  initial: readonly string[] = [`Name`, `Date of Birth1`];
-
-  enabled = this.initial;
-
-  columns = [`name`, `id`, `actions`];
-
-  search = ``;
-
   readonly loading$ = this.request$.pipe(map(value => !value));
 
   readonly total$ = this.request$.pipe(
@@ -90,13 +70,6 @@ export class FilialsComponent {
     map(users => users.filter(tuiIsPresent)),
     startWith([])
   );
-
-  onEnabled(enabled: readonly string[]): void {
-    this.enabled = enabled;
-    this.columns = this.initial
-      .filter(column => enabled.includes(column))
-      .map(column => KEYS[column]);
-  }
 
   onDirection(direction: -1 | 1): void {
     this.direction$.next(direction);
@@ -140,24 +113,25 @@ export class FilialsComponent {
     console.log('updateData');
   }
 
-  private readonly dialog = this.dialogService.open<number>(
-    new PolymorpheusComponent(EditFilialComponent, this.injector),
-    {
-      data: 237,
-      dismissible: true,
-      label: `Heading`,
-    }
-  );
-  toggleEdit() {
+  toggleEdit(filial: Filial) {
     console.log('toggleEdit');
-    this.dialog.subscribe({
-      next: data => {
-        // TODO: обновить ячейку
-        console.info(`Dialog emitted data = ${data}`);
-      },
-      complete: () => {
-        console.info(`Dialog closed`);
-      },
-    });
+    this.dialogService
+      .open<Filial>(
+        new PolymorpheusComponent(EditFilialComponent, this.injector),
+        {
+          data: filial,
+          dismissible: true,
+          label: `Редактировать`,
+        }
+      )
+      .subscribe({
+        next: data => {
+          // TODO: обновить ячейку
+          console.info(`Dialog emitted data = ${data}`);
+        },
+        complete: () => {
+          console.info(`Dialog closed`);
+        },
+      });
   }
 }

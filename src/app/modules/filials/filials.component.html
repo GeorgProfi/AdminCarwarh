@@ -2,7 +2,7 @@
 
 <p tuiTextfieldSize="m" class="filters">
   <tui-input class="input" [tuiTextfieldCleaner]="true" [(ngModel)]="search">
-    Find on page
+    Поиск
   </tui-input>
 </p>
 
@@ -18,8 +18,8 @@
     (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th *tuiHead="'name'" tuiTh tuiSortable>Name</th>
-        <th *tuiHead="'id'" tuiTh tuiSortable>Date of Birth</th>
+        <th *tuiHead="'id'" tuiTh tuiSortable>ID</th>
+        <th *tuiHead="'name'" tuiTh tuiSortable>Название</th>
         <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
       </tr>
     </thead>
@@ -39,11 +39,10 @@
             tuiIconButton
             appearance="flat"
             size="s"
-            icon="tuiIconTrash"
-            title="Remove"
+            icon="tuiIconEdit"
+            title="edit"
             shape="rounded"
-            class="remove"
-            (click)="toggleEdit()"></button>
+            (click)="toggleEdit(item)"></button>
         </td>
       </tr>
     </tbody>

@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { FilialsService } from '../filials.service';
+import { Filial } from '../interfaces/filial.interface';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-filial',
@@ -12,23 +15,29 @@ export class EditFilialComponent {
   constructor(
     @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
     @Inject(POLYMORPHEUS_CONTEXT)
-    private readonly context: TuiDialogContext<number, number>
+    private readonly context: TuiDialogContext<Filial, Filial>,
+    private filialsService: FilialsService
   ) {}
 
-  value: number | null = null;
-  name = ``;
+  formEditFilial = new FormGroup({
+    name: new FormControl(this.context.data.name, Validators.required),
+  });
+
+  id = this.context.data.id;
 
   get hasValue(): boolean {
-    return this.value !== null;
+    return this.id !== null;
   }
 
-  get data(): number {
-    return this.context.data;
-  }
-
-  submit(): void {
-    if (this.value !== null) {
-      this.context.completeWith(this.value);
+  onSubmit(): void {
+    const name = this.formEditFilial.value.name;
+    if (!name) {
+      // FIXME: Кинуть норм ошибку
+      throw 123;
     }
+
+    this.filialsService.updateFilial(this.id, name).subscribe(data => {
+      this.context.completeWith(data);
+    });
   }
 }

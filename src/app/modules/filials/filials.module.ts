@@ -5,7 +5,7 @@ import {
   TuiTableModule,
   TuiTablePaginationModule,
 } from '@taiga-ui/addon-table';
-import { TuiLetModule } from '@taiga-ui/cdk';
+import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiButtonModule,
@@ -55,6 +55,7 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiSelectModule,
     TuiDataListWrapperModule,
     TuiSliderModule,
+    TuiAutoFocusModule,
   ],
   providers: [FilialsService],
   declarations: [FilialsComponent, CreateFilialComponent, EditFilialComponent],
