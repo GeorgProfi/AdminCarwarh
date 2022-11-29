@@ -8,7 +8,7 @@ import { UpdateServiceDto } from '../dto/update-service.dto';
 
 @Component({
   selector: 'app-edit-service',
-  templateUrl: './edit-service.component.less',
+  templateUrl: './edit-service.component.html',
   styleUrls: ['./edit-service.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

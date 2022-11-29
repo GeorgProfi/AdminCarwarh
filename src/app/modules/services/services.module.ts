@@ -13,7 +13,7 @@ import {
   TuiTablePaginationModule,
 } from '@taiga-ui/addon-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiLetModule } from '@taiga-ui/cdk';
+import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { ServicesService } from './services.service';
 import { CreateFilialComponent } from './create-service/create-service.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
@@ -34,6 +34,7 @@ import { EditServiceComponent } from './edit-service/edit-service.component';
     TuiExpandModule,
     TuiIslandModule,
     ReactiveFormsModule,
+    TuiAutoFocusModule,
   ],
   providers: [ServicesService],
   declarations: [

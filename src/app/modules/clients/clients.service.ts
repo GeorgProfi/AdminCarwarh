@@ -23,18 +23,18 @@ export class ClientsService {
   }
 
   createClient(data: CreateClientDto) {
-    return this.http.post(`${environment.apiUrl}/client`, data);
+    return this.http.post<Client>(`${environment.apiUrl}/client`, data);
   }
 
   updateClient(id: string, data: UpdateClientDto) {
-    return this.http.put(`${environment.apiUrl}/client/${id}`, data);
+    return this.http.put<Client>(`${environment.apiUrl}/client/${id}`, data);
   }
 
   deleteClient(id: string) {
-    return this.http.delete(`${environment.apiUrl}/client/${id}`);
+    return this.http.delete<void>(`${environment.apiUrl}/client/${id}`);
   }
 
   getClient(id: string) {
-    return this.http.get(`${environment.apiUrl}/client/get/${id}`);
+    return this.http.get<Client>(`${environment.apiUrl}/client/get/${id}`);
   }
 }
