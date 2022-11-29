@@ -97,7 +97,7 @@ export class FilialsComponent {
     page: number,
     size: number
   ): Observable<Filial[] | null> {
-    return this.filialsService.getFilialList(page, size).pipe(
+    return this.filialsService.getFilialList({ page, pageSize: size }).pipe(
       map(data => {
         console.log(data);
         return data.rows;

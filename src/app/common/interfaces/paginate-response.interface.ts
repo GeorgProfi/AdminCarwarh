@@ -1,4 +1,4 @@
-export interface Paginate<T> {
+export interface PaginateRes<T> {
   rows: T[];
   info: {
     page: number;
