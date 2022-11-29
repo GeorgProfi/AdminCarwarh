@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Service } from './service.interface';
 import { environment } from '../../../environments/environment';
 import { GetServicesListDto } from './dto/get-services-list.dto';
-import { PaginateRes } from '../../common/interfaces/paginate-response.interface';
+import { PaginateRes } from '../../common/dto/paginate-response.dto';
+import { Service } from '../../common/entities/service.entity';
+import { CreateServiceDto } from './dto/create-service.dto';
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServicesService {
@@ -18,7 +20,7 @@ export class ServicesService {
     );
   }
 
-  createService(data: Service) {
+  createService(data: CreateServiceDto) {
     return this.http.post<Service>(`${environment.apiUrl}/services`, data);
   }
 
@@ -26,7 +28,7 @@ export class ServicesService {
     return this.http.get<Service>(`${environment.apiUrl}/services/get/${id}`);
   }
 
-  updateService(id: string, data: Service) {
+  updateService(id: string, data: UpdateServiceDto) {
     return this.http.put<Service>(`${environment.apiUrl}/services/${id}`, data);
   }
 

@@ -16,10 +16,10 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import { FilialsService } from './filials.service';
-import { Filial } from './interfaces/filial.interface';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditFilialComponent } from './edit-filial/edit-filial.component';
+import { Filial } from '../../common/entities/filial.entity';
 
 type Key = 'name' | 'id';
 

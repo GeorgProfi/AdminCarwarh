@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { FilialsService } from '../filials.service';
-import { Filial } from '../interfaces/filial.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Filial } from '../../../common/entities/filial.entity';
 
 @Component({
   selector: 'app-edit-filial',

@@ -10,7 +10,7 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import { TUI_DEFAULT_MATCHER, tuiIsPresent } from '@taiga-ui/cdk';
-import { Filial } from '../filials/interfaces/filial.interface';
+import { Service } from '../../common/entities/service.entity';
 
 type Key = 'id' | 'name';
 
@@ -48,7 +48,7 @@ export class ServicesComponent {
     map(({ length }) => length),
     startWith(1)
   );
-  readonly data$: Observable<readonly Filial[]> = this.request$.pipe(
+  readonly data$: Observable<readonly Service[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(services => services.filter(tuiIsPresent)),
     startWith([])
@@ -75,12 +75,16 @@ export class ServicesComponent {
     direction: -1 | 1,
     page: number,
     size: number
-  ): Observable<Filial[] | null> {
+  ): Observable<Service[] | null> {
     return this.servicesService.getServicesList({ page, pageSize: size }).pipe(
       map(data => {
         console.log(data);
         return data.rows;
       })
     );
+  }
+
+  updateData() {
+    console.log('updateData');
   }
 }

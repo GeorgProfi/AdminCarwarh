@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { Filial } from './interfaces/filial.interface';
-import { PaginateRes } from '../../common/interfaces/paginate-response.interface';
-import { Pagination } from '../../common/interfaces/pagination.interface';
+import { PaginateRes } from '../../common/dto/paginate-response.dto';
+import { Pagination } from '../../common/dto/pagination.dto';
+import { Filial } from '../../common/entities/filial.entity';
 
 @Injectable()
 export class FilialsService {
