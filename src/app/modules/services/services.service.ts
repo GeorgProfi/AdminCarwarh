@@ -6,12 +6,13 @@ import { PaginateRes } from '../../common/dto/paginate-response.dto';
 import { Service } from '../../common/entities/service.entity';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ServicesService {
   constructor(private http: HttpClient) {}
 
-  getServicesList(data: GetServicesListDto) {
+  getServicesList(data: GetServicesListDto): Observable<PaginateRes<Service>> {
     return this.http.get<PaginateRes<Service>>(
       `${environment.apiUrl}/services`,
       {

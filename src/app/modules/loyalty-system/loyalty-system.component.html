@@ -1,1 +1,27 @@
-Loyalty System
+<tui-island size="l" textAlign="center">
+  <h3 class="title">Бонусная система</h3>
+  <tui-input-phone [(ngModel)]="phone">
+    Телефон
+    <input tuiTextfield autocomplete="tel" />
+  </tui-input-phone>
+  <button tuiButton (click)="onAcceptClient()" appearance="primary">
+    Найти
+  </button>
+
+  <tui-expand [expanded]="expanded">
+    <ng-template tuiExpandContent>
+      <h3 class="title">{{ clientName }}</h3>
+      <p class="tui-island__paragraph">Бонусов: {{ clientBonuses }}</p>
+      <form [formGroup]="formBonus" (ngSubmit)="onBonus()">
+        <tui-input-number formControlName="sum" [postfix]="'RUB' | tuiCurrency">
+          Сумма
+        </tui-input-number>
+        <tui-input-count formControlName="offs" [step]="100">
+          Списать
+        </tui-input-count>
+
+        <button tuiButton type="submit" appearance="primary">Начислить</button>
+      </form>
+    </ng-template>
+  </tui-expand>
+</tui-island>

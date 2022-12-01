@@ -16,6 +16,18 @@
           Цена
           <input tuiTextfield />
         </tui-input>
+        <tui-select [(ngModel)]="filial" [valueContent]="filial.name">
+          Филиал
+          <input tuiTextfield />
+          <tui-data-list *tuiDataList>
+            <button
+              *ngFor="let filial of selectFilial"
+              tuiOption
+              [value]="filial.id">
+              {{ filial.name }}
+            </button>
+          </tui-data-list>
+        </tui-select>
         <button tuiButton type="submit" appearance="primary">Создать</button>
       </form>
     </tui-island>

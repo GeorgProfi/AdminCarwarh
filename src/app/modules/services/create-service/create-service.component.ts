@@ -17,6 +17,13 @@ import { Service } from '../../../common/entities/service.entity';
 export class CreateFilialComponent {
   constructor(private servicesService: ServicesService) {}
 
+  selectFilial = [
+    { id: '1', name: 'Баня' },
+    { id: '2', name: 'Ваня' },
+    { id: '3', name: 'Мойдодыр' },
+  ];
+  filial = this.selectFilial[0];
+
   @Output() createEvent = new EventEmitter();
 
   expanded = false;

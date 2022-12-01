@@ -2,11 +2,18 @@ import { NgModule } from '@angular/core';
 import { ServicesComponent } from './services.component';
 import {
   TuiButtonModule,
+  TuiDataListModule,
   TuiExpandModule,
   TuiLoaderModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
-import { TuiInputModule, TuiIslandModule } from '@taiga-ui/kit';
+import {
+  TuiDataListWrapperModule,
+  TuiInputModule,
+  TuiIslandModule,
+  TuiSelectModule,
+  TuiSelectOptionModule,
+} from '@taiga-ui/kit';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiTableModule,
@@ -35,6 +42,10 @@ import { EditServiceComponent } from './edit-service/edit-service.component';
     TuiIslandModule,
     ReactiveFormsModule,
     TuiAutoFocusModule,
+    TuiSelectModule,
+    TuiDataListWrapperModule,
+    TuiSelectOptionModule,
+    TuiDataListModule,
   ],
   providers: [ServicesService],
   declarations: [

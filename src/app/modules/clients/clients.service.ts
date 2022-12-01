@@ -34,7 +34,13 @@ export class ClientsService {
     return this.http.delete<void>(`${environment.apiUrl}/client/${id}`);
   }
 
-  getClient(id: string) {
+  getClientById(id: string) {
     return this.http.get<Client>(`${environment.apiUrl}/client/get/${id}`);
+  }
+
+  getClientByPhone(phone: string) {
+    return this.http.get<Client>(
+      `${environment.apiUrl}/client/get-by-phone/${phone}`
+    );
   }
 }
