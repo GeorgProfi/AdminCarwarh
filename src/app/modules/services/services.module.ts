@@ -8,6 +8,7 @@ import {
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
+  TuiAccordionModule,
   TuiDataListWrapperModule,
   TuiInputModule,
   TuiIslandModule,
@@ -46,6 +47,7 @@ import { EditServiceComponent } from './edit-service/edit-service.component';
     TuiDataListWrapperModule,
     TuiSelectOptionModule,
     TuiDataListModule,
+    TuiAccordionModule,
   ],
   providers: [ServicesService],
   declarations: [

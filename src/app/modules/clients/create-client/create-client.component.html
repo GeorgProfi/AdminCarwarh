@@ -1,23 +1,59 @@
-<button tuiButton type="button" (click)="toggle()">Добавить</button>
-<tui-expand [expanded]="expanded">
-  <ng-template tuiExpandContent>
-    <tui-island size="l" textAlign="center">
-      <h3 class="title">Создание клиента</h3>
-      <form [formGroup]="formCreateService" (ngSubmit)="onSubmit()">
-        <tui-input formControlName="name">
-          Имя
-          <input tuiTextfield />
-        </tui-input>
+<tui-accordion-item>
+  Создание клиента
+  <ng-template tuiAccordionItemContent>
+    <form [formGroup]="formCreateService" (ngSubmit)="onSubmit()">
+      <div class="tui-form__row">
         <tui-input formControlName="phone">
           Телефон
           <input tuiTextfield />
         </tui-input>
-        <tui-input formControlName="email">
-          email
-          <input tuiTextfield />
-        </tui-input>
-        <button tuiButton type="submit" appearance="primary">Создать</button>
-      </form>
-    </tui-island>
+      </div>
+
+      <div class="tui-form__row tui-form__row_multi-fields">
+        <div class="tui-form__multi-field">
+          <tui-input formControlName="name">
+            Имя
+            <input tuiTextfield />
+          </tui-input>
+        </div>
+        <div class="tui-form__multi-field">
+          <tui-input formControlName="email">
+            email
+            <input tuiTextfield />
+          </tui-input>
+        </div>
+      </div>
+
+      <div class="tui-form__buttons tui-form__buttons_align_center">
+        <button
+          tuiButton
+          class="tui-form__button"
+          type="submit"
+          appearance="primary">
+          Зарегистрировать
+        </button>
+      </div>
+    </form>
+    <div class="tui-form__row">
+      <tui-expand [expanded]="expandedCode">
+        <div
+          tuiGroup
+          class="tui-form__row"
+          [adaptive]="true"
+          [collapsed]="true">
+          <tui-input formControlName="name">
+            Код подтверждения
+            <input tuiTextfield />
+          </tui-input>
+          <button
+            tuiButton
+            class="tui-form__button"
+            appearance="primary"
+            (click)="onAcceptCode()">
+            Отправить
+          </button>
+        </div>
+      </tui-expand>
+    </div>
   </ng-template>
-</tui-expand>
+</tui-accordion-item>

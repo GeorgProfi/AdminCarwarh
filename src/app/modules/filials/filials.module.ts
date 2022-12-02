@@ -16,6 +16,7 @@ import {
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
+  TuiAccordionModule,
   TuiDataListWrapperModule,
   TuiInputCountModule,
   TuiInputModule,
@@ -56,6 +57,7 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiDataListWrapperModule,
     TuiSliderModule,
     TuiAutoFocusModule,
+    TuiAccordionModule,
   ],
   providers: [FilialsService],
   declarations: [FilialsComponent, CreateFilialComponent, EditFilialComponent],

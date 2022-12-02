@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ClientsService } from '../clients.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CreateClientDto } from '../dto/create-client.dto';
 
 @Component({
   selector: 'app-create-client',
@@ -17,6 +16,7 @@ export class CreateClientComponent {
   toggle(): void {
     this.expanded = !this.expanded;
   }
+  expandedCode = false;
 
   formCreateService = new FormGroup({
     name: new FormControl(``, Validators.required),
@@ -24,14 +24,19 @@ export class CreateClientComponent {
     email: new FormControl(``, Validators.required),
   });
   onSubmit(): void {
+    this.expandedCode = true;
     // FIXME: Кринж с типом(
-    const data: CreateClientDto = this.formCreateService
-      .value as unknown as CreateClientDto;
+    // const data: CreateClientDto = this.formCreateService
+    //   .value as unknown as CreateClientDto;
+    //
+    // this.clientsService.createClient(data).subscribe(data => {
+    //   console.log(data);
+    //   this.formCreateService.reset();
+    //   this.createEvent.emit();
+    // });
+  }
 
-    this.clientsService.createClient(data).subscribe(data => {
-      console.log(data);
-      this.formCreateService.reset();
-      this.createEvent.emit();
-    });
+  onAcceptCode() {
+    console.log('7');
   }
 }

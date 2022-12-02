@@ -6,10 +6,15 @@ import { EditClientComponent } from './edit-client/edit-client.component';
 import {
   TuiButtonModule,
   TuiExpandModule,
+  TuiGroupModule,
   TuiLoaderModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
-import { TuiInputModule, TuiIslandModule } from '@taiga-ui/kit';
+import {
+  TuiAccordionModule,
+  TuiInputModule,
+  TuiIslandModule,
+} from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
@@ -35,6 +40,8 @@ import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
     TuiIslandModule,
     ReactiveFormsModule,
     TuiAutoFocusModule,
+    TuiAccordionModule,
+    TuiGroupModule,
   ],
   providers: [ClientsService],
   declarations: [ClientsComponent, CreateClientComponent, EditClientComponent],

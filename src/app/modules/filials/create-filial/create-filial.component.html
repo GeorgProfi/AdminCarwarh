@@ -1,15 +1,22 @@
-<button tuiButton type="button" (click)="toggle()">Добавить</button>
-<tui-expand [expanded]="expanded">
-  <ng-template tuiExpandContent>
-    <tui-island size="l" textAlign="center">
-      <h3 class="title">Создание филиала</h3>
-      <form [formGroup]="formCreateFilial" (ngSubmit)="onSubmit()">
+<tui-accordion-item>
+  Создание филиала
+  <ng-template tuiAccordionItemContent>
+    <form [formGroup]="formCreateFilial" (ngSubmit)="onSubmit()">
+      <div class="tui-form__row">
         <tui-input formControlName="name">
           Название
           <input tuiTextfield />
         </tui-input>
-        <button tuiButton type="submit" appearance="primary">Создать</button>
-      </form>
-    </tui-island>
+      </div>
+      <div class="tui-form__buttons tui-form__buttons_align_center">
+        <button
+          class="tui-form__button"
+          tuiButton
+          type="submit"
+          appearance="primary">
+          Создать
+        </button>
+      </div>
+    </form>
   </ng-template>
-</tui-expand>
+</tui-accordion-item>

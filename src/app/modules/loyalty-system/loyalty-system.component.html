@@ -1,26 +1,53 @@
 <tui-island size="l" textAlign="center">
-  <h3 class="title">Бонусная система</h3>
-  <tui-input-phone [(ngModel)]="phone">
-    Телефон
-    <input tuiTextfield autocomplete="tel" />
-  </tui-input-phone>
-  <button tuiButton (click)="onAcceptClient()" appearance="primary">
-    Найти
-  </button>
+  <h3 class="tui-form__header tui-form__header_margin-top_none">
+    Бонусная система
+  </h3>
+  <div class="tui-form__row">
+    <div tuiGroup class="tui-form__row" [adaptive]="true" [collapsed]="true">
+      <tui-input-phone [(ngModel)]="phone">
+        Телефон
+        <input tuiTextfield autocomplete="tel" />
+      </tui-input-phone>
+      <button
+        tuiButton
+        class="tui-form__button"
+        (click)="onAcceptClient()"
+        appearance="primary">
+        Найти
+      </button>
+    </div>
+  </div>
 
   <tui-expand [expanded]="expanded">
     <ng-template tuiExpandContent>
-      <h3 class="title">{{ clientName }}</h3>
-      <p class="tui-island__paragraph">Бонусов: {{ clientBonuses }}</p>
+      <h3 class="title">
+        Клиент: {{ clientName }} ~~~ Бонусов: {{ clientBonuses }}
+      </h3>
       <form [formGroup]="formBonus" (ngSubmit)="onBonus()">
-        <tui-input-number formControlName="sum" [postfix]="'RUB' | tuiCurrency">
-          Сумма
-        </tui-input-number>
-        <tui-input-count formControlName="offs" [step]="100">
-          Списать
-        </tui-input-count>
+        <div class="tui-form__row tui-form__row_multi-fields">
+          <div class="tui-form__multi-field">
+            <tui-input-number
+              formControlName="sum"
+              [postfix]="'RUB' | tuiCurrency">
+              Сумма
+            </tui-input-number>
+          </div>
+          <div class="tui-form__multi-field">
+            <tui-input-count formControlName="offs" [step]="100">
+              Списать
+            </tui-input-count>
+          </div>
+        </div>
 
-        <button tuiButton type="submit" appearance="primary">Начислить</button>
+        <div class="tui-form__buttons tui-form__buttons_align_center">
+          <button
+            tuiButton
+            class="tui-form__button"
+            type="submit"
+            appearance="primary">
+            Начислить
+          </button>
+        </div>
       </form>
     </ng-template>
   </tui-expand>

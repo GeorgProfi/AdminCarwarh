@@ -8,7 +8,11 @@ import {
   TuiIslandModule,
   TuiStepperModule,
 } from '@taiga-ui/kit';
-import { TuiButtonModule, TuiExpandModule } from '@taiga-ui/core';
+import {
+  TuiButtonModule,
+  TuiExpandModule,
+  TuiGroupModule,
+} from '@taiga-ui/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
 import { LoyaltySystemService } from './loyalty-system.service';
@@ -26,6 +30,7 @@ import { LoyaltySystemService } from './loyalty-system.service';
     TuiInputCountModule,
     TuiInputNumberModule,
     TuiCurrencyPipeModule,
+    TuiGroupModule,
   ],
   providers: [LoyaltySystemService],
   declarations: [LoyaltySystemComponent],
