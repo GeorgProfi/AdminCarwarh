@@ -34,7 +34,8 @@
             size="s"
             icon="tuiIconEdit"
             title="edit"
-            shape="rounded"></button>
+            shape="rounded"
+            (click)="toggleEdit(item)"></button>
         </td>
         <td *tuiCell="'name'" tuiTd [class.match]="isMatch(item.name)">
           {{ item.name }}
