@@ -23,7 +23,7 @@ type Key = 'id' | 'name';
 export class ServicesComponent {
   constructor(private servicesService: ServicesService) {}
 
-  columns = ['id', 'name', 'cost', 'filial', 'actions'];
+  columns = ['actions', 'name', 'cost', 'filial'];
   search = '';
 
   private readonly size$ = new BehaviorSubject(10);

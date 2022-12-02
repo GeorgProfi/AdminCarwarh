@@ -18,9 +18,8 @@
     (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th *tuiHead="'id'" tuiTh tuiSortable>ID</th>
+        <th *tuiHead="'actions'" tuiTh [sorter]="null">Действия</th>
         <th *tuiHead="'name'" tuiTh tuiSortable>Название</th>
-        <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
       </tr>
     </thead>
     <tbody
@@ -28,21 +27,37 @@
       tuiTbody
       [data]="sortedData">
       <tr *ngFor="let item of sortedData" tuiTr>
-        <td *tuiCell="'name'" tuiTd [class.match]="isMatch(item.name)">
-          {{ item.name }}
-        </td>
-        <td *tuiCell="'id'" tuiTd [class.match]="isMatch(item.id)">
-          {{ item.id }}
-        </td>
         <td *tuiCell="'actions'" tuiTd>
           <button
             tuiIconButton
             appearance="flat"
             size="s"
-            icon="tuiIconEdit"
-            title="edit"
+            icon="tuiIconEditLarge"
+            tuiHint="Редактировать"
+            tuiHintDirection="right"
+            tuiHintDescribe
+            title="Редактировать"
             shape="rounded"
             (click)="toggleEdit(item)"></button>
+          <button
+            tuiIconButton
+            tuiHint="Удалить"
+            tuiHintDirection="right"
+            tuiHintDescribe
+            appearance="flat"
+            size="s"
+            icon="tuiIconRemoveLarge"
+            shape="rounded"></button>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconAlertCircleLarge"
+            title="Подробнее"
+            shape="rounded"></button>
+        </td>
+        <td *tuiCell="'name'" tuiTd [class.match]="isMatch(item.name)">
+          {{ item.name }}
         </td>
       </tr>
     </tbody>

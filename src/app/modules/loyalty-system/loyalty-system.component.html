@@ -4,8 +4,9 @@
   </h3>
   <div class="tui-form__row">
     <div tuiGroup class="tui-form__row" [adaptive]="true" [collapsed]="true">
-      <tui-input-phone [(ngModel)]="phone">
+      <tui-input-phone [formControl]="phone">
         Телефон
+        <span class="tui-required"></span>
         <input tuiTextfield autocomplete="tel" />
       </tui-input-phone>
       <button
@@ -16,39 +17,52 @@
         Найти
       </button>
     </div>
+    <tui-error
+      [formControl]="phone"
+      [error]="[] | tuiFieldError | async"></tui-error>
   </div>
 
-  <tui-expand [expanded]="expanded">
-    <ng-template tuiExpandContent>
-      <h3 class="title">
-        Клиент: {{ clientName }} ~~~ Бонусов: {{ clientBonuses }}
-      </h3>
-      <form [formGroup]="formBonus" (ngSubmit)="onBonus()">
-        <div class="tui-form__row tui-form__row_multi-fields">
-          <div class="tui-form__multi-field">
-            <tui-input-number
-              formControlName="sum"
-              [postfix]="'RUB' | tuiCurrency">
-              Сумма
-            </tui-input-number>
+  <div class="tui-form__row">
+    <tui-expand [expanded]="expanded">
+      <ng-template tuiExpandContent>
+        <div class="tui-row">
+          <div class="tui-col_md-6">
+            <tui-island size="l" textAlign="center">
+              <h3 class="title">Клиент: {{ clientName }}</h3>
+              <p class="tui-island__paragraph">Бонусов: {{ clientBonuses }}</p>
+            </tui-island>
           </div>
-          <div class="tui-form__multi-field">
-            <tui-input-count formControlName="offs" [step]="100">
-              Списать
-            </tui-input-count>
-          </div>
-        </div>
+          <div class="tui-col_md-6">
+            <form [formGroup]="formBonus" (ngSubmit)="onBonus()">
+              <div class="tui-form__row tui-form__row_multi-fields">
+                <div class="tui-form__multi-field">
+                  <tui-input-number
+                    formControlName="sum"
+                    [postfix]="'RUB' | tuiCurrency">
+                    Сумма
+                    <span class="tui-required"></span>
+                  </tui-input-number>
+                </div>
+                <div class="tui-form__multi-field">
+                  <tui-input-count formControlName="offs" [step]="100">
+                    Списать
+                  </tui-input-count>
+                </div>
+              </div>
 
-        <div class="tui-form__buttons tui-form__buttons_align_center">
-          <button
-            tuiButton
-            class="tui-form__button"
-            type="submit"
-            appearance="primary">
-            Начислить
-          </button>
+              <div class="tui-form__buttons tui-form__buttons_align_center">
+                <button
+                  tuiButton
+                  class="tui-form__button"
+                  type="submit"
+                  appearance="primary">
+                  Начислить
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </ng-template>
-  </tui-expand>
+      </ng-template>
+    </tui-expand>
+  </div>
 </tui-island>

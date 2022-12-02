@@ -1,9 +1,18 @@
 <form [formGroup]="formEditFilial" (ngSubmit)="onSubmit()">
-  <tui-input tuiTextfieldSize="m" tuiAutoFocus formControlName="name">
-    Название
-    <input tuiTextfield />
-  </tui-input>
-  <button tuiButton type="submit" size="m" appearance="primary">
-    Сохранить
-  </button>
+  <div class="tui-form__row">
+    <tui-input tuiTextfieldSize="m" tuiAutoFocus formControlName="name">
+      Название
+      <input tuiTextfield />
+    </tui-input>
+  </div>
+  <div class="tui-form__buttons tui-form__buttons_align_center">
+    <button
+      tuiButton
+      type="submit"
+      class="tui-form__button"
+      size="m"
+      appearance="primary">
+      Сохранить
+    </button>
+  </div>
 </form>

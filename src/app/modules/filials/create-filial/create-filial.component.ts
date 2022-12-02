@@ -34,7 +34,7 @@ export class CreateFilialComponent {
       return;
     }
 
-    this.filialsService.createFilial(name).subscribe(data => {
+    this.filialsService.createFilial({ name }).subscribe(data => {
       console.log(data);
       this.formCreateFilial.reset();
       this.createEvent.emit();

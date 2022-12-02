@@ -10,6 +10,7 @@ import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiButtonModule,
   TuiExpandModule,
+  TuiHintModule,
   TuiHostedDropdownModule,
   TuiLinkModule,
   TuiLoaderModule,
@@ -58,6 +59,7 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiSliderModule,
     TuiAutoFocusModule,
     TuiAccordionModule,
+    TuiHintModule,
   ],
   providers: [FilialsService],
   declarations: [FilialsComponent, CreateFilialComponent, EditFilialComponent],

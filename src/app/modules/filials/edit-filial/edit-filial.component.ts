@@ -36,7 +36,7 @@ export class EditFilialComponent {
       throw 123;
     }
 
-    this.filialsService.updateFilial(this.id, name).subscribe(data => {
+    this.filialsService.updateFilial(this.id, { name }).subscribe(data => {
       this.context.completeWith(data);
     });
   }

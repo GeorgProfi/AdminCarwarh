@@ -11,19 +11,19 @@ import { UpdateClientDto } from './dto/update-client.dto';
 export class ClientsService {
   constructor(private http: HttpClient) {}
 
-  getClientsList(pagination: GetClientListDto) {
+  getClientsList(data: GetClientListDto) {
     return this.http.get<PaginateRes<Client>>(
       `${environment.apiUrl}/client/list`,
-      {
-        params: {
-          ...pagination,
-        },
-      }
+      { params: { ...data } }
     );
   }
 
   createClient(data: CreateClientDto) {
     return this.http.post<Client>(`${environment.apiUrl}/client`, data);
+  }
+
+  getClientById(id: string) {
+    return this.http.get<Client>(`${environment.apiUrl}/client/get/${id}`);
   }
 
   updateClient(id: string, data: UpdateClientDto) {
@@ -32,15 +32,5 @@ export class ClientsService {
 
   deleteClient(id: string) {
     return this.http.delete<void>(`${environment.apiUrl}/client/${id}`);
-  }
-
-  getClientById(id: string) {
-    return this.http.get<Client>(`${environment.apiUrl}/client/get/${id}`);
-  }
-
-  getClientByPhone(phone: string) {
-    return this.http.get<Client>(
-      `${environment.apiUrl}/client/get-by-phone/${phone}`
-    );
   }
 }

@@ -36,7 +36,7 @@ export class FilialsComponent {
     @Inject(Injector) private readonly injector: Injector
   ) {}
 
-  columns = ['id', 'name', 'actions'];
+  columns = ['actions', 'name'];
   search = ``;
 
   private readonly size$ = new BehaviorSubject(10);
@@ -97,21 +97,21 @@ export class FilialsComponent {
     page: number,
     size: number
   ): Observable<Filial[] | null> {
-    return this.filialsService.getFilialList({ page, pageSize: size }).pipe(
-      map(data => {
-        console.log(data);
-        return data.rows;
-      })
-    );
+    return this.filialsService
+      .getFilialList({ search: '', page, pageSize: size })
+      .pipe(
+        map(data => {
+          console.log(data);
+          return data.rows;
+        })
+      );
 
     //   const result = [...DATA]
     //     .sort(this.sortBy(key, direction))
     //     .map((user, index) => (index >= start && index < end ? user : null));
   }
 
-  updateData() {
-    console.log('updateData');
-  }
+  updateData() {}
 
   toggleEdit(filial: Filial) {
     console.log('toggleEdit');

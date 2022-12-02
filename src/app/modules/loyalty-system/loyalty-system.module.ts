@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { LoyaltySystemComponent } from './loyalty-system.component';
 import {
+  TuiFieldErrorPipeModule,
   TuiInputCountModule,
   TuiInputModule,
   TuiInputNumberModule,
@@ -10,12 +11,14 @@ import {
 } from '@taiga-ui/kit';
 import {
   TuiButtonModule,
+  TuiErrorModule,
   TuiExpandModule,
   TuiGroupModule,
 } from '@taiga-ui/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
 import { LoyaltySystemService } from './loyalty-system.service';
+import { AsyncPipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -31,6 +34,9 @@ import { LoyaltySystemService } from './loyalty-system.service';
     TuiInputNumberModule,
     TuiCurrencyPipeModule,
     TuiGroupModule,
+    TuiErrorModule,
+    TuiFieldErrorPipeModule,
+    AsyncPipe,
   ],
   providers: [LoyaltySystemService],
   declarations: [LoyaltySystemComponent],

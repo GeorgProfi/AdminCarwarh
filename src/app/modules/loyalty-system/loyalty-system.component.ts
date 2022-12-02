@@ -14,7 +14,12 @@ export class LoyaltySystemComponent {
     private clientsService: ClientsService
   ) {}
 
-  phone: string = '';
+  nameValue = new FormControl(``, Validators.required);
+
+  phone = new FormControl(null, [
+    Validators.required,
+    Validators.pattern('[- +()0-9]+'),
+  ]);
   clientName: string = 'Аноним';
   clientBonuses: number = 0;
   expanded = false;
@@ -25,7 +30,9 @@ export class LoyaltySystemComponent {
   });
 
   onAcceptClient() {
-    this.loyaltySystemService.getClientAndBonuses(this.phone).subscribe({
+    if (!this.phone.value) return;
+
+    this.loyaltySystemService.getClientAndBonuses(this.phone.value).subscribe({
       next: data => {
         this.clientName = data.holderName;
         this.clientBonuses = data.bonuses;
@@ -38,6 +45,8 @@ export class LoyaltySystemComponent {
   }
 
   onBonus() {
+    if (!this.phone.value) return;
+
     const data = this.formBonus.value;
     if (!data.offs || !data.sum) return;
     this.loyaltySystemService
@@ -46,7 +55,7 @@ export class LoyaltySystemComponent {
           accrual: data.sum,
           debiting: data.offs,
         },
-        this.phone
+        this.phone.value
       )
       .subscribe({
         next: bonuses => {

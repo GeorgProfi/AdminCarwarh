@@ -7,6 +7,7 @@ import {
   TuiTextAreaModule,
 } from '@taiga-ui/kit';
 import { AsyncPipe, NgIf } from '@angular/common';
+import { TuiButtonModule, TuiLabelModule } from '@taiga-ui/core';
 
 @NgModule({
   imports: [
@@ -16,6 +17,8 @@ import { AsyncPipe, NgIf } from '@angular/common';
     NgIf,
     AsyncPipe,
     TuiInputPasswordModule,
+    TuiLabelModule,
+    TuiButtonModule,
   ],
   declarations: [SettingComponent],
   exports: [SettingComponent],
