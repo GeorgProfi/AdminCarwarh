@@ -18,13 +18,14 @@ import { AuthService } from './auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { ClientsModule } from './modules/clients/clients.module';
-import { FilialsModule } from './modules/filials/filials.module';
+import { StationModule } from './modules/stations/station.module';
 import { LoyaltySystemModule } from './modules/loyalty-system/loyalty-system.module';
 import { ServicesModule } from './modules/services/services.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { of } from 'rxjs';
 import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
+import { DebugModule } from './modules/debug/debug.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,11 +45,13 @@ import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
     LayoutModule,
     HomeModule,
     ClientsModule,
-    FilialsModule,
+    StationModule,
     LoyaltySystemModule,
     ServicesModule,
     SettingModule,
     NotificationModule,
+
+    DebugModule,
   ],
   providers: [
     { provide: TUI_SANITIZER, useClass: NgDompurifySanitizer },

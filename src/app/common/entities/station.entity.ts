@@ -1,4 +1,4 @@
-export interface Filial {
+export interface Station {
   readonly id: string;
   readonly name: string;
 }

@@ -41,7 +41,7 @@ export class AuthService {
       localStorage.setItem('device_id', deviceId);
     }
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/owner-car-wash/signIn`, {
+      .post<AuthResponse>(`${environment.apiUrl}/auth/owner/signIn`, {
         email,
         password,
         deviceId,

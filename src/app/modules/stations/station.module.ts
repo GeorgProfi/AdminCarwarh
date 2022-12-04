@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FilialsComponent } from './filials.component';
+import { StationComponent } from './station.component';
 import {
   TuiReorderModule,
   TuiTableModule,
@@ -27,9 +27,9 @@ import {
   TuiTagModule,
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CreateFilialComponent } from './create-filial/create-filial.component';
-import { FilialsService } from './filials.service';
-import { EditFilialComponent } from './edit-filial/edit-filial.component';
+import { CreateStationComponent } from './create-station/create-station.component';
+import { StationService } from './station.service';
+import { EditStationComponent } from './edit-station/edit-station.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 
 @NgModule({
@@ -61,8 +61,12 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiAccordionModule,
     TuiHintModule,
   ],
-  providers: [FilialsService],
-  declarations: [FilialsComponent, CreateFilialComponent, EditFilialComponent],
-  exports: [FilialsComponent],
+  providers: [StationService],
+  declarations: [
+    StationComponent,
+    CreateStationComponent,
+    EditStationComponent,
+  ],
+  exports: [StationComponent],
 })
-export class FilialsModule {}
+export class StationModule {}

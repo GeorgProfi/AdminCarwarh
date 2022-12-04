@@ -1,4 +1,4 @@
-<app-create-filial (createEvent)="updateData()"></app-create-filial>
+<app-create-station (createEvent)="updateData()"></app-create-station>
 
 <p tuiTextfieldSize="m" class="filters">
   <tui-input class="input" [tuiTextfieldCleaner]="true" [(ngModel)]="search">
@@ -6,7 +6,7 @@
   </tui-input>
 </p>
 
-<tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
+<tui-loader [showLoader]="!!(loading$ | async)">
   <table
     *ngIf="data$ | async as data"
     tuiTable

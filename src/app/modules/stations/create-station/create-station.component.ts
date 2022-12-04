@@ -5,16 +5,16 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FilialsService } from '../filials.service';
+import { StationService } from '../station.service';
 
 @Component({
-  selector: 'app-create-filial',
-  templateUrl: './create-filial.component.html',
-  styleUrls: ['./create-filial.component.less'],
+  selector: 'app-create-station',
+  templateUrl: './create-station.component.html',
+  styleUrls: ['./create-station.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateFilialComponent {
-  constructor(private filialsService: FilialsService) {}
+export class CreateStationComponent {
+  constructor(private stationService: StationService) {}
 
   @Output() createEvent = new EventEmitter();
 
@@ -23,20 +23,20 @@ export class CreateFilialComponent {
     this.expanded = !this.expanded;
   }
 
-  formCreateFilial = new FormGroup({
+  formCreateStation = new FormGroup({
     name: new FormControl(``, Validators.required),
   });
   onSubmit(): void {
     console.log('Create!');
-    const name = this.formCreateFilial.value.name;
+    const name = this.formCreateStation.value.name;
     if (!name) {
       // TODO: Кинуть ошибку валидации
       return;
     }
 
-    this.filialsService.createFilial({ name }).subscribe(data => {
+    this.stationService.createStation({ name }).subscribe(data => {
       console.log(data);
-      this.formCreateFilial.reset();
+      this.formCreateStation.reset();
       this.createEvent.emit();
     });
   }

@@ -1,6 +1,6 @@
 export interface Service {
   id: string;
-  filialId: string;
+  stationId: string;
   name: string;
   description: string;
   price: number;

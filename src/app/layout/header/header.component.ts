@@ -14,7 +14,7 @@ export class HeaderComponent {
 
   menu = [
     { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
-    { name: 'Филиалы', icon: 'tuiIconFlag', link: 'filials' },
+    { name: 'Филиалы', icon: 'tuiIconFlag', link: 'stations' },
     {
       name: 'Система лояльности',
       icon: 'tuiIconCard',
@@ -23,6 +23,8 @@ export class HeaderComponent {
     { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
     { name: 'Настройки', icon: 'tuiIconDrag', link: 'setting' },
     { name: 'Уведомления', icon: 'tuiIconBell', link: 'notification' },
+
+    { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },
   ];
 
   async logout() {

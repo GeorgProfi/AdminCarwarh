@@ -23,8 +23,8 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { ServicesService } from './services.service';
-import { CreateFilialComponent } from './create-service/create-service.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
+import { CreateServiceComponent } from './create-service/create-service.component';
 
 @NgModule({
   imports: [
@@ -52,7 +52,7 @@ import { EditServiceComponent } from './edit-service/edit-service.component';
   providers: [ServicesService],
   declarations: [
     ServicesComponent,
-    CreateFilialComponent,
+    CreateServiceComponent,
     EditServiceComponent,
   ],
   exports: [ServicesComponent],

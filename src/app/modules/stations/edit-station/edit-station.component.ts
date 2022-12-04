@@ -1,25 +1,25 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
-import { FilialsService } from '../filials.service';
+import { StationService } from '../station.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Filial } from '../../../common/entities/filial.entity';
+import { Station } from '../../../common/entities/station.entity';
 
 @Component({
-  selector: 'app-edit-filial',
-  templateUrl: './edit-filial.component.html',
-  styleUrls: ['./edit-filial.component.less'],
+  selector: 'app-edit-station',
+  templateUrl: './edit-station.component.html',
+  styleUrls: ['./edit-station.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditFilialComponent {
+export class EditStationComponent {
   constructor(
     @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
     @Inject(POLYMORPHEUS_CONTEXT)
-    private readonly context: TuiDialogContext<Filial, Filial>,
-    private filialsService: FilialsService
+    private readonly context: TuiDialogContext<Station, Station>,
+    private stationService: StationService
   ) {}
 
-  formEditFilial = new FormGroup({
+  formEditStation = new FormGroup({
     name: new FormControl(this.context.data.name, Validators.required),
   });
 
@@ -30,13 +30,13 @@ export class EditFilialComponent {
   }
 
   onSubmit(): void {
-    const name = this.formEditFilial.value.name;
+    const name = this.formEditStation.value.name;
     if (!name) {
       // FIXME: Кинуть норм ошибку
       throw 123;
     }
 
-    this.filialsService.updateFilial(this.id, { name }).subscribe(data => {
+    this.stationService.updateStation(this.id, { name }).subscribe(data => {
       this.context.completeWith(data);
     });
   }

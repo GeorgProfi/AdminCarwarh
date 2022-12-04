@@ -25,7 +25,7 @@ const databaseMockData: readonly string[] = [
   styleUrls: ['./create-service.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateFilialComponent {
+export class CreateServiceComponent {
   constructor(private servicesService: ServicesService) {}
 
   @Output() createEvent = new EventEmitter();

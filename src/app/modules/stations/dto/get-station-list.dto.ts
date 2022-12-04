@@ -1,5 +1,5 @@
 import { Pagination } from '../../../common/dto/pagination.dto';
 
-export interface GetFilialListDto extends Pagination {
+export interface GetStationListDto extends Pagination {
   search?: string;
 }

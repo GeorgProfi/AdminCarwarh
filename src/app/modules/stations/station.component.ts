@@ -15,23 +15,23 @@ import {
   startWith,
   switchMap,
 } from 'rxjs/operators';
-import { FilialsService } from './filials.service';
+import { StationService } from './station.service';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { EditFilialComponent } from './edit-filial/edit-filial.component';
-import { Filial } from '../../common/entities/filial.entity';
+import { EditStationComponent } from './edit-station/edit-station.component';
+import { Station } from '../../common/entities/station.entity';
 
 type Key = 'name' | 'id';
 
 @Component({
-  selector: 'app-filials',
-  templateUrl: './filials.component.html',
-  styleUrls: ['./filials.component.less'],
+  selector: 'app-stations',
+  templateUrl: './station.component.html',
+  styleUrls: ['./station.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilialsComponent {
+export class StationComponent {
   constructor(
-    private filialsService: FilialsService,
+    private stationService: StationService,
     @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
     @Inject(Injector) private readonly injector: Injector
   ) {}
@@ -65,7 +65,7 @@ export class FilialsComponent {
     startWith(1)
   );
 
-  readonly data$: Observable<readonly Filial[]> = this.request$.pipe(
+  readonly data$: Observable<readonly Station[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(users => users.filter(tuiIsPresent)),
     startWith([])
@@ -87,7 +87,7 @@ export class FilialsComponent {
     return !!this.search && TUI_DEFAULT_MATCHER(value, this.search);
   }
 
-  private sortBy(key: Key, direction: -1 | 1): TuiComparator<Filial> {
+  private sortBy(key: Key, direction: -1 | 1): TuiComparator<Station> {
     return (a, b) => direction * tuiDefaultSort(a[key], b[key]);
   }
 
@@ -96,9 +96,9 @@ export class FilialsComponent {
     direction: -1 | 1,
     page: number,
     size: number
-  ): Observable<Filial[] | null> {
-    return this.filialsService
-      .getFilialList({ search: '', page, pageSize: size })
+  ): Observable<Station[] | null> {
+    return this.stationService
+      .getStationList({ search: '', page, pageSize: size })
       .pipe(
         map(data => {
           console.log(data);
@@ -113,11 +113,11 @@ export class FilialsComponent {
 
   updateData() {}
 
-  toggleEdit(filial: Filial) {
+  toggleEdit(filial: Station) {
     console.log('toggleEdit');
     this.dialogService
-      .open<Filial>(
-        new PolymorpheusComponent(EditFilialComponent, this.injector),
+      .open<Station>(
+        new PolymorpheusComponent(EditStationComponent, this.injector),
         {
           data: filial,
           dismissible: true,
