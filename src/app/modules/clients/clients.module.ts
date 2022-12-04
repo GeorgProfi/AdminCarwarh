@@ -14,6 +14,7 @@ import {
   TuiAccordionModule,
   TuiInputModule,
   TuiIslandModule,
+  TuiPaginationModule,
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
@@ -42,6 +43,7 @@ import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
     TuiAutoFocusModule,
     TuiAccordionModule,
     TuiGroupModule,
+    TuiPaginationModule,
   ],
   providers: [ClientsService],
   declarations: [ClientsComponent, CreateClientComponent, EditClientComponent],

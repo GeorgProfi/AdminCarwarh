@@ -11,33 +11,44 @@
     *ngIf="data$ | async as data"
     tuiTable
     class="table"
-    [columns]="columns"
-    [tuiSortBy]="sorter$ | async"
-    (tuiSortByChange)="sorter$.next($event!)"
-    [direction]="(direction$ | async) || 1"
-    (directionChange)="direction$.next($event)">
+    [columns]="columns">
     <thead>
       <tr tuiThGroup>
-        <th *tuiHead="'actions'" tuiTh [sorter]="null">Действия</th>
-        <th *tuiHead="'name'" tuiTh tuiSortable>Имя</th>
+        <th tuiTh>Действия</th>
+        <th tuiTh>Название</th>
       </tr>
     </thead>
-    <tbody
-      *tuiLet="data | tuiTableSort as sortedData"
-      tuiTbody
-      [data]="sortedData">
-      <tr *ngFor="let item of sortedData" tuiTr>
-        <td *tuiCell="'actions'" tuiTd>
+    <tbody tuiTbody [data]="data">
+      <tr tuiTr *ngFor="let item of data">
+        <td tuiTd *tuiCell="'actions'">
           <button
             tuiIconButton
             appearance="flat"
             size="s"
-            icon="tuiIconEdit"
-            title="edit"
-            shape="rounded"
-            (click)="toggleEdit(item)"></button>
+            icon="tuiIconEditLarge"
+            tuiHint="Редактировать"
+            tuiHintDirection="right"
+            tuiHintDescribe
+            title="Редактировать"
+            shape="rounded"></button>
+          <button
+            tuiIconButton
+            tuiHint="Удалить"
+            tuiHintDirection="right"
+            tuiHintDescribe
+            appearance="flat"
+            size="s"
+            icon="tuiIconRemoveLarge"
+            shape="rounded"></button>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconAlertCircleLarge"
+            title="Подробнее"
+            shape="rounded"></button>
         </td>
-        <td *tuiCell="'name'" tuiTd [class.match]="isMatch(item.name)">
+        <td tuiTd *tuiCell="'name'">
           {{ item.name }}
         </td>
       </tr>
@@ -45,11 +56,11 @@
     <tfoot>
       <tr>
         <td [colSpan]="columns.length">
-          <tui-table-pagination
-            class="tui-space_top-2"
-            [total]="(total$ | async) || 0"
-            (pageChange)="onPage($event)"
-            (sizeChange)="onSize($event)"></tui-table-pagination>
+          <tui-pagination
+            class="tui-space_top-5"
+            [length]="(total$ | async) || 0"
+            [index]="page$.value"
+            (indexChange)="page$.next($event)"></tui-pagination>
         </td>
       </tr>
     </tfoot>

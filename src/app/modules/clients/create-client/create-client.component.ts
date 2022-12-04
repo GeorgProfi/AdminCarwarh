@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ClientsService } from '../clients.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-create-client',
@@ -18,7 +19,7 @@ export class CreateClientComponent {
   }
   expandedCode = false;
 
-  formCreateService = new FormGroup({
+  formCreateClient = new FormGroup({
     name: new FormControl(``, Validators.required),
     phone: new FormControl(``, Validators.required),
     email: new FormControl(``, Validators.required),
@@ -36,7 +37,11 @@ export class CreateClientComponent {
     // });
   }
 
+  loader: boolean = false;
   onAcceptCode() {
-    console.log('7');
+    this.loader = true;
+    timer(1000).subscribe(() => {
+      this.loader = false;
+    });
   }
 }

@@ -1,12 +1,35 @@
 <app-create-station (createEvent)="updateData()"></app-create-station>
 
-<p tuiTextfieldSize="m" class="filters">
-  <tui-input class="input" [tuiTextfieldCleaner]="true" [(ngModel)]="search">
+<div
+  tuiGroup
+  class="tui-form__row tui-space_bottom-5"
+  [adaptive]="true"
+  [collapsed]="true">
+  <tui-input
+    class="input"
+    tuiTextfieldSize="m"
+    [tuiTextfieldCleaner]="true"
+    [(ngModel)]="search">
     Поиск
   </tui-input>
-</p>
+  <button
+    tuiButton
+    size="m"
+    class="tui-form__button"
+    appearance="primary"
+    (click)="search$.next(search)">
+    Найти
+  </button>
+  <tui-select
+    tuiTextfieldSize="m"
+    [(ngModel)]="size"
+    (ngModelChange)="size$.next($event)">
+    Размер страницы
+    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>
+  </tui-select>
+</div>
 
-<tui-loader [showLoader]="!!(loading$ | async)">
+<tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
   <table
     *ngIf="data$ | async as data"
     tuiTable
@@ -18,16 +41,16 @@
     (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th *tuiHead="'actions'" tuiTh [sorter]="null">Действия</th>
-        <th *tuiHead="'name'" tuiTh tuiSortable>Название</th>
+        <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
+        <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
       </tr>
     </thead>
     <tbody
-      *tuiLet="data | tuiTableSort as sortedData"
       tuiTbody
+      *tuiLet="data | tuiTableSort as sortedData"
       [data]="sortedData">
-      <tr *ngFor="let item of sortedData" tuiTr>
-        <td *tuiCell="'actions'" tuiTd>
+      <tr tuiTr *ngFor="let item of sortedData">
+        <td tuiTd *tuiCell="'actions'">
           <button
             tuiIconButton
             appearance="flat"
@@ -37,8 +60,7 @@
             tuiHintDirection="right"
             tuiHintDescribe
             title="Редактировать"
-            shape="rounded"
-            (click)="toggleEdit(item)"></button>
+            shape="rounded"></button>
           <button
             tuiIconButton
             tuiHint="Удалить"
@@ -56,7 +78,7 @@
             title="Подробнее"
             shape="rounded"></button>
         </td>
-        <td *tuiCell="'name'" tuiTd [class.match]="isMatch(item.name)">
+        <td tuiTd *tuiCell="'name'">
           {{ item.name }}
         </td>
       </tr>
@@ -64,11 +86,11 @@
     <tfoot>
       <tr>
         <td [colSpan]="columns.length">
-          <tui-table-pagination
-            class="tui-space_top-2"
-            [total]="(total$ | async) || 0"
-            (pageChange)="onPage($event)"
-            (sizeChange)="onSize($event)"></tui-table-pagination>
+          <tui-pagination
+            class="tui-space_top-5"
+            [length]="(total$ | async) || 0"
+            [index]="page$.value"
+            (indexChange)="page$.next($event)"></tui-pagination>
         </td>
       </tr>
     </tfoot>

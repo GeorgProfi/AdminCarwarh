@@ -12,6 +12,7 @@ import {
   TuiDataListWrapperModule,
   TuiInputModule,
   TuiIslandModule,
+  TuiPaginationModule,
   TuiSelectModule,
   TuiSelectOptionModule,
 } from '@taiga-ui/kit';
@@ -48,6 +49,7 @@ import { CreateServiceComponent } from './create-service/create-service.componen
     TuiSelectOptionModule,
     TuiDataListModule,
     TuiAccordionModule,
+    TuiPaginationModule,
   ],
   providers: [ServicesService],
   declarations: [

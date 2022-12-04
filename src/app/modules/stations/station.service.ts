@@ -6,13 +6,13 @@ import { PaginateRes } from '../../common/dto/paginate-response.dto';
 import { Station } from '../../common/entities/station.entity';
 import { CreateStationDto } from './dto/create-station.dto';
 import { UpdateStationDto } from './dto/update-station.dto';
-import { GetStationListDto } from './dto/get-station-list.dto';
+import { Pagination } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class StationService {
   constructor(private http: HttpClient) {}
 
-  getStationList(data: GetStationListDto): Observable<PaginateRes<Station>> {
+  getStationList(data: Pagination): Observable<PaginateRes<Station>> {
     return this.http.get<PaginateRes<Station>>(
       `${environment.apiUrl}/station/list`,
       { params: { ...data } }

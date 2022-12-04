@@ -9,11 +9,12 @@ import {
   startWith,
   switchMap,
 } from 'rxjs/operators';
-import { TUI_DEFAULT_MATCHER, tuiIsPresent } from '@taiga-ui/cdk';
+import { tuiIsPresent } from '@taiga-ui/cdk';
 import { Client } from '../../common/entities/client.entity';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditClientComponent } from './edit-client/edit-client.component';
+import { Station } from '../../common/entities/station.entity';
 
 type Key = 'id' | 'name';
 
@@ -29,65 +30,54 @@ export class ClientsComponent {
     @Inject(Injector) private readonly injector: Injector
   ) {}
 
-  columns = ['actions', 'name'];
-  search = '';
+  columns: string[] = ['actions', 'name'];
 
-  private readonly size$ = new BehaviorSubject(10);
-  private readonly page$ = new BehaviorSubject(0);
-  readonly direction$ = new BehaviorSubject<-1 | 1>(-1);
-  readonly sorter$ = new BehaviorSubject<Key>(`name`);
+  search$ = new BehaviorSubject('');
+  page$ = new BehaviorSubject(0);
+  size$ = new BehaviorSubject(10);
+  sorter$ = new BehaviorSubject<Key>(`name`);
+  direction$ = new BehaviorSubject<-1 | 1>(-1);
 
   readonly request$ = combineLatest([
-    this.sorter$,
-    this.direction$,
     this.page$,
     this.size$,
+    this.search$,
+    this.sorter$,
+    this.direction$,
   ]).pipe(
+    // zero time debounce for a case when both key and direction change
     debounceTime(0),
     switchMap(query => this.getData(...query).pipe(startWith(null))),
     share()
   );
-
-  readonly loading$ = this.request$.pipe(map(value => !value));
-  readonly total$ = this.request$.pipe(
+  readonly data$: Observable<readonly Station[]> = this.request$.pipe(
     filter(tuiIsPresent),
-    map(({ length }) => length),
-    startWith(1)
-  );
-  readonly data$: Observable<readonly Client[]> = this.request$.pipe(
-    filter(tuiIsPresent),
-    map(client => client.filter(tuiIsPresent)),
+    map(data => data.rows.filter(tuiIsPresent)),
     startWith([])
   );
+  readonly total$ = this.request$.pipe(
+    filter(tuiIsPresent),
+    map(data => data.info.totalPages),
+    startWith(1)
+  );
+  readonly loading$ = this.request$.pipe(map(value => !value));
 
-  onDirection(direction: -1 | 1): void {
-    this.direction$.next(direction);
-  }
-
-  onSize(size: number): void {
-    this.size$.next(size);
-  }
-
-  onPage(page: number): void {
-    this.page$.next(page);
-  }
-
-  isMatch(value: unknown): boolean {
-    return !!this.search && TUI_DEFAULT_MATCHER(value, this.search);
-  }
+  search = ``;
 
   private getData(
-    key: Key,
-    direction: -1 | 1,
     page: number,
-    size: number
-  ): Observable<Client[] | null> {
-    return this.clientsService.getClientsList({ page, pageSize: size }).pipe(
-      map(data => {
-        console.log(data);
-        return data.rows;
-      })
-    );
+    pageSize: number,
+    search: string,
+    sorter: string,
+    direction: -1 | 1
+  ) {
+    return this.clientsService.getClientsList({
+      page,
+      pageSize,
+      search,
+      sorter,
+      direction,
+    });
   }
 
   updateData() {

@@ -2,7 +2,7 @@
   Создание клиента
   <ng-template tuiAccordionItemContent>
     <tui-expand [expanded]="!expandedCode">
-      <form [formGroup]="formCreateService" (ngSubmit)="onSubmit()">
+      <form [formGroup]="formCreateClient" (ngSubmit)="onSubmit()">
         <div class="tui-form__row">
           <tui-input formControlName="phone">
             Телефон
@@ -45,6 +45,7 @@
         </tui-input>
         <button
           tuiButton
+          [showLoader]="loader"
           class="tui-form__button"
           appearance="primary"
           (click)="onAcceptCode()">

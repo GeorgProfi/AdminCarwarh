@@ -10,6 +10,7 @@ import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiButtonModule,
   TuiExpandModule,
+  TuiGroupModule,
   TuiHintModule,
   TuiHostedDropdownModule,
   TuiLinkModule,
@@ -22,6 +23,7 @@ import {
   TuiInputCountModule,
   TuiInputModule,
   TuiIslandModule,
+  TuiPaginationModule,
   TuiSelectModule,
   TuiSliderModule,
   TuiTagModule,
@@ -60,6 +62,8 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiAutoFocusModule,
     TuiAccordionModule,
     TuiHintModule,
+    TuiPaginationModule,
+    TuiGroupModule,
   ],
   providers: [StationService],
   declarations: [
