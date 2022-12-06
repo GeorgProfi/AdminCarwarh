@@ -1,25 +1,62 @@
 <app-create-client (createEvent)="updateData()"></app-create-client>
 
-<p tuiTextfieldSize="m" class="filters">
-  <tui-input class="input" [tuiTextfieldCleaner]="true" [(ngModel)]="search">
+<div
+  tuiGroup
+  class="tui-form__row tui-space_bottom-5"
+  [adaptive]="true"
+  [collapsed]="true">
+  <tui-input
+    class="input"
+    tuiTextfieldSize="m"
+    [tuiTextfieldCleaner]="true"
+    [(ngModel)]="search">
     Поиск
   </tui-input>
-</p>
+  <button
+    tuiButton
+    size="m"
+    class="tui-form__button"
+    appearance="primary"
+    (click)="search$.next(search)">
+    Найти
+  </button>
+  <tui-select
+    tuiTextfieldSize="m"
+    [(ngModel)]="size"
+    (ngModelChange)="size$.next($event)">
+    Размер страницы
+    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>
+  </tui-select>
+</div>
 
 <tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
   <table
     *ngIf="data$ | async as data"
     tuiTable
     class="table"
-    [columns]="columns">
+    [columns]="columns"
+    [tuiSortBy]="sorter$ | async"
+    (tuiSortByChange)="sorter$.next($event!)"
+    [direction]="(direction$ | async) || 1"
+    (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th tuiTh>Действия</th>
-        <th tuiTh>Название</th>
+        <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
+        <th tuiTh *tuiHead="'name'" tuiSortable>Имя</th>
+        <th tuiTh *tuiHead="'phone'" tuiSortable>Телефон</th>
+        <th tuiTh *tuiHead="'email'" tuiSortable>email</th>
+        <th tuiTh *tuiHead="'bonuses'" [sorter]="null">Бонусы</th>
+        <th tuiTh *tuiHead="'numberOfVisits'" tuiSortable>Число посещений</th>
+        <th tuiTh *tuiHead="'dateOfRegistration'" tuiSortable>
+          Дата регистрации
+        </th>
       </tr>
     </thead>
-    <tbody tuiTbody [data]="data">
-      <tr tuiTr *ngFor="let item of data">
+    <tbody
+      tuiTbody
+      *tuiLet="data | tuiTableSort as sortedData"
+      [data]="sortedData">
+      <tr tuiTr *ngFor="let item of sortedData">
         <td tuiTd *tuiCell="'actions'">
           <button
             tuiIconButton
@@ -50,6 +87,21 @@
         </td>
         <td tuiTd *tuiCell="'name'">
           {{ item.name }}
+        </td>
+        <td tuiTd *tuiCell="'phone'">
+          {{ item.phone }}
+        </td>
+        <td tuiTd *tuiCell="'email'">
+          {{ item.email }}
+        </td>
+        <td tuiTd *tuiCell="'bonuses'">
+          {{ item.card.bonuses }}
+        </td>
+        <td tuiTd *tuiCell="'numberOfVisits'">
+          {{ item.numberOfVisits }}
+        </td>
+        <td tuiTd *tuiCell="'dateOfRegistration'">
+          {{ item.dateOfRegistration | date }}
         </td>
       </tr>
     </tbody>

@@ -1,25 +1,59 @@
 <app-create-service (createEvent)="updateData()"></app-create-service>
 
-<p tuiTextfieldSize="m" class="filters">
-  <tui-input class="input" [tuiTextfieldCleaner]="true" [(ngModel)]="search">
+<div
+  tuiGroup
+  class="tui-form__row tui-space_bottom-5"
+  [adaptive]="true"
+  [collapsed]="true">
+  <tui-input
+    class="input"
+    tuiTextfieldSize="m"
+    [tuiTextfieldCleaner]="true"
+    [(ngModel)]="search">
     Поиск
   </tui-input>
-</p>
+  <button
+    tuiButton
+    size="m"
+    class="tui-form__button"
+    appearance="primary"
+    (click)="search$.next(search)">
+    Найти
+  </button>
+  <tui-select
+    tuiTextfieldSize="m"
+    [(ngModel)]="size"
+    (ngModelChange)="size$.next($event)">
+    Размер страницы
+    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>
+  </tui-select>
+</div>
 
 <tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
   <table
     *ngIf="data$ | async as data"
     tuiTable
     class="table"
-    [columns]="columns">
+    [columns]="columns"
+    [tuiSortBy]="sorter$ | async"
+    (tuiSortByChange)="sorter$.next($event!)"
+    [direction]="(direction$ | async) || 1"
+    (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th tuiTh>Действия</th>
-        <th tuiTh>Название</th>
+        <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
+        <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
+        <th tuiTh *tuiHead="'price'" tuiSortable>Цена</th>
+        <th tuiTh *tuiHead="'duration'" tuiSortable>Время работы</th>
+        <th tuiTh *tuiHead="'NumberOfSales'" tuiSortable>Число продаж</th>
+        <th tuiTh *tuiHead="'discount'" tuiSortable>Скидка</th>
       </tr>
     </thead>
-    <tbody tuiTbody [data]="data">
-      <tr tuiTr *ngFor="let item of data">
+    <tbody
+      tuiTbody
+      *tuiLet="data | tuiTableSort as sortedData"
+      [data]="sortedData">
+      <tr tuiTr *ngFor="let item of sortedData">
         <td tuiTd *tuiCell="'actions'">
           <button
             tuiIconButton
@@ -50,6 +84,18 @@
         </td>
         <td tuiTd *tuiCell="'name'">
           {{ item.name }}
+        </td>
+        <td tuiTd *tuiCell="'price'">
+          {{ item.price }}
+        </td>
+        <td tuiTd *tuiCell="'duration'">
+          {{ item.duration }}
+        </td>
+        <td tuiTd *tuiCell="'NumberOfSales'">
+          {{ item.NumberOfSales }}
+        </td>
+        <td tuiTd *tuiCell="'discount'">
+          {{ item.discount }}
         </td>
       </tr>
     </tbody>

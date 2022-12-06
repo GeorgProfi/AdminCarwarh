@@ -14,7 +14,7 @@ export class HeaderComponent {
 
   menu = [
     { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
-    { name: 'Филиалы', icon: 'tuiIconFlag', link: 'stations' },
+    { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
     {
       name: 'Система лояльности',
       icon: 'tuiIconCard',

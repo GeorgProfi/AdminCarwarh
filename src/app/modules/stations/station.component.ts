@@ -36,7 +36,7 @@ export class StationComponent {
 
   sizes = [10, 20, 5];
   size = this.sizes[0];
-  columns: string[] = ['actions', 'name'];
+  columns: string[] = ['actions', 'name', 'schedule'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -77,13 +77,20 @@ export class StationComponent {
     sorter: string,
     direction: -1 | 1
   ) {
-    return this.stationService.getStationList({
-      page,
-      pageSize,
-      search,
-      sorter,
-      direction,
-    });
+    return this.stationService
+      .getStationList({
+        page,
+        pageSize,
+        search,
+        sorter,
+        direction,
+      })
+      .pipe(
+        map(data => {
+          console.log(data);
+          return data;
+        })
+      );
   }
 
   updateData() {}

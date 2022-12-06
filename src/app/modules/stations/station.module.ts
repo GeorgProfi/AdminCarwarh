@@ -6,7 +6,7 @@ import {
   TuiTablePaginationModule,
 } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiButtonModule,
   TuiExpandModule,
@@ -64,6 +64,7 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiHintModule,
     TuiPaginationModule,
     TuiGroupModule,
+    DatePipe,
   ],
   providers: [StationService],
   declarations: [

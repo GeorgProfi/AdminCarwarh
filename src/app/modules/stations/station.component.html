@@ -43,6 +43,7 @@
       <tr tuiThGroup>
         <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
         <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
+        <th tuiTh *tuiHead="'schedule'" [sorter]="null">Расписание</th>
       </tr>
     </thead>
     <tbody
@@ -80,6 +81,9 @@
         </td>
         <td tuiTd *tuiCell="'name'">
           {{ item.name }}
+        </td>
+        <td tuiTd *tuiCell="'schedule'">
+          {{ item.startWork }} - {{ item.endWork }}
         </td>
       </tr>
     </tbody>

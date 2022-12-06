@@ -14,7 +14,6 @@ import { Client } from '../../common/entities/client.entity';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditClientComponent } from './edit-client/edit-client.component';
-import { Station } from '../../common/entities/station.entity';
 
 type Key = 'id' | 'name';
 
@@ -30,13 +29,23 @@ export class ClientsComponent {
     @Inject(Injector) private readonly injector: Injector
   ) {}
 
-  columns: string[] = ['actions', 'name'];
+  sizes = [10, 20, 5];
+  size = this.sizes[0];
+  columns: string[] = [
+    'actions',
+    'name',
+    'phone',
+    'email',
+    'bonuses',
+    'numberOfVisits',
+    'dateOfRegistration',
+  ];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
   size$ = new BehaviorSubject(10);
   sorter$ = new BehaviorSubject<Key>(`name`);
-  direction$ = new BehaviorSubject<-1 | 1>(-1);
+  direction$ = new BehaviorSubject<-1 | 1>(1);
 
   readonly request$ = combineLatest([
     this.page$,
@@ -50,7 +59,7 @@ export class ClientsComponent {
     switchMap(query => this.getData(...query).pipe(startWith(null))),
     share()
   );
-  readonly data$: Observable<readonly Station[]> = this.request$.pipe(
+  readonly data$: Observable<readonly Client[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(data => data.rows.filter(tuiIsPresent)),
     startWith([])
@@ -71,13 +80,20 @@ export class ClientsComponent {
     sorter: string,
     direction: -1 | 1
   ) {
-    return this.clientsService.getClientsList({
-      page,
-      pageSize,
-      search,
-      sorter,
-      direction,
-    });
+    return this.clientsService
+      .getClientsList({
+        page,
+        pageSize,
+        search,
+        sorter,
+        direction,
+      })
+      .pipe(
+        map(data => {
+          console.log(data);
+          return data;
+        })
+      );
   }
 
   updateData() {

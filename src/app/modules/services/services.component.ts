@@ -10,7 +10,7 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
-import { Station } from '../../common/entities/station.entity';
+import { Service } from '../../common/entities/service.entity';
 
 type Key = 'id' | 'name';
 
@@ -23,7 +23,16 @@ type Key = 'id' | 'name';
 export class ServicesComponent {
   constructor(private servicesService: ServicesService) {}
 
-  columns: string[] = ['actions', 'name'];
+  sizes = [10, 20, 5];
+  size = this.sizes[0];
+  columns: string[] = [
+    'actions',
+    'name',
+    'price',
+    'duration',
+    'NumberOfSales',
+    'discount',
+  ];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -43,7 +52,7 @@ export class ServicesComponent {
     switchMap(query => this.getData(...query).pipe(startWith(null))),
     share()
   );
-  readonly data$: Observable<readonly Station[]> = this.request$.pipe(
+  readonly data$: Observable<readonly Service[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(data => data.rows.filter(tuiIsPresent)),
     startWith([])

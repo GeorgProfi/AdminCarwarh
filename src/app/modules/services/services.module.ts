@@ -4,6 +4,7 @@ import {
   TuiButtonModule,
   TuiDataListModule,
   TuiExpandModule,
+  TuiGroupModule,
   TuiLoaderModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
@@ -50,6 +51,7 @@ import { CreateServiceComponent } from './create-service/create-service.componen
     TuiDataListModule,
     TuiAccordionModule,
     TuiPaginationModule,
+    TuiGroupModule,
   ],
   providers: [ServicesService],
   declarations: [
