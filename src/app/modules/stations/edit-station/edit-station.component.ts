@@ -21,9 +21,17 @@ export class EditStationComponent {
 
   formEditStation = new FormGroup({
     name: new FormControl(this.context.data.name, Validators.required),
+    postCount: new FormControl(3, Validators.required),
+    startWork: new FormControl(null, Validators.required),
+    endWork: new FormControl(null, Validators.required),
+    description: new FormControl(this.context.data.description),
   });
 
   id = this.context.data.id;
+
+  setServices() {
+    console.log('setServices');
+  }
 
   get hasValue(): boolean {
     return this.id !== null;

@@ -1,18 +1,29 @@
 <form [formGroup]="formEditStation" (ngSubmit)="onSubmit()">
+  <div tuiGroup class="tui-form__row">
+    <tui-input formControlName="name"> Название </tui-input>
+    <tui-input formControlName="postCount"> Число постов </tui-input>
+  </div>
+  <div tuiGroup class="tui-form__row">
+    <tui-input-time tuiUnfinishedValidator formControlName="startWork">
+      Начало работы
+    </tui-input-time>
+    <tui-input-time tuiUnfinishedValidator formControlName="endWork">
+      Окончание работы
+    </tui-input-time>
+  </div>
   <div class="tui-form__row">
-    <tui-input tuiTextfieldSize="m" tuiAutoFocus formControlName="name">
-      Название
-      <input tuiTextfield />
-    </tui-input>
+    <tui-text-area formControlName="description">Описание</tui-text-area>
+  </div>
+  <div class="tui-form__row">
+    <button>Указать услуги</button>
   </div>
   <div class="tui-form__buttons tui-form__buttons_align_center">
     <button
-      tuiButton
-      type="submit"
       class="tui-form__button"
-      size="m"
+      tuiButton
+      (click)="onSubmit()"
       appearance="primary">
-      Сохранить
+      Создать
     </button>
   </div>
 </form>

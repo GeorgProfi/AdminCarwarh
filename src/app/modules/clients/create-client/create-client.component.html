@@ -3,25 +3,15 @@
   <ng-template tuiAccordionItemContent>
     <tui-expand [expanded]="!expandedCode">
       <form [formGroup]="formCreateClient" (ngSubmit)="onSubmit()">
-        <div class="tui-form__row">
-          <tui-input formControlName="phone">
-            Телефон
-            <span class="tui-required"></span>
-          </tui-input>
-        </div>
-
         <div class="tui-form__row tui-form__row_multi-fields">
           <div class="tui-form__multi-field">
-            <tui-input formControlName="name">
-              Имя
-              <input tuiTextfield />
+            <tui-input formControlName="phone">
+              Телефон
+              <span class="tui-required"></span>
             </tui-input>
           </div>
           <div class="tui-form__multi-field">
-            <tui-input formControlName="email">
-              email
-              <input tuiTextfield />
-            </tui-input>
+            <tui-input formControlName="name"> Имя </tui-input>
           </div>
         </div>
 
@@ -38,11 +28,11 @@
     </tui-expand>
 
     <tui-expand [expanded]="expandedCode">
-      <div tuiGroup class="tui-form__row" [adaptive]="true" [collapsed]="true">
-        <tui-input formControlName="name">
-          Код подтверждения
-          <input tuiTextfield />
-        </tui-input>
+      <div tuiGroup class="tui-form__row">
+        <tui-input-number [formControl]="code"
+          >Код подтверждения</tui-input-number
+        >
+
         <button
           tuiButton
           [showLoader]="loader"

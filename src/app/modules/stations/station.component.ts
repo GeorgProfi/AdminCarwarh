@@ -102,7 +102,7 @@ export class StationComponent {
         new PolymorpheusComponent(EditStationComponent, this.injector),
         {
           data: filial,
-          dismissible: true,
+          dismissible: false,
           label: `Редактировать`,
         }
       )

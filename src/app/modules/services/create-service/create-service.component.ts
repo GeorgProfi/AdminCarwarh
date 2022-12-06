@@ -7,8 +7,6 @@ import {
 import { ServicesService } from '../services.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Service } from '../../../common/entities/service.entity';
-import { delay, Observable, of, Subject, switchMap } from 'rxjs';
-import { startWith } from 'rxjs/operators';
 
 const databaseMockData: readonly string[] = [
   `John Cleese`,
@@ -36,9 +34,10 @@ export class CreateServiceComponent {
   }
 
   formCreateService = new FormGroup({
-    name: new FormControl(``, Validators.required),
-    description: new FormControl(``),
-    price: new FormControl(0, Validators.required),
+    name: new FormControl(null, Validators.required),
+    price: new FormControl(null, Validators.required),
+    workTime: new FormControl(null),
+    description: new FormControl(null),
   });
   onSubmit(): void {
     // FIXME: Кринж с типом(
@@ -51,29 +50,7 @@ export class CreateServiceComponent {
     });
   }
 
-  private readonly search$ = new Subject<string>();
-
-  value = [];
-
-  readonly items$ = this.search$.pipe(
-    switchMap(search =>
-      this.serverRequest(search).pipe(startWith<readonly string[] | null>(null))
-    ),
-    startWith(databaseMockData)
-  );
-
-  onSearchChange(search: string): void {
-    this.search$.next(search);
-  }
-
-  /**
-   * Server request emulation
-   */
-  private serverRequest(search: string): Observable<readonly string[]> {
-    const result = databaseMockData.filter(item =>
-      item.toLowerCase().includes(search.toLowerCase())
-    );
-
-    return of(result).pipe(delay(Math.random() * 1000 + 500));
+  setStations() {
+    console.log('setStations');
   }
 }

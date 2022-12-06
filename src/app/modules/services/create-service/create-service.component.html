@@ -1,32 +1,37 @@
 <tui-accordion-item>
   Создание услуги
   <ng-template tuiAccordionItemContent>
-    <form [formGroup]="formCreateService" (ngSubmit)="onSubmit()">
+    <form [formGroup]="formCreateService">
       <div class="tui-form__row tui-form__row_multi-fields">
         <div class="tui-form__multi-field">
-          <tui-input formControlName="name">
-            Название
-            <input tuiTextfield />
-          </tui-input>
+          <tui-input formControlName="name"> Название </tui-input>
         </div>
         <div class="tui-form__multi-field">
-          <tui-input formControlName="price">
-            Цена
-            <input tuiTextfield />
-          </tui-input>
+          <tui-input formControlName="price"> Цена </tui-input>
+        </div>
+        <div class="tui-form__multi-field">
+          <tui-input-time tuiUnfinishedValidator formControlName="workTime">
+            Время работы
+          </tui-input-time>
         </div>
       </div>
       <div class="tui-form__row">
-        <tui-input formControlName="description">
-          Описание
-          <input tuiTextfield />
-        </tui-input>
+        <tui-text-area formControlName="description">Описание</tui-text-area>
+      </div>
+      <div class="tui-form__buttons">
+        <button
+          tuiButton
+          class="tui-form__button"
+          appearance="primary"
+          (click)="setStations()">
+          Указать станции
+        </button>
       </div>
       <div class="tui-form__buttons tui-form__buttons_align_center">
         <button
           tuiButton
           class="tui-form__button"
-          type="submit"
+          (click)="onSubmit()"
           appearance="primary">
           Создать
         </button>

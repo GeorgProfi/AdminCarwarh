@@ -22,11 +22,13 @@ import {
   TuiDataListWrapperModule,
   TuiInputCountModule,
   TuiInputModule,
+  TuiInputTimeModule,
   TuiIslandModule,
   TuiPaginationModule,
   TuiSelectModule,
   TuiSliderModule,
   TuiTagModule,
+  TuiTextAreaModule,
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateStationComponent } from './create-station/create-station.component';
@@ -65,6 +67,8 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiPaginationModule,
     TuiGroupModule,
     DatePipe,
+    TuiInputTimeModule,
+    TuiTextAreaModule,
   ],
   providers: [StationService],
   declarations: [

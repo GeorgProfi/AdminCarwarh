@@ -12,10 +12,12 @@ import {
   TuiAccordionModule,
   TuiDataListWrapperModule,
   TuiInputModule,
+  TuiInputTimeModule,
   TuiIslandModule,
   TuiPaginationModule,
   TuiSelectModule,
   TuiSelectOptionModule,
+  TuiTextAreaModule,
 } from '@taiga-ui/kit';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
@@ -52,6 +54,8 @@ import { CreateServiceComponent } from './create-service/create-service.componen
     TuiAccordionModule,
     TuiPaginationModule,
     TuiGroupModule,
+    TuiTextAreaModule,
+    TuiInputTimeModule,
   ],
   providers: [ServicesService],
   declarations: [

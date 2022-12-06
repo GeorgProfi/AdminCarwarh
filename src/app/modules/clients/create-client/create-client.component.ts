@@ -19,10 +19,11 @@ export class CreateClientComponent {
   }
   expandedCode = false;
 
+  code = new FormControl(null, Validators.required);
+
   formCreateClient = new FormGroup({
     name: new FormControl(``, Validators.required),
     phone: new FormControl(``, Validators.required),
-    email: new FormControl(``, Validators.required),
   });
   onSubmit(): void {
     this.expandedCode = true;
