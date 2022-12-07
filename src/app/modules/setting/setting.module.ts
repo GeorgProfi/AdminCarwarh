@@ -3,6 +3,7 @@ import { SettingComponent } from './setting.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   TuiInputFilesModule,
+  TuiInputNumberModule,
   TuiInputPasswordModule,
   TuiTextAreaModule,
 } from '@taiga-ui/kit';
@@ -19,6 +20,7 @@ import { TuiButtonModule, TuiLabelModule } from '@taiga-ui/core';
     TuiInputPasswordModule,
     TuiLabelModule,
     TuiButtonModule,
+    TuiInputNumberModule,
   ],
   declarations: [SettingComponent],
   exports: [SettingComponent],

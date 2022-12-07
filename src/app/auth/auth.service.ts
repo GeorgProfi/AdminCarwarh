@@ -35,11 +35,7 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    let deviceId = localStorage.getItem('device_id');
-    if (!deviceId) {
-      deviceId = v4();
-      localStorage.setItem('device_id', deviceId);
-    }
+    const deviceId = this.deviceId;
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/owner/signIn`, {
         email,
@@ -57,6 +53,15 @@ export class AuthService {
 
   get authorization() {
     return `Bearer ${localStorage.getItem('access')}`;
+  }
+
+  get deviceId(): string {
+    let deviceId: string | null = localStorage.getItem('device_id');
+    if (!deviceId) {
+      deviceId = v4();
+      localStorage.setItem('device_id', deviceId);
+    }
+    return deviceId;
   }
 
   logout(): void {
@@ -77,8 +82,6 @@ export class AuthService {
   refresh(): Observable<any> {
     const refresh = localStorage.getItem('refresh');
     const deviceId = localStorage.getItem('device_id');
-    console.log(refresh);
-    console.log(deviceId);
     if (!deviceId || !refresh) {
       return throwError('Отсутствует refresh или deviceId');
     }

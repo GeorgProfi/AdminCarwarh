@@ -62,6 +62,11 @@ export class ClientsComponent {
   readonly data$: Observable<readonly Client[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(data => data.rows.filter(tuiIsPresent)),
+    map(data => {
+      console.log('$');
+      console.log(data);
+      return data;
+    }),
     startWith([])
   );
   readonly total$ = this.request$.pipe(
@@ -90,6 +95,7 @@ export class ClientsComponent {
       })
       .pipe(
         map(data => {
+          console.log('data');
           console.log(data);
           return data;
         })

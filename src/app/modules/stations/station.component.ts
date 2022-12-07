@@ -93,7 +93,9 @@ export class StationComponent {
       );
   }
 
-  updateData() {}
+  updateData() {
+    this.search$.next(this.search$.value);
+  }
 
   toggleEdit(filial: Station) {
     console.log('toggleEdit');

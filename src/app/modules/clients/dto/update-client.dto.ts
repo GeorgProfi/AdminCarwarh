@@ -1,3 +1,3 @@
-import { CreateClientDto } from './create-client.dto';
+import { RequestOtpDto } from './request-otp.dto';
 
-export interface UpdateClientDto extends Partial<CreateClientDto> {}
+export interface UpdateClientDto extends Partial<RequestOtpDto> {}

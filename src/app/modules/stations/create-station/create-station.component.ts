@@ -39,32 +39,30 @@ export class CreateStationComponent {
   }
 
   onSubmit(): void {
-    console.log('Create!');
     // Без этого кринжа не работает =))))
-    let startWork: any = this.formCreateStation.value
+    const startWorkTui: TuiTime = this.formCreateStation.value
       .startWork as unknown as TuiTime;
-    let endWork: any = this.formCreateStation.value
+    const endWorkTui: TuiTime = this.formCreateStation.value
       .endWork as unknown as TuiTime;
-    startWork = DateTime.local(
+    const startWork = DateTime.local(
       2022,
       1,
       1,
-      startWork.hours,
-      startWork.minutes
+      startWorkTui.hours,
+      startWorkTui.minutes
     ).toJSDate();
-    endWork = DateTime.local(
+    const endWork = DateTime.local(
       2022,
       1,
       1,
-      endWork.hours,
-      endWork.minutes
+      endWorkTui.hours,
+      endWorkTui.minutes
     ).toJSDate();
     const data: CreateStationDto = this.formCreateStation
       .value as unknown as CreateStationDto;
     data.startWork = startWork;
     data.endWork = endWork;
     this.stationService.createStation(data).subscribe(data => {
-      console.log(data);
       this.formCreateStation.reset();
       this.createEvent.emit();
     });

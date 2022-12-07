@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TuiInputModule, TuiInputPasswordModule } from '@taiga-ui/kit';
+import {
+  TuiInputModule,
+  TuiInputPasswordModule,
+  TuiTabsModule,
+} from '@taiga-ui/kit';
 import { TuiButtonModule, TuiErrorModule } from '@taiga-ui/core';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { AuthPageComponent } from './auth-page.component';
 
 @NgModule({
   imports: [
@@ -16,8 +21,10 @@ import { RouterLink } from '@angular/router';
     TuiErrorModule,
     TuiButtonModule,
     RouterLink,
+    TuiTabsModule,
+    RouterOutlet,
   ],
-  declarations: [LoginComponent, RegisterComponent],
-  exports: [LoginComponent, RegisterComponent],
+  declarations: [AuthPageComponent, LoginComponent, RegisterComponent],
+  exports: [AuthPageComponent, LoginComponent, RegisterComponent],
 })
 export class AuthModule {}

@@ -7,15 +7,8 @@ import {
 import { ServicesService } from '../services.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Service } from '../../../common/entities/service.entity';
-
-const databaseMockData: readonly string[] = [
-  `John Cleese`,
-  `Eric Idle`,
-  `Michael Palin`,
-  `Terry Gilliam`,
-  `Terry Jones`,
-  `Graham Chapman`,
-];
+import { DateTime } from 'luxon';
+import { TuiTime } from '@taiga-ui/cdk';
 
 @Component({
   selector: 'app-create-service',
@@ -40,14 +33,30 @@ export class CreateServiceComponent {
     description: new FormControl(null),
   });
   onSubmit(): void {
-    // FIXME: Кринж с типом(
+    const workTimeTui: TuiTime = this.formCreateService.value
+      .workTime as unknown as TuiTime;
+    const workTime = DateTime.local(
+      2022,
+      1,
+      1,
+      workTimeTui.hours,
+      workTimeTui.minutes
+    ).toJSDate();
     const data: Service = this.formCreateService.value as unknown as Service;
 
-    this.servicesService.createService(data).subscribe(data => {
-      console.log(data);
-      this.formCreateService.reset();
-      this.createEvent.emit();
-    });
+    this.servicesService
+      .createService({
+        name: data.name,
+        price: data.price,
+        description: data.description,
+        duration: workTime,
+        stationIds: [],
+      })
+      .subscribe(data => {
+        console.log(data);
+        this.formCreateService.reset();
+        this.createEvent.emit();
+      });
   }
 
   setStations() {

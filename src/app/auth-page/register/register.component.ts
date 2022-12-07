@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiValidationError } from '@taiga-ui/cdk';
 
 @Component({
-  selector: 'app-auth',
+  selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.less'],
 })
@@ -13,10 +13,10 @@ export class RegisterComponent {
   constructor(private route: Router, private authService: AuthService) {}
 
   authForm = new FormGroup({
-    nameCarWash: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required),
+    nameCarWash: new FormControl('TEST', Validators.required),
+    email: new FormControl('TEST@email.com', Validators.required),
+    phone: new FormControl('+71231231212', Validators.required),
+    password: new FormControl('1234', Validators.required),
   });
 
   enabledError = false;
@@ -28,11 +28,9 @@ export class RegisterComponent {
 
   async onSubmit(): Promise<void> {
     const data = this.authForm.value;
-    console.log(666);
     if (!(data.phone && data.email && data.nameCarWash && data.password)) {
       return;
     }
-    console.log(777);
 
     this.authService
       .register({

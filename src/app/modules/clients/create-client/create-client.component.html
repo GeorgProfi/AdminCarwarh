@@ -1,37 +1,27 @@
 <tui-accordion-item>
-  Создание клиента
+  Регистрация клиента
   <ng-template tuiAccordionItemContent>
     <tui-expand [expanded]="!expandedCode">
-      <form [formGroup]="formCreateClient" (ngSubmit)="onSubmit()">
-        <div class="tui-form__row tui-form__row_multi-fields">
-          <div class="tui-form__multi-field">
-            <tui-input formControlName="phone">
-              Телефон
-              <span class="tui-required"></span>
-            </tui-input>
-          </div>
-          <div class="tui-form__multi-field">
-            <tui-input formControlName="name"> Имя </tui-input>
-          </div>
-        </div>
-
-        <div class="tui-form__buttons tui-form__buttons_align_center">
-          <button
-            tuiButton
-            class="tui-form__button"
-            type="submit"
-            appearance="primary">
-            Зарегистрировать
-          </button>
-        </div>
-      </form>
+      <div tuiGroup class="tui-form__row">
+        <tui-input [formControl]="phone">
+          Телефон
+          <span class="tui-required"></span>
+        </tui-input>
+        <button
+          tuiButton
+          class="tui-form__button"
+          (click)="onSubmit()"
+          appearance="primary">
+          Зарегистрировать
+        </button>
+      </div>
     </tui-expand>
 
     <tui-expand [expanded]="expandedCode">
       <div tuiGroup class="tui-form__row">
-        <tui-input-number [formControl]="code"
-          >Код подтверждения</tui-input-number
-        >
+        <tui-input-number [formControl]="code">
+          Код подтверждения
+        </tui-input-number>
 
         <button
           tuiButton

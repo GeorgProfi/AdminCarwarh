@@ -10,7 +10,7 @@ import { TuiValidationError } from '@taiga-ui/cdk';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
-  selector: 'app-auth',
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,8 +31,8 @@ export class LoginComponent {
   constructor(private route: Router, private authService: AuthService) {}
 
   authForm = new FormGroup({
-    email: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+    email: new FormControl('owner@email.com', Validators.required),
+    password: new FormControl('1234', Validators.required),
   });
 
   enabledError = false;

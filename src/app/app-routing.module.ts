@@ -12,6 +12,8 @@ import { ServicesComponent } from './modules/services/services.component';
 import { SettingComponent } from './modules/setting/setting.component';
 import { NotificationComponent } from './modules/notification/notification.component';
 import { DebugComponent } from './modules/debug/debug.component';
+import { AuthPageComponent } from './auth-page/auth-page.component';
+import { ReservationComponent } from './modules/reservation/reservation.component';
 
 const routes: Routes = [
   {
@@ -25,6 +27,7 @@ const routes: Routes = [
       { path: 'services', component: ServicesComponent },
       { path: 'setting', component: SettingComponent },
       { path: 'notification', component: NotificationComponent },
+      { path: 'reservation', component: ReservationComponent },
 
       { path: 'debug', component: DebugComponent },
     ],
@@ -32,11 +35,12 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    component: LoginComponent,
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
+    component: AuthPageComponent,
+    children: [
+      { path: '', redirectTo: 'login', pathMatch: 'prefix' },
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
+    ],
   },
 ];
 

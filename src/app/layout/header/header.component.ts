@@ -23,6 +23,7 @@ export class HeaderComponent {
     { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
     { name: 'Настройки', icon: 'tuiIconDrag', link: 'setting' },
     { name: 'Уведомления', icon: 'tuiIconBell', link: 'notification' },
+    { name: 'Запись на время', icon: 'tuiIconTime', link: 'reservation' },
 
     { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },
   ];

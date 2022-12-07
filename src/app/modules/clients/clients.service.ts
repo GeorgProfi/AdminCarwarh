@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { PaginateRes } from '../../common/dto/paginate-response.dto';
 import { Client } from '../../common/entities/client.entity';
 import { environment } from '../../../environments/environment';
-import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { Pagination } from '../../common/dto/pagination.dto';
 
@@ -18,8 +17,23 @@ export class ClientsService {
     );
   }
 
-  createClient(data: CreateClientDto) {
-    return this.http.post<Client>(`${environment.apiUrl}/client`, data);
+  requestRegistrationClient(phone: string) {
+    const deviceId = localStorage.getItem('device_id');
+    return this.http.post<Client>(
+      `${environment.apiUrl}/auth/client/request/with-company`,
+      {
+        phone,
+        deviceId,
+      }
+    );
+  }
+
+  codeRegistrationClient(code: string) {
+    const deviceId = localStorage.getItem('device_id');
+    return this.http.post<Client>(`${environment.apiUrl}/auth/client/otp`, {
+      code,
+      deviceId,
+    });
   }
 
   getClientById(id: string) {

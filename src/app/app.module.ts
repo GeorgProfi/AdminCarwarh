@@ -26,6 +26,7 @@ import { NotificationModule } from './modules/notification/notification.module';
 import { of } from 'rxjs';
 import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 import { DebugModule } from './modules/debug/debug.module';
+import { ReservationModule } from './modules/reservation/reservation.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,6 +51,7 @@ import { DebugModule } from './modules/debug/debug.module';
     ServicesModule,
     SettingModule,
     NotificationModule,
+    ReservationModule,
 
     DebugModule,
   ],

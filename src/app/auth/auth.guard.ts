@@ -30,7 +30,6 @@ export class AuthGuard implements CanActivate {
         return this.router.parseUrl('/auth');
       }),
       catchError(error => {
-        console.log('FUCK');
         return of(this.router.parseUrl('/auth'));
       })
     );

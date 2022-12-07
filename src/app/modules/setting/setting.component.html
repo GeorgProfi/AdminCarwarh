@@ -1,4 +1,19 @@
 <form class="container" [formGroup]="formSetting">
+  <h3 class="tui-form__header">Система лояльности</h3>
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input-number> Процент бонусов </tui-input-number>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input-number> Процент кэшбека </tui-input-number>
+    </div>
+  </div>
+  <div class="tui-form__buttons">
+    <button tuiButton class="tui-form__button" appearance="primary">
+      Сохранить
+    </button>
+  </div>
+
   <h3 class="tui-form__header">Описание</h3>
   <div class="tui-form__row">
     <tui-text-area formControlName="description">Type a text</tui-text-area>

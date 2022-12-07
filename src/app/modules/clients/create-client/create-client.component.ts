@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ClientsService } from '../clients.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { timer } from 'rxjs';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-client',
@@ -17,32 +16,32 @@ export class CreateClientComponent {
   toggle(): void {
     this.expanded = !this.expanded;
   }
-  expandedCode = false;
 
-  code = new FormControl(null, Validators.required);
-
-  formCreateClient = new FormGroup({
-    name: new FormControl(``, Validators.required),
-    phone: new FormControl(``, Validators.required),
-  });
+  phone = new FormControl('', Validators.required);
   onSubmit(): void {
-    this.expandedCode = true;
-    // FIXME: Кринж с типом(
-    // const data: CreateClientDto = this.formCreateService
-    //   .value as unknown as CreateClientDto;
-    //
-    // this.clientsService.createClient(data).subscribe(data => {
-    //   console.log(data);
-    //   this.formCreateService.reset();
-    //   this.createEvent.emit();
-    // });
+    const phone: string = this.phone.value as string;
+    this.clientsService.requestRegistrationClient(phone).subscribe({
+      next: () => {
+        this.expandedCode = true;
+        this.phone.reset();
+      },
+      error: error => {
+        console.error(error);
+      },
+    });
   }
 
   loader: boolean = false;
+
+  expandedCode = false;
+  code = new FormControl('', Validators.required);
   onAcceptCode() {
     this.loader = true;
-    timer(1000).subscribe(() => {
+    const code: string = this.code.value as string;
+    this.clientsService.codeRegistrationClient(code).subscribe(() => {
       this.loader = false;
+      this.expandedCode = false;
+      this.code.reset();
     });
   }
 }
