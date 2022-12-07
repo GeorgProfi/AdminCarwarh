@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Inject,
+  Injector,
   Output,
 } from '@angular/core';
 import { ServicesService } from '../services.service';
@@ -9,6 +11,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Service } from '../../../common/entities/service.entity';
 import { DateTime } from 'luxon';
 import { TuiTime } from '@taiga-ui/cdk';
+import { TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { SelectStationComponent } from '../select-station/select-station.component';
 
 @Component({
   selector: 'app-create-service',
@@ -17,7 +22,11 @@ import { TuiTime } from '@taiga-ui/cdk';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateServiceComponent {
-  constructor(private servicesService: ServicesService) {}
+  constructor(
+    private servicesService: ServicesService,
+    @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
+    @Inject(Injector) private readonly injector: Injector
+  ) {}
 
   @Output() createEvent = new EventEmitter();
 
@@ -60,6 +69,23 @@ export class CreateServiceComponent {
   }
 
   setStations() {
-    console.log('setStations');
+    this.dialogService
+      .open<string[]>(
+        new PolymorpheusComponent(SelectStationComponent, this.injector),
+        {
+          data: 1,
+          dismissible: false,
+          label: `Выбор станций`,
+        }
+      )
+      .subscribe({
+        next: data => {
+          // TODO: обновить ячейку
+          console.info(`Dialog emitted data = ${data}`);
+        },
+        complete: () => {
+          console.info(`Dialog closed`);
+        },
+      });
   }
 }

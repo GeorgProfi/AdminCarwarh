@@ -18,14 +18,26 @@
       <div class="tui-form__row">
         <tui-text-area formControlName="description">Описание</tui-text-area>
       </div>
-      <div class="tui-form__buttons">
-        <button
-          tuiButton
-          class="tui-form__button"
-          appearance="primary"
-          (click)="setStations()">
-          Указать станции
-        </button>
+      <div class="tui-form__header">Станции:</div>
+      <div tuiGroup class="tui-form__row">
+        <tui-island>
+          <h3 class="tui-island__title">Поддерживает</h3>
+          <p class="tui-island__paragraph">Чекбоксы</p>
+          <p class="tui-island__paragraph tui-island__paragraph_button">
+            <button tuiButton type="button" appearance="secondary">
+              Переместить в другую группу
+            </button>
+          </p>
+        </tui-island>
+        <tui-island>
+          <h3 class="tui-island__title">Не поддерживает</h3>
+          <p class="tui-island__paragraph">Чекбоксы</p>
+          <p class="tui-island__paragraph tui-island__paragraph_button">
+            <button tuiButton type="button" appearance="secondary">
+              Переместить в другую группу
+            </button>
+          </p>
+        </tui-island>
       </div>
       <div class="tui-form__buttons tui-form__buttons_align_center">
         <button

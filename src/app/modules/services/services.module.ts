@@ -10,6 +10,7 @@ import {
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
+  TuiCheckboxBlockModule,
   TuiDataListWrapperModule,
   TuiInputModule,
   TuiInputTimeModule,
@@ -29,6 +30,7 @@ import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { ServicesService } from './services.service';
 import { EditServiceComponent } from './edit-service/edit-service.component';
 import { CreateServiceComponent } from './create-service/create-service.component';
+import { SelectStationComponent } from './select-station/select-station.component';
 
 @NgModule({
   imports: [
@@ -56,10 +58,12 @@ import { CreateServiceComponent } from './create-service/create-service.componen
     TuiGroupModule,
     TuiTextAreaModule,
     TuiInputTimeModule,
+    TuiCheckboxBlockModule,
   ],
   providers: [ServicesService],
   declarations: [
     ServicesComponent,
+    SelectStationComponent,
     CreateServiceComponent,
     EditServiceComponent,
   ],
