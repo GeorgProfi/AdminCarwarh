@@ -19,7 +19,7 @@ import {
 import { debounceTime, filter, share, startWith } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
 
-type Key = 'name' | 'id';
+type Key = 'name';
 
 @Component({
   selector: 'app-stations',

@@ -1,1 +1,96 @@
-Notification
+<div
+  tuiGroup
+  class="tui-form__row tui-space_bottom-5"
+  [adaptive]="true"
+  [collapsed]="true">
+  <tui-input
+    class="input"
+    tuiTextfieldSize="m"
+    [tuiTextfieldCleaner]="true"
+    [(ngModel)]="search">
+    Поиск
+  </tui-input>
+  <button
+    tuiButton
+    size="m"
+    class="tui-form__button"
+    appearance="primary"
+    (click)="search$.next(search)">
+    Найти
+  </button>
+  <tui-select
+    tuiTextfieldSize="m"
+    [(ngModel)]="size"
+    (ngModelChange)="size$.next($event)">
+    Размер страницы
+    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>
+  </tui-select>
+</div>
+
+<tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
+  <table
+    *ngIf="data$ | async as data"
+    tuiTable
+    class="table"
+    [columns]="columns"
+    [tuiSortBy]="sorter$ | async"
+    (tuiSortByChange)="sorter$.next($event!)"
+    [direction]="(direction$ | async) || 1"
+    (directionChange)="direction$.next($event)">
+    <thead>
+      <tr tuiThGroup>
+        <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
+        <th tuiTh *tuiHead="'title'" tuiSortable>Название</th>
+      </tr>
+    </thead>
+    <tbody
+      tuiTbody
+      *tuiLet="data | tuiTableSort as sortedData"
+      [data]="sortedData">
+      <tr tuiTr *ngFor="let item of sortedData">
+        <td tuiTd *tuiCell="'actions'">
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconEditLarge"
+            tuiHint="Редактировать"
+            tuiHintDirection="right"
+            tuiHintDescribe
+            title="Редактировать"
+            shape="rounded"></button>
+          <button
+            tuiIconButton
+            tuiHint="Удалить"
+            tuiHintDirection="right"
+            tuiHintDescribe
+            appearance="flat"
+            size="s"
+            icon="tuiIconRemoveLarge"
+            shape="rounded"></button>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconAlertCircleLarge"
+            title="Подробнее"
+            shape="rounded"></button>
+        </td>
+        <td tuiTd *tuiCell="'title'">
+          {{ item.title }}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td [colSpan]="columns.length">
+          <tui-pagination
+            class="tui-space_top-5"
+            [length]="(total$ | async) || 0"
+            [index]="page$.value"
+            (indexChange)="page$.next($event)"></tui-pagination>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</tui-loader>

@@ -14,6 +14,7 @@ import { NotificationComponent } from './modules/notification/notification.compo
 import { DebugComponent } from './modules/debug/debug.component';
 import { AuthPageComponent } from './auth-page/auth-page.component';
 import { ReservationComponent } from './modules/reservation/reservation.component';
+import { Error404Component } from './modules/error-404/error-404.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,7 @@ const routes: Routes = [
       { path: 'register', component: RegisterComponent },
     ],
   },
+  { path: '**', component: Error404Component },
 ];
 
 @NgModule({

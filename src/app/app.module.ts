@@ -27,6 +27,7 @@ import { of } from 'rxjs';
 import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 import { DebugModule } from './modules/debug/debug.module';
 import { ReservationModule } from './modules/reservation/reservation.module';
+import { Error404Module } from './modules/error-404/error-404.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,6 +43,7 @@ import { ReservationModule } from './modules/reservation/reservation.module';
     TuiDialogModule,
     TuiAlertModule,
     // My app
+    Error404Module,
     AuthModule,
     LayoutModule,
     HomeModule,
