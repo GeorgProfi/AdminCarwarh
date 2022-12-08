@@ -1,0 +1,63 @@
+<tui-accordion-item>
+  Создание записи на мойку
+  <ng-template tuiAccordionItemContent>
+    <div tuiGroup class="tui-form__row">
+      <div>
+        <tui-calendar [value]="day" (dayClick)="day = $event"></tui-calendar>
+      </div>
+      <div>
+        <tui-select>
+          Станция
+          <tui-data-list-wrapper></tui-data-list-wrapper>
+        </tui-select>
+        <div class="tui-form__buttons">
+          <button class="tui-form__button" tuiButton appearance="primary">
+            09:00
+          </button>
+          <button class="tui-form__button" tuiButton appearance="primary">
+            09:30
+          </button>
+          <button class="tui-form__button" tuiButton appearance="primary">
+            10:00
+          </button>
+          <button class="tui-form__button" tuiButton appearance="primary">
+            12:00
+          </button>
+        </div>
+        <div class="tui-form__buttons">
+          <button class="tui-form__button" tuiButton appearance="primary">
+            13:30
+          </button>
+          <button class="tui-form__button" tuiButton appearance="primary">
+            14:00
+          </button>
+          <button class="tui-form__button" tuiButton appearance="primary">
+            15:00
+          </button>
+          <button class="tui-form__button" tuiButton appearance="primary">
+            17:30
+          </button>
+        </div>
+        <div class="tui-form__buttons">
+          <button class="tui-form__button" tuiButton appearance="primary">
+            18:30
+          </button>
+          <button class="tui-form__button" tuiButton appearance="primary">
+            20:00
+          </button>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="formCreateReservation">
+      <div class="tui-form__buttons tui-form__buttons_align_center">
+        <button
+          class="tui-form__button"
+          tuiButton
+          (click)="onSubmit()"
+          appearance="primary">
+          Создать
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</tui-accordion-item>
