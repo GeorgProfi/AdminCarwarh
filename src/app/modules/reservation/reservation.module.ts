@@ -13,7 +13,7 @@ import {
   TuiSelectModule,
 } from '@taiga-ui/kit';
 import { FormsModule } from '@angular/forms';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
 import { TuiTableModule } from '@taiga-ui/addon-table';
 import { ReservationService } from './reservation.service';
 import { TuiLetModule } from '@taiga-ui/cdk';
@@ -34,6 +34,7 @@ import { TuiLetModule } from '@taiga-ui/cdk';
     TuiPaginationModule,
     TuiLetModule,
     NgForOf,
+    DatePipe,
   ],
   providers: [ReservationService],
   declarations: [ReservationComponent],

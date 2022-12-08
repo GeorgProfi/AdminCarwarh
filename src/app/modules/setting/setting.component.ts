@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { finalize, map, Observable, of, Subject, switchMap, timer } from 'rxjs';
 import { TuiFileLike } from '@taiga-ui/kit';
 
@@ -10,11 +10,12 @@ import { TuiFileLike } from '@taiga-ui/kit';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingComponent {
-  formSetting = new FormGroup({
-    description: new FormControl(),
-    logo: new FormControl(),
-    password: new FormControl(),
-  });
+  percentBonus = new FormControl();
+  percentCache = new FormControl();
+  description = new FormControl();
+  logo = new FormControl();
+  password = new FormControl();
+  passwordRepeat = new FormControl();
 
   readonly control = new FormControl();
 

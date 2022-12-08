@@ -17,6 +17,7 @@ export class RegisterComponent {
     email: new FormControl('TEST@email.com', Validators.required),
     phone: new FormControl('+71231231212', Validators.required),
     password: new FormControl('1234', Validators.required),
+    passwordRepeat: new FormControl('1234', Validators.required),
   });
 
   enabledError = false;

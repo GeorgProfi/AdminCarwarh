@@ -53,6 +53,23 @@ export class AuthInterceptor implements HttpInterceptor {
       headers: req.headers.set('Authorization', token),
     });
 
+    // TODO: заранее бы ловить просроченный токен по хорошему
+    // if (!this.authService.isLoggedIn) {
+    //   this.authService.refresh().subscribe({
+    //     next: () => {},
+    //     error: err => {
+    //       if (
+    //         err instanceof HttpErrorResponse &&
+    //         !authReq.url.includes('auth') &&
+    //         err.status === 401
+    //       ) {
+    //         return this.router.parseUrl('/auth');
+    //       }
+    //       return throwError(err);
+    //     },
+    //   });
+    // }
+
     return next.handle(authReq).pipe(
       catchError(err => {
         if (

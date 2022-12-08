@@ -17,4 +17,16 @@ export class DebugService {
   createClient100() {
     return this.http.get(`${environment.apiUrl}/debug/client`);
   }
+
+  createNotification20() {
+    return this.http.get(`${environment.apiUrl}/debug/notification`);
+  }
+
+  createReservation10() {
+    return this.http.get(`${environment.apiUrl}/debug/reservation`);
+  }
+
+  clearData() {
+    return this.http.get(`${environment.apiUrl}/debug/clear`);
+  }
 }

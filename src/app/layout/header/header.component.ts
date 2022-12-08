@@ -13,17 +13,17 @@ export class HeaderComponent {
   activeItemIndex = 0;
 
   menu = [
-    { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
-    { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
     {
       name: 'Система лояльности',
       icon: 'tuiIconCard',
       link: 'loyalty-system',
     },
+    { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
+    { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
     { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
-    { name: 'Настройки', icon: 'tuiIconDrag', link: 'setting' },
-    { name: 'Уведомления', icon: 'tuiIconBell', link: 'notification' },
     { name: 'Запись на время', icon: 'tuiIconTime', link: 'reservation' },
+    { name: 'Уведомления', icon: 'tuiIconBell', link: 'notification' },
+    { name: 'Настройки', icon: 'tuiIconDrag', link: 'setting' },
 
     { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },
   ];

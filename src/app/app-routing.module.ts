@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
-import { HomeComponent } from './modules/home/home.component';
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth-page/login/login.component';
 import { RegisterComponent } from './auth-page/register/register.component';
@@ -21,14 +20,14 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', component: HomeComponent },
+      { path: '', redirectTo: 'loyalty-system', pathMatch: 'prefix' },
+      { path: 'loyalty-system', component: LoyaltySystemComponent },
       { path: 'clients', component: ClientsComponent },
       { path: 'stations', component: StationComponent },
-      { path: 'loyalty-system', component: LoyaltySystemComponent },
       { path: 'services', component: ServicesComponent },
-      { path: 'setting', component: SettingComponent },
-      { path: 'notification', component: NotificationComponent },
       { path: 'reservation', component: ReservationComponent },
+      { path: 'notification', component: NotificationComponent },
+      { path: 'setting', component: SettingComponent },
 
       { path: 'debug', component: DebugComponent },
     ],

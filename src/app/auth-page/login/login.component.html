@@ -1,11 +1,22 @@
 <form class="b-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
-  <label>Авторизация</label>
-  <tui-input formControlName="email">
-    email
-    <input tuiTextfield type="email" />
-  </tui-input>
-  <tui-input-password formControlName="password"> password </tui-input-password>
+  <div class="tui-form__row">
+    <tui-input formControlName="email">
+      Email
+      <input tuiTextfield type="email" />
+    </tui-input>
+  </div>
+  <div class="tui-form__row">
+    <tui-input-password formControlName="password"> Пароль </tui-input-password>
+  </div>
 
   <tui-error [error]="computedError"></tui-error>
-  <button tuiButton type="submit" appearance="primary">Войти</button>
+  <div class="tui-form__buttons">
+    <button
+      tuiButton
+      class="tui-form__button"
+      type="submit"
+      appearance="primary">
+      Войти
+    </button>
+  </div>
 </form>

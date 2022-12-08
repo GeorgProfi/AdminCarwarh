@@ -22,7 +22,15 @@ export class ReservationComponent {
   constructor(private reservationService: ReservationService) {}
   sizes = [10, 20, 5];
   size = this.sizes[0];
-  columns: string[] = ['actions', 'id'];
+  columns: string[] = [
+    'actions',
+    'station',
+    'post',
+    'client',
+    'service',
+    'timeStart',
+    'timeEnd',
+  ];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -45,6 +53,9 @@ export class ReservationComponent {
   readonly data$: Observable<readonly Reservation[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(data => data.rows.filter(tuiIsPresent)),
+    map(data => {
+      return data;
+    }),
     startWith([])
   );
   readonly total$ = this.request$.pipe(

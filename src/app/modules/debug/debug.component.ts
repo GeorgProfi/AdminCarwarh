@@ -41,4 +41,37 @@ export class DebugComponent {
       },
     });
   }
+
+  createNotification20() {
+    this.debugService.createNotification20().subscribe({
+      next: () => {
+        console.log('ok');
+      },
+      error: error => {
+        console.error(error);
+      },
+    });
+  }
+
+  createReservation10() {
+    this.debugService.createReservation10().subscribe({
+      next: () => {
+        console.log('ok');
+      },
+      error: error => {
+        console.error(error);
+      },
+    });
+  }
+
+  clearData() {
+    this.debugService.clearData().subscribe({
+      next: () => {
+        console.log('ok');
+      },
+      error: error => {
+        console.error(error);
+      },
+    });
+  }
 }

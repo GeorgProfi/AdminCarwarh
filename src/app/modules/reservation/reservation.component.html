@@ -40,7 +40,12 @@
     <thead>
       <tr tuiThGroup>
         <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
-        <th tuiTh *tuiHead="'id'" tuiSortable>Название</th>
+        <th tuiTh *tuiHead="'station'" tuiSortable>Станция</th>
+        <th tuiTh *tuiHead="'post'" [sorter]="null">Пост</th>
+        <th tuiTh *tuiHead="'client'" tuiSortable>Клиент</th>
+        <th tuiTh *tuiHead="'service'" tuiSortable>Услуга</th>
+        <th tuiTh *tuiHead="'timeStart'" tuiSortable>Время начала</th>
+        <th tuiTh *tuiHead="'timeEnd'" tuiSortable>Время окончания</th>
       </tr>
     </thead>
     <tbody
@@ -76,8 +81,23 @@
             title="Подробнее"
             shape="rounded"></button>
         </td>
-        <td tuiTd *tuiCell="'id'">
-          {{ item.id }}
+        <td tuiTd *tuiCell="'station'">
+          {{ item.station.name }}
+        </td>
+        <td tuiTd *tuiCell="'post'">
+          {{ item.post.name }}
+        </td>
+        <td tuiTd *tuiCell="'client'">
+          {{ item.client.name }}
+        </td>
+        <td tuiTd *tuiCell="'service'">
+          {{ item.service.name }}
+        </td>
+        <td tuiTd *tuiCell="'timeStart'">
+          {{ item.timeStart }}
+        </td>
+        <td tuiTd *tuiCell="'timeEnd'">
+          {{ item.timeEnd | date }}
         </td>
       </tr>
     </tbody>
