@@ -9,15 +9,6 @@ import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditStationComponent } from './edit-station/edit-station.component';
 import { Station } from '../../common/entities/station.entity';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  Observable,
-  switchMap,
-} from 'rxjs';
-import { debounceTime, filter, share, startWith } from 'rxjs/operators';
-import { tuiIsPresent } from '@taiga-ui/cdk';
 
 type Key = 'name';
 
@@ -29,72 +20,22 @@ type Key = 'name';
 })
 export class StationComponent {
   constructor(
-    private stationService: StationService,
+    public stationService: StationService,
     @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
     @Inject(Injector) private readonly injector: Injector
   ) {}
 
-  sizes = [10, 20, 5];
-  size = this.sizes[0];
-  columns: string[] = ['actions', 'name', 'schedule'];
-
-  search$ = new BehaviorSubject('');
-  page$ = new BehaviorSubject(0);
-  size$ = new BehaviorSubject(10);
-  sorter$ = new BehaviorSubject<Key>(`name`);
-  direction$ = new BehaviorSubject<-1 | 1>(-1);
-
-  readonly request$ = combineLatest([
-    this.page$,
-    this.size$,
-    this.search$,
-    this.sorter$,
-    this.direction$,
-  ]).pipe(
-    // zero time debounce for a case when both key and direction change
-    debounceTime(0),
-    switchMap(query => this.getData(...query).pipe(startWith(null))),
-    share()
-  );
-  readonly data$: Observable<readonly Station[]> = this.request$.pipe(
-    filter(tuiIsPresent),
-    map(data => data.rows.filter(tuiIsPresent)),
-    startWith([])
-  );
-  readonly total$ = this.request$.pipe(
-    filter(tuiIsPresent),
-    map(data => data.info.totalPages),
-    startWith(1)
-  );
-  readonly loading$ = this.request$.pipe(map(value => !value));
-
-  search = ``;
-
-  private getData(
-    page: number,
-    pageSize: number,
-    search: string,
-    sorter: string,
-    direction: -1 | 1
-  ) {
-    return this.stationService
-      .getStationList({
-        page,
-        pageSize,
-        search,
-        sorter,
-        direction,
-      })
-      .pipe(
-        map(data => {
-          console.log(data);
-          return data;
-        })
-      );
+  columns: string[] = ['name', 'schedule'];
+  infoColumn = [
+    { name: 'Название', sort: true },
+    { name: 'Расписание', sort: false },
+  ];
+  pipeData(data: any[]): Station[] {
+    return data.map(el => ({ ...el, schedule: 'test' }));
   }
 
   updateData() {
-    this.search$.next(this.search$.value);
+    console.log('updateData');
   }
 
   toggleEdit(filial: Station) {

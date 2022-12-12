@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { PaginateRes } from '../../common/dto/paginate-response.dto';
 import { Station } from '../../common/entities/station.entity';
 import { CreateStationDto } from './dto/create-station.dto';
@@ -10,13 +10,21 @@ import { Pagination } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class StationService {
-  constructor(private http: HttpClient) {}
+  constructor(public http: HttpClient) {}
 
   getStationList(data: Pagination): Observable<PaginateRes<Station>> {
-    return this.http.get<PaginateRes<Station>>(
-      `${environment.apiUrl}/station/list`,
-      { params: { ...data } }
-    );
+    console.log('kek');
+
+    return this.http
+      .get<PaginateRes<Station>>(`${environment.apiUrl}/station/list`, {
+        params: { ...data },
+      })
+      .pipe(
+        map(data => {
+          console.log(data);
+          return data;
+        })
+      );
   }
 
   getALLStation(): Observable<Station[]> {

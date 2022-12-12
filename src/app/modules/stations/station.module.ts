@@ -35,6 +35,7 @@ import { CreateStationComponent } from './create-station/create-station.componen
 import { StationService } from './station.service';
 import { EditStationComponent } from './edit-station/edit-station.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
+import { TableModule } from '../../components/table/table.module';
 
 @NgModule({
   imports: [
@@ -69,6 +70,7 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     DatePipe,
     TuiInputTimeModule,
     TuiTextAreaModule,
+    TableModule,
   ],
   providers: [StationService],
   declarations: [
