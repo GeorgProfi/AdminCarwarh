@@ -43,6 +43,9 @@
       <tr tuiThGroup>
         <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
         <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
+        <th tuiTh *tuiHead="'address'" tuiSortable>Адрес</th>
+        <th tuiTh *tuiHead="'schedule'" tuiSortable>Расписание</th>
+        <th tuiTh *tuiHead="'status'" tuiSortable>Статус</th>
       </tr>
     </thead>
     <tbody
@@ -56,31 +59,28 @@
             appearance="flat"
             size="s"
             icon="tuiIconEditLarge"
-            tuiHint="Редактировать"
-            tuiHintDirection="right"
-            tuiHintDescribe
-            [routerLink]="['edit', item.id]"
             title="Редактировать"
+            [routerLink]="['edit', item.id]"
             shape="rounded"></button>
           <button
             tuiIconButton
-            tuiHint="Удалить"
-            tuiHintDirection="right"
-            tuiHintDescribe
+            title="Удалить"
             appearance="flat"
             size="s"
             icon="tuiIconRemoveLarge"
             shape="rounded"></button>
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconAlertCircleLarge"
-            title="Подробнее"
-            shape="rounded"></button>
         </td>
         <td tuiTd *tuiCell="'name'">
           {{ item.name }}
+        </td>
+        <td tuiTd *tuiCell="'address'">
+          {{ item.address }}
+        </td>
+        <td tuiTd *tuiCell="'schedule'">
+          {{ item.startWork | time }} - {{ item.endWork | time }}
+        </td>
+        <td tuiTd *tuiCell="'status'">
+          {{ item.status }}
         </td>
       </tr>
     </tbody>

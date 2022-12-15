@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { finalize, map, Observable, of, Subject, switchMap, timer } from 'rxjs';
 import { TuiFileLike } from '@taiga-ui/kit';
+import { CreateNotificationDto } from '../dto/create-notification.dto';
+import { NotificationService } from '../notification.service';
 
 @Component({
   selector: 'app-create-notification',
@@ -10,6 +12,7 @@ import { TuiFileLike } from '@taiga-ui/kit';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateNotificationComponent {
+  constructor(private notificationService: NotificationService) {}
   formCreateNotification = new FormGroup({
     title: new FormControl(),
     content: new FormControl(),
@@ -54,6 +57,10 @@ export class CreateNotificationComponent {
   }
 
   onSubmit() {
-    console.log('Создал');
+    const data: CreateNotificationDto = this.formCreateNotification
+      .value as unknown as CreateNotificationDto;
+    this.notificationService.createNotification(data).subscribe(data => {
+      this.formCreateNotification.reset();
+    });
   }
 }

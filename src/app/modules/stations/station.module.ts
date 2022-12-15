@@ -39,6 +39,7 @@ import { EditStationComponent } from './edit-station/edit-station.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TableModule } from '../../components/table/table.module';
 import { RouterLink } from '@angular/router';
+import { TimePipe } from '../../common/pipes/time.pipe';
 
 @NgModule({
   imports: [
@@ -83,6 +84,7 @@ import { RouterLink } from '@angular/router';
     StationComponent,
     CreateStationComponent,
     EditStationComponent,
+    TimePipe,
   ],
   exports: [StationComponent],
 })

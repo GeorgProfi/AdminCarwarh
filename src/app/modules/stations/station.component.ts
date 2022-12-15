@@ -37,7 +37,7 @@ export class StationComponent {
 
   sizes = [10, 20, 5];
   size = this.sizes[0];
-  columns: string[] = ['actions', 'name'];
+  columns: string[] = ['actions', 'name', 'address', 'schedule', 'status'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
