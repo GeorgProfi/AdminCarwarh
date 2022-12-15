@@ -12,7 +12,7 @@ export class LoyaltySystemService {
   changeBonuses(data: ChangeBonusesDto, phone: string): Observable<number> {
     phone = encodeURIComponent(phone);
     return this.http.put<number>(
-      `${environment.apiUrl}/card/change-bonuses/${phone}`,
+      `${environment.apiUrl}/loyalty-system/change-bonuses/${phone}`,
       data
     );
   }
@@ -20,7 +20,7 @@ export class LoyaltySystemService {
   getClientAndBonuses(phone: string): Observable<ClientAndBonusesDto> {
     phone = encodeURIComponent(phone);
     return this.http.get<ClientAndBonusesDto>(
-      `${environment.apiUrl}/card/card-owner/${phone}`
+      `${environment.apiUrl}/loyalty-system/client/${phone}`
     );
   }
 }

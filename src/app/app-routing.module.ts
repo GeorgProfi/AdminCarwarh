@@ -7,13 +7,13 @@ import { RegisterComponent } from './auth-page/register/register.component';
 import { ClientsComponent } from './modules/clients/clients.component';
 import { StationComponent } from './modules/stations/station.component';
 import { LoyaltySystemComponent } from './modules/loyalty-system/loyalty-system.component';
-import { ServicesComponent } from './modules/services/services.component';
 import { SettingComponent } from './modules/setting/setting.component';
 import { NotificationComponent } from './modules/notification/notification.component';
 import { DebugComponent } from './modules/debug/debug.component';
 import { AuthPageComponent } from './auth-page/auth-page.component';
 import { ReservationComponent } from './modules/reservation/reservation.component';
 import { Error404Component } from './modules/error-404/error-404.component';
+import { EditStationComponent } from './modules/stations/edit-station/edit-station.component';
 
 const routes: Routes = [
   {
@@ -24,7 +24,8 @@ const routes: Routes = [
       { path: 'loyalty-system', component: LoyaltySystemComponent },
       { path: 'clients', component: ClientsComponent },
       { path: 'stations', component: StationComponent },
-      { path: 'services', component: ServicesComponent },
+      { path: 'stations/edit/:id', component: EditStationComponent },
+      // { path: 'services', component: ServicesComponent },
       { path: 'reservation', component: ReservationComponent },
       { path: 'notification', component: NotificationComponent },
       { path: 'setting', component: SettingComponent },

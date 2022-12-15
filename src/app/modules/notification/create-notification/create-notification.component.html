@@ -13,7 +13,9 @@
             [formControl]="control"
             (reject)="onReject($event)"></tui-input-files>
         </label>
-        <ng-template #label> картинка </ng-template>
+        <ng-template #label>
+          картинка <span class="negative">(НЕ РАБОТАЕТ)</span>
+        </ng-template>
 
         <tui-files class="tui-space_top-1">
           <tui-file

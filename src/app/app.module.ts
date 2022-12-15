@@ -20,7 +20,6 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { ClientsModule } from './modules/clients/clients.module';
 import { StationModule } from './modules/stations/station.module';
 import { LoyaltySystemModule } from './modules/loyalty-system/loyalty-system.module';
-import { ServicesModule } from './modules/services/services.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { of } from 'rxjs';
@@ -50,7 +49,7 @@ import { Error404Module } from './modules/error-404/error-404.module';
     ClientsModule,
     StationModule,
     LoyaltySystemModule,
-    ServicesModule,
+    // ServicesModule,
     SettingModule,
     NotificationModule,
     ReservationModule,

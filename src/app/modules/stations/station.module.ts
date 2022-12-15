@@ -9,6 +9,7 @@ import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiButtonModule,
+  TuiDataListModule,
   TuiExpandModule,
   TuiGroupModule,
   TuiHintModule,
@@ -24,6 +25,7 @@ import {
   TuiInputModule,
   TuiInputTimeModule,
   TuiIslandModule,
+  TuiMultiSelectModule,
   TuiPaginationModule,
   TuiSelectModule,
   TuiSliderModule,
@@ -36,6 +38,7 @@ import { StationService } from './station.service';
 import { EditStationComponent } from './edit-station/edit-station.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TableModule } from '../../components/table/table.module';
+import { RouterLink } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -71,6 +74,9 @@ import { TableModule } from '../../components/table/table.module';
     TuiInputTimeModule,
     TuiTextAreaModule,
     TableModule,
+    RouterLink,
+    TuiDataListModule,
+    TuiMultiSelectModule,
   ],
   providers: [StationService],
   declarations: [

@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
-import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { StationService } from '../station.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Station } from '../../../common/entities/station.entity';
+import { switchMap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+
+interface User {
+  readonly name: string;
+  readonly tags: readonly string[];
+}
 
 @Component({
   selector: 'app-edit-station',
@@ -11,41 +15,89 @@ import { Station } from '../../../common/entities/station.entity';
   styleUrls: ['./edit-station.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditStationComponent {
+export class EditStationComponent implements OnInit {
   constructor(
-    @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
-    @Inject(POLYMORPHEUS_CONTEXT)
-    private readonly context: TuiDialogContext<Station, Station>,
-    private stationService: StationService
+    private stationService: StationService,
+    private route: ActivatedRoute
   ) {}
 
+  readonly columns = [`name`, `actions`];
+
+  users: readonly User[] = [
+    {
+      name: `Michael Palin`,
+      tags: [`Funny`],
+    },
+    {
+      name: `Eric Idle`,
+      tags: [`Funny`, `Music`],
+    },
+    {
+      name: `John Cleese`,
+      tags: [`Funny`, `Tall`, `Actor`],
+    },
+    {
+      name: `Terry Jones`,
+      tags: [`Funny`, `Director`],
+    },
+    {
+      name: `Terry Gilliam`,
+      tags: [`Funny`, `Director`],
+    },
+    {
+      name: `Graham Chapman`,
+      tags: [`Funny`, `King Arthur`],
+    },
+  ];
+
   formEditStation = new FormGroup({
-    name: new FormControl(this.context.data.name, Validators.required),
+    name: new FormControl('', Validators.required),
     postCount: new FormControl(3, Validators.required),
     startWork: new FormControl(null, Validators.required),
     endWork: new FormControl(null, Validators.required),
-    description: new FormControl(this.context.data.description),
+    description: new FormControl(''),
+    tagas: new FormControl([]),
+    post3: new FormControl('3'),
   });
 
-  id = this.context.data.id;
+  id!: string;
 
-  setServices() {
-    console.log('setServices');
+  get asd() {
+    return Object.keys(this.typeService) as 'обычно'[];
   }
 
-  get hasValue(): boolean {
-    return this.id !== null;
+  getService(key: 'обычно' | 'чистка') {
+    return this.typeService[key];
   }
 
-  onSubmit(): void {
-    const name = this.formEditStation.value.name;
-    if (!name) {
-      // FIXME: Кинуть норм ошибку
-      throw 123;
-    }
+  typeService = {
+    обычно: [0, 1, 2],
+    чистка: [3, 4, 5],
+  };
 
-    this.stationService.updateStation(this.id, { name }).subscribe(data => {
-      this.context.completeWith(data);
-    });
+  services = ['asd', 'asdg', '77', '65', '465', 'ajgadsg', 'adsgkj'];
+
+  readonly jedi: readonly string[] = [
+    `Luke Skywalker`,
+    `Princess Leia`,
+    `Han Solo`,
+    `Obi-Wan Kenobi`,
+    `Yoda`,
+  ];
+
+  readonly sith: readonly string[] = [`Emperor`, `Darth Vader`, `Darth Maul`];
+
+  value: readonly string[] = [];
+
+  ngOnInit() {
+    this.route.paramMap
+      .pipe(switchMap(params => params.getAll('id')))
+      .subscribe(data => (this.id = data));
   }
+
+  addService() {
+    console.log('addService');
+  }
+
+  onSubmit(): void {}
 }

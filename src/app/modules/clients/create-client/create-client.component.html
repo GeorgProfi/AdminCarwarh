@@ -3,10 +3,11 @@
   <ng-template tuiAccordionItemContent>
     <tui-expand [expanded]="!expandedCode">
       <div tuiGroup class="tui-form__row">
-        <tui-input [formControl]="phone">
+        <tui-input-phone [formControl]="phone">
           Телефон
           <span class="tui-required"></span>
-        </tui-input>
+          <input tuiTextfield autocomplete="tel" />
+        </tui-input-phone>
         <button
           tuiButton
           class="tui-form__button"

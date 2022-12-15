@@ -32,6 +32,12 @@ export class LoyaltySystemComponent {
   onAcceptClient() {
     if (!this.phone.value) return;
 
+    if (!this.phone.valid) {
+      console.log('XXX');
+      return;
+    }
+    console.log(this.phone.valid);
+
     this.loyaltySystemService.getClientAndBonuses(this.phone.value).subscribe({
       next: data => {
         this.clientName = data.holderName;
