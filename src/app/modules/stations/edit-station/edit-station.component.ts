@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 
 interface User {
   readonly name: string;
-  readonly tags: readonly string[];
+  readonly type: string;
 }
 
 @Component({
@@ -21,32 +21,40 @@ export class EditStationComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  readonly columns = [`name`, `actions`];
+  readonly columns = [`name`, 'type', `actions`];
 
   users: readonly User[] = [
     {
-      name: `Michael Palin`,
-      tags: [`Funny`],
+      name: `просто`,
+      type: 'Обычно',
     },
     {
-      name: `Eric Idle`,
-      tags: [`Funny`, `Music`],
+      name: `двери`,
+      type: 'Обычно',
     },
     {
-      name: `John Cleese`,
-      tags: [`Funny`, `Tall`, `Actor`],
+      name: `фул мойка`,
+      type: 'Обычно',
     },
     {
-      name: `Terry Jones`,
-      tags: [`Funny`, `Director`],
+      name: `с пенкой`,
+      type: 'Премиум',
     },
     {
-      name: `Terry Gilliam`,
-      tags: [`Funny`, `Director`],
+      name: `блестяще`,
+      type: 'Премиум',
     },
     {
-      name: `Graham Chapman`,
-      tags: [`Funny`, `King Arthur`],
+      name: `с ароматом`,
+      type: 'Премиум',
+    },
+    {
+      name: `днище`,
+      type: 'Помойка',
+    },
+    {
+      name: `колеса`,
+      type: 'Помойка',
     },
   ];
 
@@ -56,36 +64,39 @@ export class EditStationComponent implements OnInit {
     startWork: new FormControl(null, Validators.required),
     endWork: new FormControl(null, Validators.required),
     description: new FormControl(''),
-    tagas: new FormControl([]),
+    services3: new FormControl([]),
     post3: new FormControl('3'),
+    newPost: new FormControl('3'),
   });
 
   id!: string;
 
   get asd() {
-    return Object.keys(this.typeService) as 'обычно'[];
+    return Object.keys(this.typeService) as 'Обычно'[];
   }
 
-  getService(key: 'обычно' | 'чистка') {
+  getService(key: 'Обычно' | 'Премиум' | 'Помойка') {
     return this.typeService[key];
   }
 
   typeService = {
-    обычно: [0, 1, 2],
-    чистка: [3, 4, 5],
+    Обычно: [0, 1, 2],
+    Премиум: [3, 4, 5],
+    Помойка: [6, 7],
   };
 
-  services = ['asd', 'asdg', '77', '65', '465', 'ajgadsg', 'adsgkj'];
-
-  readonly jedi: readonly string[] = [
-    `Luke Skywalker`,
-    `Princess Leia`,
-    `Han Solo`,
-    `Obi-Wan Kenobi`,
-    `Yoda`,
+  services = [
+    'просто',
+    'двери',
+    'фул мойка',
+    'с пенкой',
+    'блестяще',
+    'с ароматом',
+    'днище',
+    'колеса',
   ];
 
-  readonly sith: readonly string[] = [`Emperor`, `Darth Vader`, `Darth Maul`];
+  deleteService(postId: string, ServiceId: string) {}
 
   value: readonly string[] = [];
 

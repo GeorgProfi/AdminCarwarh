@@ -20,7 +20,7 @@
         <thead>
           <tr tuiThGroup>
             <th *tuiHead="'name'" tuiTh>Name</th>
-            <th *tuiHead="'tags'" tuiTh [sorter]="null">Tags</th>
+            <th *tuiHead="'type'" tuiTh [sorter]="null">Тип</th>
             <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
           </tr>
         </thead>
@@ -30,11 +30,10 @@
           [data]="sortedUsers">
           <tr *ngFor="let item of sortedUsers; let index = index" tuiTr>
             <td *tuiCell="'name'" tuiTd>{{ index + 1 }}. {{ item.name }}</td>
-            <td *tuiCell="'tags'" tuiTd>
+            <td *tuiCell="'type'" tuiTd>
               <tui-tag
-                *ngFor="let tag of item.tags"
                 class="tui-space_right-1"
-                [value]="tag"
+                [value]="item.type"
                 [autoColor]="true"></tui-tag>
             </td>
             <td *tuiCell="'actions'" tuiTd>
@@ -67,7 +66,73 @@
           [editable]="true"
           [expandable]="false"
           [tuiTextfieldLabelOutside]="true"
-          formControlName="tagas">
+          formControlName="services3">
+          <tui-data-list *tuiDataList>
+            <button tuiOption class="link" (click)="addService()">
+              Добавить услугу
+            </button>
+            <tui-opt-group
+              tuiMultiSelectGroup
+              *ngFor="let service of asd"
+              [label]="service">
+              <button
+                *ngFor="let id of getService(service)"
+                tuiOption
+                [value]="services[id]">
+                {{ services[id] }}
+              </button>
+            </tui-opt-group>
+          </tui-data-list>
+        </tui-multi-select>
+
+        <table tuiTable [columns]="columns" class="tui-form__row">
+          <thead>
+            <tr tuiThGroup>
+              <th *tuiHead="'name'" tuiTh>Название</th>
+              <th *tuiHead="'type'" tuiTh>Тип</th>
+              <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
+            </tr>
+          </thead>
+          <tbody
+            *tuiLet="
+              formEditStation.value.services3 | tuiTableSort as sortedUsers
+            "
+            tuiTbody
+            [data]="sortedUsers">
+            <tr *ngFor="let item of sortedUsers; let index = index" tuiTr>
+              <td *tuiCell="'name'" tuiTd>{{ index + 1 }}. {{ item }}</td>
+              <td *tuiCell="'type'" tuiTd>123</td>
+              <td *tuiCell="'actions'" tuiTd>
+                <button
+                  tuiIconButton
+                  appearance="flat"
+                  size="s"
+                  icon="tuiIconTrash"
+                  title="Remove"
+                  shape="rounded"
+                  (click)="deleteService('2', '3')"
+                  class="remove"></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </tui-accordion-item>
+
+    <tui-accordion-item>
+      Создать пост
+      <ng-template tuiAccordionItemContent>
+        <tui-input class="tui-form__row" formControlName="post3">
+          Название
+        </tui-input>
+
+        <tui-multi-select
+          #component
+          class="b-form tui-form__row"
+          [editable]="true"
+          [expandable]="false"
+          [tuiTextfieldLabelOutside]="true"
+          formControlName="services3">
           <tui-data-list *tuiDataList>
             <button tuiOption class="link" (click)="addService()">
               Добавить услугу
@@ -94,7 +159,9 @@
             </tr>
           </thead>
           <tbody
-            *tuiLet="formEditStation.value.tagas | tuiTableSort as sortedUsers"
+            *tuiLet="
+              formEditStation.value.services3 | tuiTableSort as sortedUsers
+            "
             tuiTbody
             [data]="sortedUsers">
             <tr *ngFor="let item of sortedUsers; let index = index" tuiTr>
@@ -107,78 +174,7 @@
                   icon="tuiIconTrash"
                   title="Remove"
                   shape="rounded"
-                  class="remove"></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </ng-template>
-    </tui-accordion-item>
-
-    <tui-accordion-item>
-      Создать пост
-      <ng-template tuiAccordionItemContent>
-        <tui-input class="tui-form__row"> Название </tui-input>
-
-        <tui-multi-select
-          #component
-          class="b-form tui-form__row"
-          [editable]="true"
-          [expandable]="false"
-          [tuiTextfieldLabelOutside]="true"
-          [(ngModel)]="value">
-          <tui-data-list *tuiDataList>
-            <button tuiOption class="link" (click)="addService()">
-              Добавить услугу
-            </button>
-            <tui-opt-group tuiMultiSelectGroup label="Стандарт">
-              <button
-                *ngFor="let item of jedi | tuiHideSelected"
-                tuiOption
-                [value]="item">
-                {{ item }}
-              </button>
-            </tui-opt-group>
-            <tui-opt-group tuiMultiSelectGroup label="С кайфом">
-              <button
-                *ngFor="let item of sith | tuiHideSelected"
-                tuiOption
-                [value]="item">
-                {{ item }}
-              </button>
-            </tui-opt-group>
-          </tui-data-list>
-        </tui-multi-select>
-
-        <table tuiTable [columns]="columns" class="tui-form__row">
-          <thead>
-            <tr tuiThGroup>
-              <th *tuiHead="'name'" tuiTh>Name</th>
-              <th *tuiHead="'tags'" tuiTh [sorter]="null">Tags</th>
-              <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
-            </tr>
-          </thead>
-          <tbody
-            *tuiLet="users | tuiTableSort as sortedUsers"
-            tuiTbody
-            [data]="sortedUsers">
-            <tr *ngFor="let item of sortedUsers; let index = index" tuiTr>
-              <td *tuiCell="'name'" tuiTd>{{ index + 1 }}. {{ item.name }}</td>
-              <td *tuiCell="'tags'" tuiTd>
-                <tui-tag
-                  *ngFor="let tag of item.tags"
-                  class="tui-space_right-1"
-                  [value]="tag"
-                  [autoColor]="true"></tui-tag>
-              </td>
-              <td *tuiCell="'actions'" tuiTd>
-                <button
-                  tuiIconButton
-                  appearance="flat"
-                  size="s"
-                  icon="tuiIconTrash"
-                  title="Remove"
-                  shape="rounded"
+                  (click)="deleteService('2', '3')"
                   class="remove"></button>
               </td>
             </tr>
