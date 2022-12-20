@@ -1,12 +1,20 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { StationService } from '../station.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { TuiTime } from '@taiga-ui/cdk';
 
-interface User {
-  readonly name: string;
-  readonly type: string;
+interface Service {
+  name: string;
+  type: string;
+  cost: number;
+  discount: number;
+  bonuses: number;
+}
+
+interface Post {
+  name: string;
+  services: Service[];
 }
 
 @Component({
@@ -23,82 +31,44 @@ export class EditStationComponent implements OnInit {
 
   readonly columns = [`name`, 'type', `actions`];
 
-  users: readonly User[] = [
-    {
-      name: `просто`,
-      type: 'Обычно',
-    },
-    {
-      name: `двери`,
-      type: 'Обычно',
-    },
-    {
-      name: `фул мойка`,
-      type: 'Обычно',
-    },
-    {
-      name: `с пенкой`,
-      type: 'Премиум',
-    },
-    {
-      name: `блестяще`,
-      type: 'Премиум',
-    },
-    {
-      name: `с ароматом`,
-      type: 'Премиум',
-    },
-    {
-      name: `днище`,
-      type: 'Помойка',
-    },
-    {
-      name: `колеса`,
-      type: 'Помойка',
-    },
+  address: string = '';
+  name: string = '';
+  startWork: TuiTime = new TuiTime(0, 0);
+  endWork: TuiTime = new TuiTime(0, 0);
+  description: string = '';
+  services: Service[] = [
+    { name: 'asd', type: 'standart', bonuses: 10, cost: 100, discount: 5 },
+    { name: 'qwerty', type: 'standart', bonuses: 10, cost: 100, discount: 5 },
+    { name: 'fff', type: 'standart', bonuses: 10, cost: 100, discount: 5 },
+    { name: 'KEK', type: 'mem', bonuses: 10, cost: 100, discount: 5 },
+    { name: 'LOL', type: 'mem', bonuses: 10, cost: 100, discount: 5 },
   ];
 
-  formEditStation = new FormGroup({
-    name: new FormControl('', Validators.required),
-    postCount: new FormControl(3, Validators.required),
-    startWork: new FormControl(null, Validators.required),
-    endWork: new FormControl(null, Validators.required),
-    description: new FormControl(''),
-    services3: new FormControl([]),
-    post3: new FormControl('3'),
-    newPost: new FormControl('3'),
-  });
+  posts: Post[] = [
+    { name: '1', services: [this.services[0], this.services[1]] },
+    { name: '2', services: [this.services[1], this.services[2]] },
+    { name: '3', services: [this.services[1], this.services[3]] },
+  ];
 
-  id!: string;
+  newPost = '';
 
-  get asd() {
-    return Object.keys(this.typeService) as 'Обычно'[];
-  }
-
-  getService(key: 'Обычно' | 'Премиум' | 'Помойка') {
-    return this.typeService[key];
-  }
-
-  typeService = {
-    Обычно: [0, 1, 2],
-    Премиум: [3, 4, 5],
-    Помойка: [6, 7],
+  forTypeServices = {
+    standart: [this.services[0], this.services[1], this.services[2]],
+    mem: [this.services[3], this.services[4]],
   };
 
-  services = [
-    'просто',
-    'двери',
-    'фул мойка',
-    'с пенкой',
-    'блестяще',
-    'с ароматом',
-    'днище',
-    'колеса',
-  ];
+  createPost() {
+    this.posts.push({ name: this.newPost, services: [] });
+  }
 
-  deleteService(postId: string, ServiceId: string) {}
+  deleteServiceInPost(post: Post, service: Service) {
+    const index = post.services.indexOf(service);
+    if (index > -1) {
+      post.services.splice(index, 1);
+    }
+  }
 
-  value: readonly string[] = [];
+  id!: string;
 
   ngOnInit() {
     this.route.paramMap

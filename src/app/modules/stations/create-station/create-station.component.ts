@@ -29,10 +29,20 @@ export class CreateStationComponent {
   formCreateStation = new FormGroup({
     name: new FormControl(``, Validators.required),
     postCount: new FormControl(3, Validators.required),
+    //aroundClock: new FormControl(false),
     startWork: new FormControl(new TuiTime(8, 0), Validators.required),
     endWork: new FormControl(new TuiTime(18, 0), Validators.required),
     description: new FormControl(``),
   });
+
+  aroundClock = new FormControl(false);
+
+  changeAroundClock() {
+    this.formCreateStation.patchValue({
+      startWork: new TuiTime(0, 0),
+      endWork: new TuiTime(0, 0),
+    });
+  }
 
   setServices() {
     console.log('setServices');

@@ -6,7 +6,13 @@ import {
   TuiTablePaginationModule,
 } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
-import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
+import {
+  AsyncPipe,
+  DatePipe,
+  KeyValuePipe,
+  NgForOf,
+  NgIf,
+} from '@angular/common';
 import {
   TuiButtonModule,
   TuiDataListModule,
@@ -14,18 +20,23 @@ import {
   TuiGroupModule,
   TuiHintModule,
   TuiHostedDropdownModule,
+  TuiLabelModule,
   TuiLinkModule,
   TuiLoaderModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
+  TuiArrowModule,
+  TuiCheckboxBlockModule,
+  TuiDataListDropdownManagerModule,
   TuiDataListWrapperModule,
   TuiInputCountModule,
   TuiInputModule,
   TuiInputTimeModule,
   TuiIslandModule,
   TuiMultiSelectModule,
+  TuiMultiSelectOptionModule,
   TuiPaginationModule,
   TuiSelectModule,
   TuiSliderModule,
@@ -78,6 +89,13 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     RouterLink,
     TuiDataListModule,
     TuiMultiSelectModule,
+    TuiCheckboxBlockModule,
+    KeyValuePipe,
+
+    TuiArrowModule,
+    TuiDataListDropdownManagerModule,
+    TuiMultiSelectOptionModule,
+    TuiLabelModule,
   ],
   providers: [StationService],
   declarations: [

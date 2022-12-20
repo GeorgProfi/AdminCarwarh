@@ -13,8 +13,6 @@ export class StationService {
   constructor(public http: HttpClient) {}
 
   getStationList(data: Pagination): Observable<PaginateRes<Station>> {
-    console.log('kek');
-
     return this.http
       .get<PaginateRes<Station>>(`${environment.apiUrl}/station/list`, {
         params: { ...data },

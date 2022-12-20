@@ -10,10 +10,22 @@
         <tui-input formControlName="postCount"> Число постов </tui-input>
       </div>
       <div tuiGroup class="tui-form__row">
-        <tui-input-time tuiUnfinishedValidator formControlName="startWork">
+        <tui-checkbox-block
+          contentAlign="right"
+          [formControl]="aroundClock"
+          (change)="changeAroundClock()">
+          Круглосуточно
+        </tui-checkbox-block>
+        <tui-input-time
+          tuiUnfinishedValidator
+          [readOnly]="!!aroundClock.value"
+          formControlName="startWork">
           Начало работы
         </tui-input-time>
-        <tui-input-time tuiUnfinishedValidator formControlName="endWork">
+        <tui-input-time
+          tuiUnfinishedValidator
+          [readOnly]="!!aroundClock.value"
+          formControlName="endWork">
           Окончание работы
         </tui-input-time>
       </div>
