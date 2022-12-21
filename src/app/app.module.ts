@@ -12,7 +12,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth-page/auth.module';
-import { LayoutModule } from './layout/layout.module';
 import { HomeModule } from './modules/home/home.module';
 import { AuthService } from './auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -27,6 +26,7 @@ import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 import { DebugModule } from './modules/debug/debug.module';
 import { ReservationModule } from './modules/reservation/reservation.module';
 import { Error404Module } from './modules/error-404/error-404.module';
+import { LayoutModule } from './left-menu-layout/layout.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,6 +44,7 @@ import { Error404Module } from './modules/error-404/error-404.module';
     // My app
     Error404Module,
     AuthModule,
+    //LayoutModule,
     LayoutModule,
     HomeModule,
     ClientsModule,

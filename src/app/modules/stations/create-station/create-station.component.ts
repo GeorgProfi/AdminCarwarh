@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Inject,
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -9,6 +10,7 @@ import { StationService } from '../station.service';
 import { TuiTime } from '@taiga-ui/cdk';
 import { CreateStationDto } from '../dto/create-station.dto';
 import { DateTime } from 'luxon';
+import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-create-station',
@@ -17,7 +19,11 @@ import { DateTime } from 'luxon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateStationComponent {
-  constructor(private stationService: StationService) {}
+  constructor(
+    private stationService: StationService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService
+  ) {}
 
   @Output() createEvent = new EventEmitter();
 
@@ -27,6 +33,7 @@ export class CreateStationComponent {
   }
 
   formCreateStation = new FormGroup({
+    address: new FormControl(``, Validators.required),
     name: new FormControl(``, Validators.required),
     postCount: new FormControl(3, Validators.required),
     //aroundClock: new FormControl(false),
@@ -75,6 +82,9 @@ export class CreateStationComponent {
     this.stationService.createStation(data).subscribe(data => {
       this.formCreateStation.reset();
       this.createEvent.emit();
+      this.alertService
+        .open('Создал', { status: TuiNotification.Success })
+        .subscribe();
     });
   }
 }

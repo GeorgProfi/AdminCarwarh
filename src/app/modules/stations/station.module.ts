@@ -23,6 +23,7 @@ import {
   TuiLabelModule,
   TuiLinkModule,
   TuiLoaderModule,
+  TuiNotificationModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
@@ -96,6 +97,7 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     TuiDataListDropdownManagerModule,
     TuiMultiSelectOptionModule,
     TuiLabelModule,
+    TuiNotificationModule,
   ],
   providers: [StationService],
   declarations: [

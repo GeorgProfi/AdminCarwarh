@@ -15,7 +15,17 @@
 <tui-accordion-item class="tui-form__row">
   Редактор услуг
   <ng-template tuiAccordionItemContent>
-    <table tuiTable [columns]="columns">
+    <div tuiGroup class="tui-form__row">
+      <tui-input [(ngModel)]="newPost"> Название </tui-input>
+      <button
+        class="tui-form__button"
+        tuiButton
+        (click)="createPost()"
+        appearance="primary">
+        Создать
+      </button>
+    </div>
+    <table tuiTable [columns]="columns" class="tui-form__row">
       <thead>
         <tr tuiThGroup>
           <th *tuiHead="'name'" tuiTh>Название</th>
@@ -51,24 +61,9 @@
   </ng-template>
 </tui-accordion-item>
 
-<label [tuiLabel]="labelCreatePost" class="tui-form__row">
-  <div tuiGroup>
-    <tui-input [(ngModel)]="newPost"> Название </tui-input>
-    <button
-      class="tui-form__button"
-      tuiButton
-      (click)="createPost()"
-      appearance="primary">
-      Создать
-    </button>
-  </div>
-</label>
-
-<ng-template #labelCreatePost> Создание поста </ng-template>
-
 <tui-accordion class="tui-form__row">
   <tui-accordion-item *ngFor="let post of posts">
-    Пост {{ post.name }}
+    {{ post.name }}
     <ng-template tuiAccordionItemContent>
       <div tuiGroup class="tui-form__row">
         <tui-input [(ngModel)]="post.name"> Название </tui-input>

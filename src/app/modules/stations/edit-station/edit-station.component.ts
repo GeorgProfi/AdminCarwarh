@@ -48,6 +48,7 @@ export class EditStationComponent implements OnInit {
     { name: '1', services: [this.services[0], this.services[1]] },
     { name: '2', services: [this.services[1], this.services[2]] },
     { name: '3', services: [this.services[1], this.services[3]] },
+    { name: 'создать', services: [] },
   ];
 
   newPost = '';
@@ -62,10 +63,12 @@ export class EditStationComponent implements OnInit {
   }
 
   deleteServiceInPost(post: Post, service: Service) {
+    console.log(post);
     const index = post.services.indexOf(service);
     if (index > -1) {
       post.services.splice(index, 1);
     }
+    console.log(post);
   }
 
   id!: string;

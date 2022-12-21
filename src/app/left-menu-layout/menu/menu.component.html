@@ -1,0 +1,37 @@
+<div class="nav-panel">
+  <!--  <h3>Приветствую, "имя автомойки"!</h3>-->
+  <!--  <h3>Ваш баланс: 1234 Р</h3>-->
+  <!--  <h3>Статус: Активирован</h3>-->
+  <tui-scrollbar>
+    <tui-accordion [rounded]="false">
+      <tui-accordion-item [borders]="null">
+        <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
+        Taiga UI cdkфы
+        <ng-template tuiAccordionItemContent>
+          fuck ajsk dnsjka njkda sndkj abn kj sdsb фыв фы вф вф в фыв фы вфы вфы
+          в фыв фы вфы вфы в
+        </ng-template>
+      </tui-accordion-item>
+      <tui-accordion-item
+        [borders]="null"
+        [showArrow]="false"
+        [routerLink]="'loyalty-system'">
+        <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
+        123
+      </tui-accordion-item>
+      <tui-accordion-item [borders]="null">
+        Taiga UI core
+        <ng-template tuiAccordionItemContent>
+          <div #content>
+            Basic elements needed to develop components, directives and more
+            using Taiga UI design system
+          </div>
+        </ng-template>
+      </tui-accordion-item>
+    </tui-accordion>
+  </tui-scrollbar>
+  <button tuiButton size="m" (click)="logout()">
+    <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
+    Выход
+  </button>
+</div>
