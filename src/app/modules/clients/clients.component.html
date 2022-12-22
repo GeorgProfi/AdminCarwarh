@@ -10,7 +10,7 @@
     tuiTextfieldSize="m"
     [tuiTextfieldCleaner]="true"
     [(ngModel)]="search">
-    Поиск <span class="negative">(ПО ТЕЛЕФОНУ)</span>
+    Поиск
   </tui-input>
   <button
     tuiButton
@@ -67,22 +67,6 @@
             tuiHintDirection="right"
             tuiHintDescribe
             title="Редактировать"
-            shape="rounded"></button>
-          <button
-            tuiIconButton
-            tuiHint="Удалить"
-            tuiHintDirection="right"
-            tuiHintDescribe
-            appearance="flat"
-            size="s"
-            icon="tuiIconRemoveLarge"
-            shape="rounded"></button>
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconAlertCircleLarge"
-            title="Подробнее"
             shape="rounded"></button>
         </td>
         <td tuiTd *tuiCell="'name'">

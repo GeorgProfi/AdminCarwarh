@@ -33,8 +33,8 @@ export class StationService {
     return this.http.post<Station>(`${environment.apiUrl}/station`, data);
   }
 
-  getStationById(id: string): Observable<Station> {
-    return this.http.get<Station>(`${environment.apiUrl}/station/${id}`);
+  getStationById(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/station/get/${id}`);
   }
 
   deleteStationById(id: string): Observable<void> {

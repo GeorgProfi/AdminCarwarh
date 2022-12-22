@@ -2,8 +2,8 @@ export interface Service {
   id: string;
   stationId: string;
   name: string;
-  description: string;
+  type: string;
   price: number;
-  duration: number;
   discount: number;
+  bonuses: number;
 }

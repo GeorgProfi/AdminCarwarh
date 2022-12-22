@@ -4,18 +4,13 @@ import { finalize, map, Observable, of, Subject, switchMap, timer } from 'rxjs';
 import { TuiFileLike } from '@taiga-ui/kit';
 
 @Component({
-  selector: 'app-setting',
-  templateUrl: './setting.component.html',
-  styleUrls: ['./setting.component.less'],
+  selector: 'app-setting-company',
+  templateUrl: './setting-company.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingComponent {
-  percentBonus = new FormControl();
-  percentCache = new FormControl();
+export class SettingCompanyComponent {
   description = new FormControl();
   logo = new FormControl();
-  password = new FormControl();
-  passwordRepeat = new FormControl();
 
   readonly control = new FormControl();
 

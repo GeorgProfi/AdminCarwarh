@@ -1,16 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { StationService } from '../station.service';
 import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { TuiTime } from '@taiga-ui/cdk';
-
-interface Service {
-  name: string;
-  type: string;
-  cost: number;
-  discount: number;
-  bonuses: number;
-}
+import { Service } from '../../../common/entities/service.entity';
 
 interface Post {
   name: string;
@@ -26,7 +24,8 @@ interface Post {
 export class EditStationComponent implements OnInit {
   constructor(
     private stationService: StationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   readonly columns = [`name`, 'type', `actions`];
@@ -36,27 +35,13 @@ export class EditStationComponent implements OnInit {
   startWork: TuiTime = new TuiTime(0, 0);
   endWork: TuiTime = new TuiTime(0, 0);
   description: string = '';
-  services: Service[] = [
-    { name: 'asd', type: 'standart', bonuses: 10, cost: 100, discount: 5 },
-    { name: 'qwerty', type: 'standart', bonuses: 10, cost: 100, discount: 5 },
-    { name: 'fff', type: 'standart', bonuses: 10, cost: 100, discount: 5 },
-    { name: 'KEK', type: 'mem', bonuses: 10, cost: 100, discount: 5 },
-    { name: 'LOL', type: 'mem', bonuses: 10, cost: 100, discount: 5 },
-  ];
+  services: Service[] = [];
 
-  posts: Post[] = [
-    { name: '1', services: [this.services[0], this.services[1]] },
-    { name: '2', services: [this.services[1], this.services[2]] },
-    { name: '3', services: [this.services[1], this.services[3]] },
-    { name: 'создать', services: [] },
-  ];
+  posts: Post[] = [{ name: 'создать', services: [] }];
 
   newPost = '';
 
-  forTypeServices = {
-    standart: [this.services[0], this.services[1], this.services[2]],
-    mem: [this.services[3], this.services[4]],
-  };
+  forTypeServices: { [key: string]: Service[] } = {};
 
   createPost() {
     this.posts.push({ name: this.newPost, services: [] });
@@ -68,15 +53,46 @@ export class EditStationComponent implements OnInit {
     if (index > -1) {
       post.services.splice(index, 1);
     }
+    this.cdr.detectChanges();
     console.log(post);
   }
 
   id!: string;
 
+  // $services
+
   ngOnInit() {
     this.route.paramMap
       .pipe(switchMap(params => params.getAll('id')))
-      .subscribe(data => (this.id = data));
+      .subscribe(id => {
+        this.stationService.getStationById(id).subscribe(data => {
+          const station = data.station;
+          const services = data.services;
+          const posts = data.posts;
+
+          this.name = station.name;
+          this.description = station.description;
+          this.address = station.address;
+
+          this.services = services;
+
+          posts.forEach((post: Post) => {
+            post.services.map((service: Service) =>
+              services.indexOf(service.id)
+            );
+          });
+          this.posts = posts;
+
+          this.services.forEach((service: Service) => {
+            if (!this.forTypeServices[service.type]) {
+              this.forTypeServices[service.type] = [];
+            }
+            this.forTypeServices[service.type].push(service);
+          });
+
+          console.log(data);
+        });
+      });
   }
 
   addService() {

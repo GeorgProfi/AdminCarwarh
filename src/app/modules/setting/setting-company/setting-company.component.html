@@ -1,18 +1,3 @@
-<h3 class="tui-form__header">Система лояльности</h3>
-<div class="tui-form__row tui-form__row_multi-fields">
-  <div class="tui-form__multi-field">
-    <tui-input [formControl]="percentBonus"> Процент бонусов </tui-input>
-  </div>
-  <div class="tui-form__multi-field">
-    <tui-input [formControl]="percentCache"> Процент кэшбека </tui-input>
-  </div>
-</div>
-<div class="tui-form__buttons">
-  <button tuiButton class="tui-form__button" appearance="primary">
-    Сохранить
-  </button>
-</div>
-
 <h3 class="tui-form__header">Описание</h3>
 <div class="tui-form__row">
   <tui-text-area [formControl]="description">Type a text</tui-text-area>
@@ -48,23 +33,6 @@
       state="loading"
       [file]="file"></tui-file>
   </tui-files>
-</div>
-<div class="tui-form__buttons">
-  <button tuiButton class="tui-form__button" appearance="primary">
-    Сохранить
-  </button>
-</div>
-
-<h3 class="tui-form__header">Смена пароля</h3>
-<div class="tui-form__row tui-form__row_multi-fields">
-  <div class="tui-form__multi-field">
-    <tui-input-password [formControl]="password"> password </tui-input-password>
-  </div>
-  <div class="tui-form__multi-field">
-    <tui-input-password [formControl]="passwordRepeat">
-      password
-    </tui-input-password>
-  </div>
 </div>
 <div class="tui-form__buttons">
   <button tuiButton class="tui-form__button" appearance="primary">

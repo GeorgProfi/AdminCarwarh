@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SettingComponent } from './setting.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   TuiInputFilesModule,
   TuiInputModule,
@@ -10,6 +9,8 @@ import {
 } from '@taiga-ui/kit';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { TuiButtonModule, TuiLabelModule } from '@taiga-ui/core';
+import { SettingProfileComponent } from './setting-profile/setting-profile.component';
+import { SettingCompanyComponent } from './setting-company/setting-company.component';
 
 @NgModule({
   imports: [
@@ -23,8 +24,9 @@ import { TuiButtonModule, TuiLabelModule } from '@taiga-ui/core';
     TuiButtonModule,
     TuiInputNumberModule,
     TuiInputModule,
+    FormsModule,
   ],
-  declarations: [SettingComponent],
-  exports: [SettingComponent],
+  declarations: [SettingProfileComponent, SettingCompanyComponent],
+  exports: [],
 })
 export class SettingModule {}

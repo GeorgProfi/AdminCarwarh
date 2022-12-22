@@ -1,13 +1,36 @@
 .nav-panel {
-  margin-right: 2rem;
-  min-width: 10rem;
-  width: 12rem;
-
+  width: 14rem;
   position: fixed;
-  top: 4rem;
+  top: 0;
   bottom: 0;
 
-  overflow-x:hidden;
-
   border-right: 1px solid var(--tui-base-03);
+
+  color: var(--tui-text-02);
+
+  nav {
+    max-height: 30rem;
+
+    link {
+      font: var(--tui-font-heading-5);
+    }
+
+  }
+
+  tui-accordion {
+    max-height: 30rem;
+  }
+
+  .foot-menu {
+    border-top: 2px solid var(--tui-base-03);
+    width: 14rem;
+
+    position: fixed;
+    bottom: 0;
+  }
+
+  .header-menu {
+    width: 14rem;
+    border-bottom: 2px solid var(--tui-base-03);
+  }
 }

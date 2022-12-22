@@ -8,12 +8,14 @@ import {
 } from '@taiga-ui/kit';
 import {
   TuiButtonModule,
+  TuiLinkModule,
   TuiScrollbarModule,
   TuiSvgModule,
 } from '@taiga-ui/core';
 import { AppRoutingModule } from '../app-routing.module';
 import { LayoutComponent } from './layout.component';
 import { MenuComponent } from './menu/menu.component';
+import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 
 @NgModule({
   imports: [
@@ -25,6 +27,8 @@ import { MenuComponent } from './menu/menu.component';
     TuiIslandModule,
     TuiScrollbarModule,
     TuiAccordionModule,
+    TuiLinkModule,
+    TuiMoneyModule,
   ],
   declarations: [MenuComponent, FooterComponent, LayoutComponent],
   exports: [LayoutComponent],

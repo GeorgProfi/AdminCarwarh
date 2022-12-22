@@ -1,37 +1,45 @@
-<div class="nav-panel">
-  <!--  <h3>Приветствую, "имя автомойки"!</h3>-->
-  <!--  <h3>Ваш баланс: 1234 Р</h3>-->
-  <!--  <h3>Статус: Активирован</h3>-->
+<section class="nav-panel">
+  <div class="header-menu">
+    <h3>Приветствую, "имя автомойки"!</h3>
+    <h3>Ваш баланс: <tui-money [value]="10728.9"></tui-money></h3>
+    <h3>Статус: Активирован</h3>
+  </div>
   <tui-scrollbar>
+    <!--    <nav tuiTabs vertical="left">-->
+    <!--      <button-->
+    <!--        tuiTab-->
+    <!--        *ngFor="let item of menu"-->
+    <!--        [routerLink]="item.link"-->
+    <!--        routerLinkActive>-->
+    <!--        <span>-->
+    <!--          <tui-svg [src]="item.icon"></tui-svg>-->
+    <!--          {{ item.name }}-->
+    <!--        </span>-->
+    <!--      </button>-->
+    <!--    </nav>-->
+
     <tui-accordion [rounded]="false">
-      <tui-accordion-item [borders]="null">
-        <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
-        Taiga UI cdkфы
-        <ng-template tuiAccordionItemContent>
-          fuck ajsk dnsjka njkda sndkj abn kj sdsb фыв фы вф вф в фыв фы вфы вфы
-          в фыв фы вфы вфы в
-        </ng-template>
-      </tui-accordion-item>
       <tui-accordion-item
+        *ngFor="let item of menu"
         [borders]="null"
-        [showArrow]="false"
-        [routerLink]="'loyalty-system'">
-        <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
-        123
-      </tui-accordion-item>
-      <tui-accordion-item [borders]="null">
-        Taiga UI core
-        <ng-template tuiAccordionItemContent>
-          <div #content>
-            Basic elements needed to develop components, directives and more
-            using Taiga UI design system
-          </div>
-        </ng-template>
+        [showArrow]="!!item.child"
+        [routerLink]="item.link"
+        routerLinkActive>
+        <tui-svg [src]="item.icon" class="tui-space_right-2"></tui-svg>
+        {{ item.name }}
+        <ng-container *ngIf="item.child" tuiAccordionItemContent>
+          <ng-container *ngFor="let link of item.child">
+            <div class="link">
+              <a tuiLink [routerLink]="link.link">{{ link.name }}</a>
+            </div>
+          </ng-container>
+        </ng-container>
       </tui-accordion-item>
     </tui-accordion>
   </tui-scrollbar>
-  <button tuiButton size="m" (click)="logout()">
-    <tui-svg src="tuiIconRemoveLarge" class="tui-space_right-2"></tui-svg>
-    Выход
-  </button>
-</div>
+  <div class="foot-menu">
+    <tui-accordion-item [borders]="null" [showArrow]="false" (click)="logout()">
+      Выход
+    </tui-accordion-item>
+  </div>
+</section>

@@ -21,8 +21,29 @@ export class MenuComponent {
     { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
     // { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
     { name: 'Запись на время', icon: 'tuiIconTime', link: 'reservation' },
-    { name: 'Рассылки уведомлений', icon: 'tuiIconBell', link: 'notification' },
-    { name: 'Настройки', icon: 'tuiIconDrag', link: 'setting' },
+    {
+      name: 'Рассылки уведомлений',
+      icon: 'tuiIconBell',
+      child: [
+        { name: 'push рассылки', icon: 'tuiIconBell', link: 'notification' },
+      ],
+    },
+    {
+      name: 'Настройки',
+      icon: 'tuiIconDrag',
+      child: [
+        {
+          name: 'Настройки личного кабинета',
+          icon: 'tuiIconDrag',
+          link: 'setting-profile',
+        },
+        {
+          name: 'Настройки компании',
+          icon: 'tuiIconDrag',
+          link: 'setting-company',
+        },
+      ],
+    },
 
     { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },
   ];
