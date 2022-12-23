@@ -54,7 +54,7 @@ export class DebugComponent {
   }
 
   createReservation10() {
-    this.debugService.createReservation10().subscribe({
+    this.debugService.createOrder20().subscribe({
       next: () => {
         console.log('ok');
       },

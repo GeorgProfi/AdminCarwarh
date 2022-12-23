@@ -22,8 +22,8 @@ export class DebugService {
     return this.http.get(`${environment.apiUrl}/debug/notification`);
   }
 
-  createReservation10() {
-    return this.http.get(`${environment.apiUrl}/debug/reservation`);
+  createOrder20() {
+    return this.http.get(`${environment.apiUrl}/debug/order`);
   }
 
   clearData() {

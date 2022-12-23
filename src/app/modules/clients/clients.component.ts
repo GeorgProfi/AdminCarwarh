@@ -1,6 +1,11 @@
 import { Component, Inject, Injector } from '@angular/core';
 import { ClientsService } from './clients.service';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  Observable,
+} from 'rxjs';
 import {
   debounceTime,
   filter,
@@ -30,7 +35,6 @@ export class ClientsComponent {
   ) {}
 
   sizes = [10, 20, 5];
-  size = this.sizes[0];
   columns: string[] = [
     'actions',
     'name',
@@ -50,7 +54,7 @@ export class ClientsComponent {
   readonly request$ = combineLatest([
     this.page$,
     this.size$,
-    this.search$,
+    this.search$.pipe(debounceTime(500), distinctUntilChanged()),
     this.sorter$,
     this.direction$,
   ]).pipe(
