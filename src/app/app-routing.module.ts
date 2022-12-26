@@ -12,7 +12,7 @@ import { AuthPageComponent } from './auth-page/auth-page.component';
 import { ReservationComponent } from './modules/reservation/reservation.component';
 import { Error404Component } from './modules/error-404/error-404.component';
 import { EditStationComponent } from './modules/stations/edit-station/edit-station.component';
-import { LayoutComponent } from './left-menu-layout/layout.component';
+import { LayoutComponent } from './layouts/left-menu/layout.component';
 import { SettingProfileComponent } from './modules/setting/setting-profile/setting-profile.component';
 import { SettingCompanyComponent } from './modules/setting/setting-company/setting-company.component';
 

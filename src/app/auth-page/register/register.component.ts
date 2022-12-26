@@ -15,7 +15,6 @@ export class RegisterComponent {
   authForm = new FormGroup({
     nameCarWash: new FormControl('TEST', Validators.required),
     email: new FormControl('TEST@email.com', Validators.required),
-    phone: new FormControl('+71231231212', Validators.required),
     password: new FormControl('1234', Validators.required),
     passwordRepeat: new FormControl('1234', Validators.required),
   });
@@ -29,13 +28,12 @@ export class RegisterComponent {
 
   async onSubmit(): Promise<void> {
     const data = this.authForm.value;
-    if (!(data.phone && data.email && data.nameCarWash && data.password)) {
+    if (!(data.email && data.nameCarWash && data.password)) {
       return;
     }
 
     this.authService
       .register({
-        phone: data.phone,
         password: data.password,
         email: data.email,
         nameCarWash: data.nameCarWash,

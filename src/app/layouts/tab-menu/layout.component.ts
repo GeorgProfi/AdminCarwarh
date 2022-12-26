@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-layout',
+  selector: 'app-layout-tab-menu',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.less'],
 })

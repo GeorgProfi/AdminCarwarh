@@ -26,7 +26,7 @@ import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 import { DebugModule } from './modules/debug/debug.module';
 import { ReservationModule } from './modules/reservation/reservation.module';
 import { Error404Module } from './modules/error-404/error-404.module';
-import { LayoutModule } from './left-menu-layout/layout.module';
+import { LayoutModule } from './layouts/left-menu/layout.module';
 
 @NgModule({
   declarations: [AppComponent],

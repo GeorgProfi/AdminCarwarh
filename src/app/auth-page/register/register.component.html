@@ -1,20 +1,14 @@
 <form class="b-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
-  <div class="tui-form__row">
-    <tui-input formControlName="nameCarWash"> Название компании </tui-input>
-  </div>
-
-  <div class="tui-form__row">
-    <tui-input formControlName="email">
-      Email
-      <input tuiTextfield />
-    </tui-input>
-  </div>
-
-  <div class="tui-form__row">
-    <tui-input formControlName="phone">
-      Телефон
-      <input tuiTextfield />
-    </tui-input>
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input formControlName="nameCarWash"> Название компании </tui-input>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input formControlName="email">
+        Email
+        <input tuiTextfield />
+      </tui-input>
+    </div>
   </div>
 
   <div class="tui-form__row tui-form__row_multi-fields">
@@ -31,6 +25,7 @@
   </div>
 
   <tui-error [error]="computedError"></tui-error>
+
   <div class="tui-form__buttons">
     <button
       tuiButton

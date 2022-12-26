@@ -12,7 +12,7 @@ import {
   TuiScrollbarModule,
   TuiSvgModule,
 } from '@taiga-ui/core';
-import { AppRoutingModule } from '../app-routing.module';
+import { AppRoutingModule } from '../../app-routing.module';
 import { LayoutComponent } from './layout.component';
 import { MenuComponent } from './menu/menu.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
