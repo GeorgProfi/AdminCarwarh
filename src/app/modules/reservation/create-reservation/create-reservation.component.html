@@ -2,62 +2,60 @@
   Создание записи на мойку
   <ng-template tuiAccordionItemContent>
     <div tuiGroup class="tui-form__row">
+      <tui-select>
+        Станция
+        <tui-data-list-wrapper></tui-data-list-wrapper>
+      </tui-select>
+      <tui-select>
+        Услуги
+        <tui-data-list-wrapper></tui-data-list-wrapper>
+      </tui-select>
+    </div>
+    <div tuiGroup class="tui-form__row">
       <div>
         <tui-calendar [value]="day" (dayClick)="day = $event"></tui-calendar>
       </div>
       <div>
-        <tui-select>
-          Станция
+        <table tuiTable [columns]="columns" class="tui-form__row">
+          <thead>
+            <tr tuiThGroup>
+              <th *tuiHead="'name'" tuiTh>Название</th>
+              <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
+            </tr>
+          </thead>
+          <tbody
+            *tuiLet="services | tuiTableSort as servicesSort"
+            tuiTbody
+            [data]="servicesSort">
+            <tr *ngFor="let service of servicesSort; let i = index" tuiTr>
+              <td *tuiCell="'name'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>
+              <td *tuiCell="'actions'" tuiTd>
+                <button
+                  tuiIconButton
+                  appearance="flat"
+                  size="s"
+                  icon="tuiIconTrash"
+                  title="Remove"
+                  shape="rounded"
+                  class="remove"></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <tui-select class="tui-form__row">
+          Время
           <tui-data-list-wrapper></tui-data-list-wrapper>
         </tui-select>
-        <div class="tui-form__buttons">
-          <button class="tui-form__button" tuiButton appearance="primary">
-            09:00
-          </button>
-          <button class="tui-form__button" tuiButton appearance="primary">
-            09:30
-          </button>
-          <button class="tui-form__button" tuiButton appearance="primary">
-            10:00
-          </button>
-          <button class="tui-form__button" tuiButton appearance="primary">
-            12:00
-          </button>
-        </div>
-        <div class="tui-form__buttons">
-          <button class="tui-form__button" tuiButton appearance="primary">
-            13:30
-          </button>
-          <button class="tui-form__button" tuiButton appearance="primary">
-            14:00
-          </button>
-          <button class="tui-form__button" tuiButton appearance="primary">
-            15:00
-          </button>
-          <button class="tui-form__button" tuiButton appearance="primary">
-            17:30
-          </button>
-        </div>
-        <div class="tui-form__buttons">
-          <button class="tui-form__button" tuiButton appearance="primary">
-            18:30
-          </button>
-          <button class="tui-form__button" tuiButton appearance="primary">
-            20:00
-          </button>
-        </div>
       </div>
     </div>
-    <form [formGroup]="formCreateReservation">
-      <div class="tui-form__buttons tui-form__buttons_align_center">
-        <button
-          class="tui-form__button"
-          tuiButton
-          (click)="onSubmit()"
-          appearance="primary">
-          Создать
-        </button>
-      </div>
-    </form>
+    <div class="tui-form__buttons tui-form__buttons_align_center">
+      <button
+        class="tui-form__button"
+        tuiButton
+        (click)="onSubmit()"
+        appearance="primary">
+        Создать
+      </button>
+    </div>
   </ng-template>
 </tui-accordion-item>

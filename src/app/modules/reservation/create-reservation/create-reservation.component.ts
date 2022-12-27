@@ -1,12 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ReservationService } from '../reservation.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiDay } from '@taiga-ui/cdk';
+import { Service } from '../../../common/entities/service.entity';
 
 @Component({
   selector: 'app-create-reservation',
@@ -17,7 +12,8 @@ import { TuiDay } from '@taiga-ui/cdk';
 export class CreateReservationComponent {
   constructor(private reservationService: ReservationService) {}
 
-  @Output() createEvent = new EventEmitter();
+  readonly columns = [`name`, 'type', `actions`];
+  services: Service[] = [];
 
   expanded = false;
   toggle(): void {
@@ -25,13 +21,6 @@ export class CreateReservationComponent {
   }
 
   day: TuiDay | null = null;
-
-  formCreateReservation = new FormGroup({
-    serviceId: new FormControl(``, Validators.required),
-    stationId: new FormControl(``, Validators.required),
-    day: new FormControl(``, Validators.required),
-    time: new FormControl(``, Validators.required),
-  });
 
   onSubmit(): void {}
 }
