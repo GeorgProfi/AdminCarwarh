@@ -15,6 +15,7 @@ import { EditStationComponent } from './modules/stations/edit-station/edit-stati
 import { LayoutComponent } from './layouts/left-menu/layout.component';
 import { SettingProfileComponent } from './modules/setting/setting-profile/setting-profile.component';
 import { SettingCompanyComponent } from './modules/setting/setting-company/setting-company.component';
+import { ServicesComponent } from './modules/services/services.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
       { path: 'clients', component: ClientsComponent },
       { path: 'stations', component: StationComponent },
       { path: 'stations/edit/:id', component: EditStationComponent },
-      // { path: 'services', component: ServicesComponent },
+      { path: 'services', component: ServicesComponent },
       { path: 'reservation', component: ReservationComponent },
       { path: 'notification', component: NotificationComponent },
       { path: 'setting-company', component: SettingCompanyComponent },

@@ -2,43 +2,9 @@
   Создание услуги
   <ng-template tuiAccordionItemContent>
     <form [formGroup]="formCreateService">
-      <div class="tui-form__row tui-form__row_multi-fields">
-        <div class="tui-form__multi-field">
-          <tui-input formControlName="name"> Название </tui-input>
-        </div>
-        <div class="tui-form__multi-field">
-          <tui-input formControlName="price"> Цена </tui-input>
-        </div>
-        <div class="tui-form__multi-field">
-          <tui-input-time tuiUnfinishedValidator formControlName="workTime">
-            Время работы
-          </tui-input-time>
-        </div>
-      </div>
-      <div class="tui-form__row">
-        <tui-text-area formControlName="description">Описание</tui-text-area>
-      </div>
-      <div class="tui-form__header">Станции:</div>
-      <div tuiGroup class="tui-form__row">
-        <tui-island>
-          <h3 class="tui-island__title">Поддерживает</h3>
-          <p class="tui-island__paragraph">Чекбоксы</p>
-          <p class="tui-island__paragraph tui-island__paragraph_button">
-            <button tuiButton type="button" appearance="secondary">
-              Переместить в другую группу
-            </button>
-          </p>
-        </tui-island>
-        <tui-island>
-          <h3 class="tui-island__title">Не поддерживает</h3>
-          <p class="tui-island__paragraph">Чекбоксы</p>
-          <p class="tui-island__paragraph tui-island__paragraph_button">
-            <button tuiButton type="button" appearance="secondary">
-              Переместить в другую группу
-            </button>
-          </p>
-        </tui-island>
-      </div>
+      <tui-input class="tui-form__row" formControlName="name">
+        Название
+      </tui-input>
       <div class="tui-form__buttons tui-form__buttons_align_center">
         <button
           tuiButton

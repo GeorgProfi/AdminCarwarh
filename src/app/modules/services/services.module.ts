@@ -28,9 +28,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { ServicesService } from './services.service';
-import { EditServiceComponent } from './edit-service/edit-service.component';
 import { CreateServiceComponent } from './create-service/create-service.component';
-import { SelectStationComponent } from './select-station/select-station.component';
 
 @NgModule({
   imports: [
@@ -61,12 +59,7 @@ import { SelectStationComponent } from './select-station/select-station.componen
     TuiCheckboxBlockModule,
   ],
   providers: [ServicesService],
-  declarations: [
-    ServicesComponent,
-    SelectStationComponent,
-    CreateServiceComponent,
-    EditServiceComponent,
-  ],
+  declarations: [ServicesComponent, CreateServiceComponent],
   exports: [ServicesComponent],
 })
 export class ServicesModule {}

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FooterComponent } from './footer/footer.component';
 import {
   TuiAccordionModule,
+  TuiBreadcrumbsModule,
   TuiIslandModule,
   TuiTabsModule,
 } from '@taiga-ui/kit';
@@ -16,6 +17,7 @@ import { AppRoutingModule } from '../../app-routing.module';
 import { LayoutComponent } from './layout.component';
 import { MenuComponent } from './menu/menu.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 
 @NgModule({
   imports: [
@@ -29,8 +31,14 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiAccordionModule,
     TuiLinkModule,
     TuiMoneyModule,
+    TuiBreadcrumbsModule,
   ],
-  declarations: [MenuComponent, FooterComponent, LayoutComponent],
+  declarations: [
+    MenuComponent,
+    FooterComponent,
+    BreadcrumbsComponent,
+    LayoutComponent,
+  ],
   exports: [LayoutComponent],
 })
 export class LayoutModule {}

@@ -27,6 +27,7 @@ import { DebugModule } from './modules/debug/debug.module';
 import { ReservationModule } from './modules/reservation/reservation.module';
 import { Error404Module } from './modules/error-404/error-404.module';
 import { LayoutModule } from './layouts/left-menu/layout.module';
+import { ServicesModule } from './modules/services/services.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,7 +51,7 @@ import { LayoutModule } from './layouts/left-menu/layout.module';
     ClientsModule,
     StationModule,
     LoyaltySystemModule,
-    // ServicesModule,
+    ServicesModule,
     SettingModule,
     NotificationModule,
     ReservationModule,

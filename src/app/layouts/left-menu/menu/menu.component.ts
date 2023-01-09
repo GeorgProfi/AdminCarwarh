@@ -19,7 +19,7 @@ export class MenuComponent {
     },
     { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
     { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
-    // { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
+    { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
     { name: 'Запись на время', icon: 'tuiIconTime', link: 'reservation' },
     {
       name: 'Рассылки уведомлений',
