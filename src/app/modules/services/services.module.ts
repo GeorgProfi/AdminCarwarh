@@ -3,8 +3,10 @@ import { ServicesComponent } from './services.component';
 import {
   TuiButtonModule,
   TuiDataListModule,
+  TuiErrorModule,
   TuiExpandModule,
   TuiGroupModule,
+  TuiLinkModule,
   TuiLoaderModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
@@ -12,6 +14,7 @@ import {
   TuiAccordionModule,
   TuiCheckboxBlockModule,
   TuiDataListWrapperModule,
+  TuiFieldErrorPipeModule,
   TuiInputModule,
   TuiInputTimeModule,
   TuiIslandModule,
@@ -29,6 +32,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { ServicesService } from './services.service';
 import { CreateServiceComponent } from './create-service/create-service.component';
+import { EditServiceComponent } from './edit-service/edit-service.component';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -57,9 +62,18 @@ import { CreateServiceComponent } from './create-service/create-service.componen
     TuiTextAreaModule,
     TuiInputTimeModule,
     TuiCheckboxBlockModule,
+    RouterLink,
+    RouterModule,
+    TuiErrorModule,
+    TuiFieldErrorPipeModule,
+    TuiLinkModule,
   ],
   providers: [ServicesService],
-  declarations: [ServicesComponent, CreateServiceComponent],
+  declarations: [
+    ServicesComponent,
+    CreateServiceComponent,
+    EditServiceComponent,
+  ],
   exports: [ServicesComponent],
 })
 export class ServicesModule {}

@@ -34,11 +34,9 @@
     (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
         <th tuiTh *tuiHead="'name'" tuiSortable>Имя</th>
         <th tuiTh *tuiHead="'phone'" tuiSortable>Телефон</th>
         <th tuiTh *tuiHead="'email'" tuiSortable>email</th>
-        <th tuiTh *tuiHead="'bonuses'" [sorter]="null">Бонусы</th>
         <th tuiTh *tuiHead="'numberOfVisits'" tuiSortable>Число посещений</th>
         <th tuiTh *tuiHead="'dateOfRegistration'" tuiSortable>
           Дата регистрации
@@ -50,29 +48,16 @@
       *tuiLet="data | tuiTableSort as sortedData"
       [data]="sortedData">
       <tr tuiTr *ngFor="let item of sortedData">
-        <td tuiTd *tuiCell="'actions'">
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconEditLarge"
-            tuiHint="Редактировать"
-            tuiHintDirection="right"
-            tuiHintDescribe
-            title="Редактировать"
-            shape="rounded"></button>
-        </td>
         <td tuiTd *tuiCell="'name'">
-          {{ item.name }}
+          <a tuiLink [routerLink]="['edit', item.id]">
+            {{ item.name }}
+          </a>
         </td>
         <td tuiTd *tuiCell="'phone'">
           {{ item.phone }}
         </td>
         <td tuiTd *tuiCell="'email'">
           {{ item.email }}
-        </td>
-        <td tuiTd *tuiCell="'bonuses'">
-          {{ item.card.bonuses }}
         </td>
         <td tuiTd *tuiCell="'numberOfVisits'">
           {{ item.numberOfVisits }}

@@ -4,7 +4,7 @@ import {
   EventEmitter,
   Output,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ServicesService } from '../services.service';
 
 @Component({
   selector: 'app-create-service',
@@ -13,20 +13,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateServiceComponent {
-  constructor() {}
+  constructor(private servicesService: ServicesService) {}
 
   @Output() createEvent = new EventEmitter();
 
-  expanded = false;
-  toggle(): void {
-    this.expanded = !this.expanded;
+  name = '';
+  onSubmit(): void {
+    this.servicesService.createService({ name: this.name }).subscribe();
   }
-
-  formCreateService = new FormGroup({
-    name: new FormControl(null, Validators.required),
-    price: new FormControl(null, Validators.required),
-    workTime: new FormControl(null),
-    description: new FormControl(null),
-  });
-  onSubmit(): void {}
 }

@@ -1,1 +1,3 @@
-export interface Notification {}
+export interface Notification {
+  title: string;
+}

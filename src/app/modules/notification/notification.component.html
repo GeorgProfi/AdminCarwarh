@@ -9,17 +9,10 @@
     class="input"
     tuiTextfieldSize="m"
     [tuiTextfieldCleaner]="true"
-    [(ngModel)]="search">
+    [ngModel]="search$ | async"
+    (ngModelChange)="search$.next($event)">
     Поиск
   </tui-input>
-  <button
-    tuiButton
-    size="m"
-    class="tui-form__button"
-    appearance="primary"
-    (click)="search$.next(search)">
-    Найти
-  </button>
   <tui-select
     tuiTextfieldSize="m"
     [(ngModel)]="size"
@@ -41,7 +34,6 @@
     (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
         <th tuiTh *tuiHead="'title'" tuiSortable>Название</th>
       </tr>
     </thead>
@@ -50,36 +42,10 @@
       *tuiLet="data | tuiTableSort as sortedData"
       [data]="sortedData">
       <tr tuiTr *ngFor="let item of sortedData">
-        <td tuiTd *tuiCell="'actions'">
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconEditLarge"
-            tuiHint="Редактировать"
-            tuiHintDirection="right"
-            tuiHintDescribe
-            title="Редактировать"
-            shape="rounded"></button>
-          <button
-            tuiIconButton
-            tuiHint="Удалить"
-            tuiHintDirection="right"
-            tuiHintDescribe
-            appearance="flat"
-            size="s"
-            icon="tuiIconRemoveLarge"
-            shape="rounded"></button>
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconAlertCircleLarge"
-            title="Подробнее"
-            shape="rounded"></button>
-        </td>
         <td tuiTd *tuiCell="'title'">
-          {{ item.title }}
+          <a tuiLink [routerLink]="['edit', item.id]">
+            {{ item.title }}
+          </a>
         </td>
       </tr>
     </tbody>

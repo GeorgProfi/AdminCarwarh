@@ -12,6 +12,10 @@ import { Observable } from 'rxjs';
 export class ServicesService {
   constructor(private http: HttpClient) {}
 
+  getAllServices(): Observable<Service[]> {
+    return this.http.get<Service[]>(`${environment.apiUrl}/services/all`);
+  }
+
   getServicesList(data: GetServicesListDto): Observable<PaginateRes<Service>> {
     return this.http.get<PaginateRes<Service>>(
       `${environment.apiUrl}/services`,

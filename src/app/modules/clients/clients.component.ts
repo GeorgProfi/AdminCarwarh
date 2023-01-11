@@ -1,4 +1,9 @@
-import { Component, Inject, Injector } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Injector,
+} from '@angular/core';
 import { ClientsService } from './clients.service';
 import {
   BehaviorSubject,
@@ -17,8 +22,6 @@ import {
 import { tuiIsPresent } from '@taiga-ui/cdk';
 import { Client } from '../../common/entities/client.entity';
 import { TuiDialogService } from '@taiga-ui/core';
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { EditClientComponent } from './edit-client/edit-client.component';
 
 type Key = 'id' | 'name';
 
@@ -26,6 +29,7 @@ type Key = 'id' | 'name';
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClientsComponent {
   constructor(
@@ -36,11 +40,9 @@ export class ClientsComponent {
 
   sizes = [10, 20, 5];
   columns: string[] = [
-    'actions',
     'name',
     'phone',
     'email',
-    'bonuses',
     'numberOfVisits',
     'dateOfRegistration',
   ];
@@ -66,11 +68,6 @@ export class ClientsComponent {
   readonly data$: Observable<readonly Client[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(data => data.rows.filter(tuiIsPresent)),
-    map(data => {
-      console.log('$');
-      console.log(data);
-      return data;
-    }),
     startWith([])
   );
   readonly total$ = this.request$.pipe(
@@ -80,8 +77,6 @@ export class ClientsComponent {
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
 
-  search = ``;
-
   private getData(
     page: number,
     pageSize: number,
@@ -89,45 +84,14 @@ export class ClientsComponent {
     sorter: string,
     direction: -1 | 1
   ) {
-    return this.clientsService
-      .getClientsList({
-        page,
-        pageSize,
-        search,
-        sorter,
-        direction,
-      })
-      .pipe(
-        map(data => {
-          console.log('data');
-          console.log(data);
-          return data;
-        })
-      );
+    return this.clientsService.getClientsList({
+      page,
+      pageSize,
+      search,
+      sorter,
+      direction,
+    });
   }
 
-  updateData() {
-    console.log('updateData');
-  }
-
-  toggleEdit(client: Client) {
-    this.dialogService
-      .open<Client>(
-        new PolymorpheusComponent(EditClientComponent, this.injector),
-        {
-          data: client,
-          dismissible: true,
-          label: `Редактировать`,
-        }
-      )
-      .subscribe({
-        next: data => {
-          // TODO: обновить ячейку
-          console.info(`Dialog emitted data = ${data}`);
-        },
-        complete: () => {
-          console.info(`Dialog closed`);
-        },
-      });
-  }
+  updateData() {}
 }

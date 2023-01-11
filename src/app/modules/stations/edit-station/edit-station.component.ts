@@ -28,7 +28,16 @@ export class EditStationComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  readonly columns = [`name`, 'type', `actions`];
+  readonly columnsServices = [
+    `name`,
+    'duration',
+    'bonusPercentage',
+    'price',
+    'discount',
+    `actions`,
+  ];
+
+  readonly columnsServicesOnPost = [`name`, `actions`];
 
   address: string = '';
   name: string = '';

@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ServicesService } from './services.service';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  Observable,
+} from 'rxjs';
 import {
   debounceTime,
   filter,
@@ -25,14 +30,7 @@ export class ServicesComponent {
 
   sizes = [10, 20, 5];
   size = this.sizes[0];
-  columns: string[] = [
-    'actions',
-    'name',
-    'price',
-    'duration',
-    'NumberOfSales',
-    'discount',
-  ];
+  columns: string[] = ['name'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -43,7 +41,7 @@ export class ServicesComponent {
   readonly request$ = combineLatest([
     this.page$,
     this.size$,
-    this.search$,
+    this.search$.pipe(debounceTime(500), distinctUntilChanged()),
     this.sorter$,
     this.direction$,
   ]).pipe(
@@ -63,8 +61,6 @@ export class ServicesComponent {
     startWith(1)
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
-
-  search = ``;
 
   private getData(
     page: number,

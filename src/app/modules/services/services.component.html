@@ -1,1 +1,71 @@
 <app-create-service (createEvent)="updateData()"></app-create-service>
+
+<div
+  tuiGroup
+  class="tui-form__row tui-space_bottom-5"
+  [adaptive]="true"
+  [collapsed]="true">
+  <tui-input
+    class="input"
+    tuiTextfieldSize="m"
+    [tuiTextfieldCleaner]="true"
+    [ngModel]="search$ | async"
+    (ngModelChange)="search$.next($event)">
+    Поиск
+  </tui-input>
+  <tui-select
+    tuiTextfieldSize="m"
+    [ngModel]="size$ | async"
+    (ngModelChange)="size$.next($event)">
+    Размер страницы
+    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>
+  </tui-select>
+</div>
+
+<tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
+  <table
+    *ngIf="data$ | async as data"
+    tuiTable
+    class="table"
+    [columns]="columns"
+    [tuiSortBy]="sorter$ | async"
+    (tuiSortByChange)="sorter$.next($event!)"
+    [direction]="(direction$ | async) || 1"
+    (directionChange)="direction$.next($event)">
+    <thead>
+      <tr tuiThGroup>
+        <th tuiTh *tuiHead="'name'" tuiSortable>Имя</th>
+        <th tuiTh *tuiHead="'phone'" tuiSortable>Телефон</th>
+        <th tuiTh *tuiHead="'email'" tuiSortable>email</th>
+        <th tuiTh *tuiHead="'bonuses'" [sorter]="null">Бонусы</th>
+        <th tuiTh *tuiHead="'numberOfVisits'" tuiSortable>Число посещений</th>
+        <th tuiTh *tuiHead="'dateOfRegistration'" tuiSortable>
+          Дата регистрации
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      tuiTbody
+      *tuiLet="data | tuiTableSort as sortedData"
+      [data]="sortedData">
+      <tr tuiTr *ngFor="let item of sortedData">
+        <td tuiTd *tuiCell="'name'">
+          <a tuiLink [routerLink]="['edit', item.id]">
+            {{ item.name }}
+          </a>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td [colSpan]="columns.length">
+          <tui-pagination
+            class="tui-space_top-5"
+            [length]="(total$ | async) || 0"
+            [index]="page$.value"
+            (indexChange)="page$.next($event)"></tui-pagination>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</tui-loader>

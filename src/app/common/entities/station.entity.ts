@@ -5,8 +5,8 @@ export interface Station {
   readonly address: string;
   readonly name: string;
   readonly postCount: number;
-  readonly startWork: number;
-  readonly endWork: number;
+  readonly startWork: Date;
+  readonly endWork: Date;
   readonly description: string;
   readonly services: Service[];
 }

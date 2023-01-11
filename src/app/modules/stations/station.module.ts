@@ -34,6 +34,7 @@ import {
   TuiDataListWrapperModule,
   TuiInputCountModule,
   TuiInputModule,
+  TuiInputNumberModule,
   TuiInputTimeModule,
   TuiIslandModule,
   TuiMultiSelectModule,
@@ -41,6 +42,7 @@ import {
   TuiPaginationModule,
   TuiSelectModule,
   TuiSliderModule,
+  TuiTabsModule,
   TuiTagModule,
   TuiTextAreaModule,
 } from '@taiga-ui/kit';
@@ -50,7 +52,7 @@ import { StationService } from './station.service';
 import { EditStationComponent } from './edit-station/edit-station.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TableModule } from '../../components/table/table.module';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { TimePipe } from '../../common/pipes/time.pipe';
 
 @NgModule({
@@ -98,6 +100,9 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     TuiMultiSelectOptionModule,
     TuiLabelModule,
     TuiNotificationModule,
+    TuiInputNumberModule,
+    RouterModule,
+    TuiTabsModule,
   ],
   providers: [StationService],
   declarations: [

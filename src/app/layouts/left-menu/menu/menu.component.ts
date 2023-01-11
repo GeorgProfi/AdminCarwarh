@@ -12,11 +12,11 @@ export class MenuComponent {
   activeItemIndex = 0;
 
   menu = [
-    {
-      name: 'Система лояльности',
-      icon: 'tuiIconCard',
-      link: 'loyalty-system',
-    },
+    // {
+    //   name: 'Система лояльности',
+    //   icon: 'tuiIconCard',
+    //   link: 'loyalty-system',
+    // },
     { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
     { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
     { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },

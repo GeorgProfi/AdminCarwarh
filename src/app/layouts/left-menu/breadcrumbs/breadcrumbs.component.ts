@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: `app-breadcrumbs`,
@@ -6,23 +7,19 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbsComponent {
+  constructor(private router: ActivatedRoute) {}
   items = [
     {
-      caption: `Selects`,
+      caption: `breadcrumbs`,
       routerLink: `/components/select`,
     },
     {
-      caption: `Multi`,
+      caption: `not`,
       routerLink: `/components/multi-select`,
     },
     {
-      caption: `With tags`,
+      caption: `work`,
       routerLink: `/components/multi-select`,
-    },
-    {
-      caption: `Current`,
-      routerLink: `/navigation/breadcrumbs`,
-      routerLinkActiveOptions: { exact: true },
     },
   ];
 }

@@ -1,54 +1,69 @@
 <tui-accordion-item>
   Создание записи на мойку
   <ng-template tuiAccordionItemContent>
-    <div tuiGroup class="tui-form__row">
-      <tui-select>
-        Станция
-        <tui-data-list-wrapper></tui-data-list-wrapper>
-      </tui-select>
-      <tui-select>
-        Услуги
-        <tui-data-list-wrapper></tui-data-list-wrapper>
-      </tui-select>
-    </div>
-    <div tuiGroup class="tui-form__row">
-      <div>
-        <tui-calendar [value]="day" (dayClick)="day = $event"></tui-calendar>
+    <div class="tui-row">
+      <div class="tui-col_md-6">
+        <h3 class="tui-form__header tui-form__header_margin-top_none">
+          Список услуг
+        </h3>
+        <div tuiGroup class="tui-form__row">
+          <tui-input> Введите название услуги </tui-input>
+          <button
+            tuiIconButton
+            type="button"
+            appearance="outline"
+            size="l"
+            title="A sample of icon-button in a group"
+            icon="tuiIconChevronDownLarge"
+            class="tui-group__auto-width-item"></button>
+          <button
+            tuiIconButton
+            type="button"
+            appearance="outline"
+            size="l"
+            title="A sample of icon-button in a group"
+            icon="tuiIconCloseLarge"
+            class="tui-group__auto-width-item"></button>
+        </div>
+        <button
+          tuiButton
+          type="button"
+          icon="tuiIconPlusLarge"
+          class="tui-form__row">
+          Добавить услугу
+        </button>
+        <!--        <tui-select-->
+        <!--          *tuiLet="services$ | async as services"-->
+        <!--          class="b-form tui-col_md-12 tui-space_bottom-5"-->
+        <!--          [(ngModel)]="service">-->
+        <!--          Услуги-->
+        <!--          <tui-data-list-wrapper-->
+        <!--            *tuiDataList-->
+        <!--            [items]="services"></tui-data-list-wrapper>-->
+        <!--        </tui-select>-->
       </div>
-      <div>
-        <table tuiTable [columns]="columns" class="tui-form__row">
-          <thead>
-            <tr tuiThGroup>
-              <th *tuiHead="'name'" tuiTh>Название</th>
-              <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
-            </tr>
-          </thead>
-          <tbody
-            *tuiLet="services | tuiTableSort as servicesSort"
-            tuiTbody
-            [data]="servicesSort">
-            <tr *ngFor="let service of servicesSort; let i = index" tuiTr>
-              <td *tuiCell="'name'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>
-              <td *tuiCell="'actions'" tuiTd>
-                <button
-                  tuiIconButton
-                  appearance="flat"
-                  size="s"
-                  icon="tuiIconTrash"
-                  title="Remove"
-                  shape="rounded"
-                  class="remove"></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="tui-col_md-6">
         <tui-select class="tui-form__row">
-          Время
+          Станция
           <tui-data-list-wrapper></tui-data-list-wrapper>
         </tui-select>
+        <tui-input-date class="tui-form__row"> Choose a date </tui-input-date>
+        <tui-input-time
+          class="tui-form__row"
+          formControlName="testValue"
+          [items]="items1">
+          Input time
+        </tui-input-time>
       </div>
     </div>
-    <div class="tui-form__buttons tui-form__buttons_align_center">
+
+    <!--        <tui-select class="tui-form__row">-->
+    <!--          Время-->
+    <!--          <tui-data-list-wrapper></tui-data-list-wrapper>-->
+    <!--        </tui-select>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <div class="tui-form__buttons tui-form__buttons_align_end">
       <button
         class="tui-form__button"
         tuiButton

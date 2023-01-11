@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
+  distinctUntilChanged,
   map,
   Observable,
   switchMap,
@@ -23,7 +24,7 @@ export class NotificationComponent {
   constructor(private notificationService: NotificationService) {}
   sizes = [10, 20, 5];
   size = this.sizes[0];
-  columns: string[] = ['actions', 'title'];
+  columns: string[] = ['title'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -34,7 +35,7 @@ export class NotificationComponent {
   readonly request$ = combineLatest([
     this.page$,
     this.size$,
-    this.search$,
+    this.search$.pipe(debounceTime(500), distinctUntilChanged()),
     this.sorter$,
     this.direction$,
   ]).pipe(
@@ -54,8 +55,6 @@ export class NotificationComponent {
     startWith(1)
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
-
-  search = ``;
 
   private getData(
     page: number,
@@ -78,9 +77,5 @@ export class NotificationComponent {
           return data;
         })
       );
-  }
-
-  updateData() {
-    this.search$.next(this.search$.value);
   }
 }

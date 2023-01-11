@@ -5,15 +5,18 @@ import { CreateClientComponent } from './create-client/create-client.component';
 import { EditClientComponent } from './edit-client/edit-client.component';
 import {
   TuiButtonModule,
+  TuiErrorModule,
   TuiExpandModule,
   TuiFormatDatePipeModule,
   TuiGroupModule,
+  TuiLinkModule,
   TuiLoaderModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
   TuiDataListWrapperModule,
+  TuiFieldErrorPipeModule,
   TuiInputModule,
   TuiInputNumberModule,
   TuiInputPhoneModule,
@@ -28,6 +31,7 @@ import {
   TuiTablePaginationModule,
 } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -55,6 +59,10 @@ import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
     TuiFormatDatePipeModule,
     TuiInputNumberModule,
     TuiInputPhoneModule,
+    RouterModule,
+    TuiErrorModule,
+    TuiFieldErrorPipeModule,
+    TuiLinkModule,
   ],
   providers: [ClientsService],
   declarations: [ClientsComponent, CreateClientComponent, EditClientComponent],

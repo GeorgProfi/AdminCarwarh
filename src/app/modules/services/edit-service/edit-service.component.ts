@@ -1,30 +1,29 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ClientsService } from '../clients.service';
+import { ServicesService } from '../services.service';
 
 @Component({
-  selector: 'app-edit-client',
-  templateUrl: './edit-client.component.html',
-  styleUrls: ['./edit-client.component.less'],
+  selector: 'app-edit-service',
+  templateUrl: './edit-service.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditClientComponent implements OnInit {
+export class EditServiceComponent implements OnInit {
   constructor(
     private router: ActivatedRoute,
-    private clientsService: ClientsService
+    private servicesService: ServicesService
   ) {}
 
-  id: string = '';
-
-  clientForm = new FormGroup({
+  serviceForm = new FormGroup({
     name: new FormControl(``, Validators.required),
   });
 
+  id: string = '';
+
   ngOnInit(): void {
     this.id = this.router.snapshot.params['id'];
-    this.clientsService.getClientById(this.id).subscribe(data => {
-      this.clientForm.patchValue({
+    this.servicesService.getServiceById(this.id).subscribe(data => {
+      this.serviceForm.patchValue({
         name: data.name,
       });
     });

@@ -9,7 +9,12 @@ import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditStationComponent } from './edit-station/edit-station.component';
 import { Station } from '../../common/entities/station.entity';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  Observable,
+} from 'rxjs';
 import {
   debounceTime,
   filter,
@@ -37,7 +42,7 @@ export class StationComponent {
 
   sizes = [10, 20, 5];
   size = this.sizes[0];
-  columns: string[] = ['actions', 'name', 'address', 'schedule', 'status'];
+  columns: string[] = ['name', 'address', 'schedule', 'status'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -48,7 +53,7 @@ export class StationComponent {
   readonly request$ = combineLatest([
     this.page$,
     this.size$,
-    this.search$,
+    this.search$.pipe(debounceTime(500), distinctUntilChanged()),
     this.sorter$,
     this.direction$,
   ]).pipe(

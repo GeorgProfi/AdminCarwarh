@@ -9,17 +9,10 @@
     class="input"
     tuiTextfieldSize="m"
     [tuiTextfieldCleaner]="true"
-    [(ngModel)]="search">
+    [ngModel]="search$ | async"
+    (ngModelChange)="search$.next($event)">
     Поиск
   </tui-input>
-  <button
-    tuiButton
-    size="m"
-    class="tui-form__button"
-    appearance="primary"
-    (click)="search$.next(search)">
-    Найти
-  </button>
   <tui-select
     tuiTextfieldSize="m"
     [(ngModel)]="size"
@@ -41,7 +34,6 @@
     (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
-        <th tuiTh *tuiHead="'actions'" [sorter]="null">Действия</th>
         <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
         <th tuiTh *tuiHead="'address'" tuiSortable>Адрес</th>
         <th tuiTh *tuiHead="'schedule'" tuiSortable>Расписание</th>
@@ -53,25 +45,10 @@
       *tuiLet="data | tuiTableSort as sortedData"
       [data]="sortedData">
       <tr tuiTr *ngFor="let item of sortedData">
-        <td tuiTd *tuiCell="'actions'">
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconEditLarge"
-            title="Редактировать"
-            [routerLink]="['edit', item.id]"
-            shape="rounded"></button>
-          <button
-            tuiIconButton
-            title="Удалить"
-            appearance="flat"
-            size="s"
-            icon="tuiIconRemoveLarge"
-            shape="rounded"></button>
-        </td>
         <td tuiTd *tuiCell="'name'">
-          {{ item.name }}
+          <a tuiLink [routerLink]="['edit', item.id]">
+            {{ item.name }}
+          </a>
         </td>
         <td tuiTd *tuiCell="'address'">
           {{ item.address }}
@@ -80,7 +57,11 @@
           {{ item.startWork | time }} - {{ item.endWork | time }}
         </td>
         <td tuiTd *tuiCell="'status'">
-          {{ item.status }}
+          <tui-tag
+            status="primary"
+            class="tag support-{{ item.status + 1 }}"
+            [hoverable]="true"
+            value="tag"></tui-tag>
         </td>
       </tr>
     </tbody>

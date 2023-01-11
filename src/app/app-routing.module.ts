@@ -5,7 +5,6 @@ import { LoginComponent } from './auth-page/login/login.component';
 import { RegisterComponent } from './auth-page/register/register.component';
 import { ClientsComponent } from './modules/clients/clients.component';
 import { StationComponent } from './modules/stations/station.component';
-import { LoyaltySystemComponent } from './modules/loyalty-system/loyalty-system.component';
 import { NotificationComponent } from './modules/notification/notification.component';
 import { DebugComponent } from './modules/debug/debug.component';
 import { AuthPageComponent } from './auth-page/auth-page.component';
@@ -16,6 +15,9 @@ import { LayoutComponent } from './layouts/left-menu/layout.component';
 import { SettingProfileComponent } from './modules/setting/setting-profile/setting-profile.component';
 import { SettingCompanyComponent } from './modules/setting/setting-company/setting-company.component';
 import { ServicesComponent } from './modules/services/services.component';
+import { EditServiceComponent } from './modules/services/edit-service/edit-service.component';
+import { EditNotificationComponent } from './modules/notification/edit-notification/edit-notification.component';
+import { EditClientComponent } from './modules/clients/edit-client/edit-client.component';
 
 const routes: Routes = [
   {
@@ -23,13 +25,19 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: '', redirectTo: 'loyalty-system', pathMatch: 'prefix' },
-      { path: 'loyalty-system', component: LoyaltySystemComponent },
+      // { path: 'loyalty-system', component: LoyaltySystemComponent },
       { path: 'clients', component: ClientsComponent },
+      { path: 'clients/edit/:id', component: EditClientComponent },
       { path: 'stations', component: StationComponent },
-      { path: 'stations/edit/:id', component: EditStationComponent },
+      {
+        path: 'stations/edit/:id',
+        component: EditStationComponent,
+      },
       { path: 'services', component: ServicesComponent },
+      { path: 'services/edit/:id', component: EditServiceComponent },
       { path: 'reservation', component: ReservationComponent },
       { path: 'notification', component: NotificationComponent },
+      { path: 'notification/edit/:id', component: EditNotificationComponent },
       { path: 'setting-company', component: SettingCompanyComponent },
       { path: 'setting-profile', component: SettingProfileComponent },
 

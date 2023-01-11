@@ -1,12 +1,11 @@
-<form [formGroup]="clientForm">
+<form [formGroup]="notificationForm">
   <div class="tui-form__row">
-    <tui-input formControlName="name">
-      Имя
-      <input tuiTextfield value="test" />
+    <tui-input formControlName="title">
+      Заголовок
       <span class="tui-required"></span>
     </tui-input>
     <tui-error
-      formControlName="name"
+      formControlName="title"
       [error]="[] | tuiFieldError | async"></tui-error>
   </div>
 
