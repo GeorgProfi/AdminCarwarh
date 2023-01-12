@@ -5,6 +5,7 @@ import {
   TuiInputModule,
   TuiInputNumberModule,
   TuiInputPasswordModule,
+  TuiInputPhoneModule,
   TuiTextAreaModule,
 } from '@taiga-ui/kit';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -25,6 +26,7 @@ import { SettingCompanyComponent } from './setting-company/setting-company.compo
     TuiInputNumberModule,
     TuiInputModule,
     FormsModule,
+    TuiInputPhoneModule,
   ],
   declarations: [SettingProfileComponent, SettingCompanyComponent],
   exports: [],

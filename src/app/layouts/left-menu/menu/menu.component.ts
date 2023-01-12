@@ -24,9 +24,7 @@ export class MenuComponent {
     {
       name: 'Рассылки уведомлений',
       icon: 'tuiIconBell',
-      child: [
-        { name: 'push рассылки', icon: 'tuiIconBell', link: 'notification' },
-      ],
+      link: 'notification',
     },
     {
       name: 'Настройки',

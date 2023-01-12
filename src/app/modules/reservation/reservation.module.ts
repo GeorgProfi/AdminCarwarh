@@ -5,6 +5,7 @@ import {
   TuiCalendarModule,
   TuiDataListModule,
   TuiGroupModule,
+  TuiHostedDropdownModule,
   TuiLoaderModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
@@ -48,6 +49,7 @@ import { ServicesService } from '../services/services.service';
     TuiDataListModule,
     TuiInputDateModule,
     TuiInputTimeModule,
+    TuiHostedDropdownModule,
   ],
   providers: [ReservationService, ServicesService],
   declarations: [ReservationComponent, CreateReservationComponent],

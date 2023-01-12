@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ReservationService } from '../reservation.service';
-import { TuiDay } from '@taiga-ui/cdk';
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../services/services.service';
-import { map } from 'rxjs';
 import { tuiCreateTimePeriods } from '@taiga-ui/kit';
-import { FormControl, FormGroup } from '@angular/forms';
+import { map } from 'rxjs';
+import { TuiDay } from '@taiga-ui/cdk';
 
 @Component({
   selector: 'app-create-reservation',
@@ -26,15 +25,17 @@ export class CreateReservationComponent {
     })
   );
 
-  service = null;
-
   readonly columns = [`name`, 'type', `actions`];
-  services: Service[] = [];
+  services: Service[] = [{ name: '' } as Service];
+  addService() {
+    this.services.push({ name: '' } as Service);
+  }
+  removeService(idx: number) {
+    this.services.splice(idx, 1);
+  }
 
-  day: TuiDay | null = null;
-  items1 = tuiCreateTimePeriods();
-  readonly testForm = new FormGroup({
-    testValue: new FormControl(null),
-  });
+  day = new TuiDay(2022, 0, 15);
+  time = null;
+  times = tuiCreateTimePeriods();
   onSubmit(): void {}
 }

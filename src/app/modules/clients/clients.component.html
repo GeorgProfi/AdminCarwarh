@@ -23,60 +23,97 @@
 </div>
 
 <tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
-  <table
-    *ngIf="data$ | async as data"
-    tuiTable
-    class="table"
-    [columns]="columns"
-    [tuiSortBy]="sorter$ | async"
-    (tuiSortByChange)="sorter$.next($event!)"
-    [direction]="(direction$ | async) || 1"
-    (directionChange)="direction$.next($event)">
-    <thead>
-      <tr tuiThGroup>
-        <th tuiTh *tuiHead="'name'" tuiSortable>Имя</th>
-        <th tuiTh *tuiHead="'phone'" tuiSortable>Телефон</th>
-        <th tuiTh *tuiHead="'email'" tuiSortable>email</th>
-        <th tuiTh *tuiHead="'numberOfVisits'" tuiSortable>Число посещений</th>
-        <th tuiTh *tuiHead="'dateOfRegistration'" tuiSortable>
-          Дата регистрации
-        </th>
-      </tr>
-    </thead>
-    <tbody
-      tuiTbody
-      *tuiLet="data | tuiTableSort as sortedData"
-      [data]="sortedData">
-      <tr tuiTr *ngFor="let item of sortedData">
-        <td tuiTd *tuiCell="'name'">
-          <a tuiLink [routerLink]="['edit', item.id]">
-            {{ item.name }}
-          </a>
-        </td>
-        <td tuiTd *tuiCell="'phone'">
-          {{ item.phone }}
-        </td>
-        <td tuiTd *tuiCell="'email'">
-          {{ item.email }}
-        </td>
-        <td tuiTd *tuiCell="'numberOfVisits'">
-          {{ item.numberOfVisits }}
-        </td>
-        <td tuiTd *tuiCell="'dateOfRegistration'">
-          {{ item.dateOfRegistration | date }}
-        </td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td [colSpan]="columns.length">
-          <tui-pagination
-            class="tui-space_top-5"
-            [length]="(total$ | async) || 0"
-            [index]="page$.value"
-            (indexChange)="page$.next($event)"></tui-pagination>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+  <tui-scrollbar>
+    <cdk-virtual-scroll-viewport
+      #viewport
+      tuiScrollable
+      class="viewport tui-zero-scrollbar"
+      [itemSize]="45"
+      [maxBufferPx]="500"
+      [minBufferPx]="400">
+      <table
+        *ngIf="data$ | async as data"
+        tuiTable
+        class="table"
+        [columns]="columns"
+        [tuiSortBy]="sorter$ | async"
+        (tuiSortByChange)="sorter$.next($event!)"
+        [direction]="(direction$ | async) || 1"
+        (directionChange)="direction$.next($event)">
+        <thead>
+          <tr tuiThGroup>
+            <th
+              tuiTh
+              *tuiHead="'name'"
+              [sticky]="true"
+              [style.top.px]="-viewport['_renderedContentOffset']"
+              tuiSortable>
+              Имя
+            </th>
+            <th
+              tuiTh
+              *tuiHead="'phone'"
+              [sticky]="true"
+              [style.top.px]="-viewport['_renderedContentOffset']"
+              tuiSortable>
+              Телефон
+            </th>
+            <th
+              tuiTh
+              *tuiHead="'email'"
+              [sticky]="true"
+              [style.top.px]="-viewport['_renderedContentOffset']"
+              tuiSortable>
+              email
+            </th>
+            <th
+              tuiTh
+              *tuiHead="'numberOfVisits'"
+              [sticky]="true"
+              [style.top.px]="-viewport['_renderedContentOffset']"
+              tuiSortable>
+              Число посещений
+            </th>
+            <th
+              tuiTh
+              *tuiHead="'dateOfRegistration'"
+              [sticky]="true"
+              [style.top.px]="-viewport['_renderedContentOffset']"
+              tuiSortable>
+              Дата регистрации
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          tuiTbody
+          *tuiLet="data | tuiTableSort as sortedData"
+          [data]="sortedData">
+          <tr tuiTr *cdkVirtualFor="let item of sortedData">
+            <td tuiTd *tuiCell="'name'">
+              <a tuiLink [routerLink]="['edit', item.id]">
+                {{ item.name }}
+              </a>
+            </td>
+            <td tuiTd *tuiCell="'phone'">
+              {{ item.phone }}
+            </td>
+            <td tuiTd *tuiCell="'email'">
+              {{ item.email }}
+            </td>
+            <td tuiTd *tuiCell="'numberOfVisits'">
+              {{ item.numberOfVisits }}
+            </td>
+            <td tuiTd *tuiCell="'dateOfRegistration'">
+              {{ item.dateOfRegistration | date }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </cdk-virtual-scroll-viewport>
+  </tui-scrollbar>
+  <tui-pagination
+    class="tui-space_top-5"
+    [length]="(total$ | async) || 0"
+    [index]="page$.value"
+    (indexChange)="page$.next($event)"></tui-pagination>
 </tui-loader>

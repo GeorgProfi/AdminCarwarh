@@ -6,14 +6,18 @@
         <h3 class="tui-form__header tui-form__header_margin-top_none">
           Список услуг
         </h3>
-        <div tuiGroup class="tui-form__row">
-          <tui-input> Введите название услуги </tui-input>
+        <div
+          tuiGroup
+          class="tui-form__row"
+          *ngFor="let service of services; index as idx">
+          <tui-input [(ngModel)]="service.name">
+            Введите название услуги
+          </tui-input>
           <button
             tuiIconButton
             type="button"
             appearance="outline"
             size="l"
-            title="A sample of icon-button in a group"
             icon="tuiIconChevronDownLarge"
             class="tui-group__auto-width-item"></button>
           <button
@@ -21,7 +25,7 @@
             type="button"
             appearance="outline"
             size="l"
-            title="A sample of icon-button in a group"
+            (click)="removeService(idx)"
             icon="tuiIconCloseLarge"
             class="tui-group__auto-width-item"></button>
         </div>
@@ -29,6 +33,7 @@
           tuiButton
           type="button"
           icon="tuiIconPlusLarge"
+          (click)="addService()"
           class="tui-form__row">
           Добавить услугу
         </button>
@@ -47,22 +52,18 @@
           Станция
           <tui-data-list-wrapper></tui-data-list-wrapper>
         </tui-select>
-        <tui-input-date class="tui-form__row"> Choose a date </tui-input-date>
+        <tui-input-date class="tui-form__row" [(ngModel)]="day">
+          Choose a date
+        </tui-input-date>
         <tui-input-time
           class="tui-form__row"
           formControlName="testValue"
-          [items]="items1">
+          [items]="times"
+          [(ngModel)]="time">
           Input time
         </tui-input-time>
       </div>
     </div>
-
-    <!--        <tui-select class="tui-form__row">-->
-    <!--          Время-->
-    <!--          <tui-data-list-wrapper></tui-data-list-wrapper>-->
-    <!--        </tui-select>-->
-    <!--      </div>-->
-    <!--    </div>-->
     <div class="tui-form__buttons tui-form__buttons_align_end">
       <button
         class="tui-form__button"

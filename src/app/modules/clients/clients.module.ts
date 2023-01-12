@@ -11,6 +11,7 @@ import {
   TuiGroupModule,
   TuiLinkModule,
   TuiLoaderModule,
+  TuiScrollbarModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
@@ -32,6 +33,7 @@ import {
 } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { RouterModule } from '@angular/router';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
@@ -63,6 +65,8 @@ import { RouterModule } from '@angular/router';
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     TuiLinkModule,
+    TuiScrollbarModule,
+    ScrollingModule,
   ],
   providers: [ClientsService],
   declarations: [ClientsComponent, CreateClientComponent, EditClientComponent],

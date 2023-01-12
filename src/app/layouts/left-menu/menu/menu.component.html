@@ -29,9 +29,9 @@
         {{ item.name }}
         <ng-container *ngIf="item.child" tuiAccordionItemContent>
           <ng-container *ngFor="let link of item.child">
-            <div class="link">
-              <a tuiLink [routerLink]="link.link">{{ link.name }}</a>
-            </div>
+            <a tuiLink class="tui-row" [routerLink]="link.link">{{
+              link.name
+            }}</a>
           </ng-container>
         </ng-container>
       </tui-accordion-item>
