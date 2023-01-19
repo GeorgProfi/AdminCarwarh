@@ -4,6 +4,7 @@ import {
   TuiButtonModule,
   TuiCalendarModule,
   TuiDataListModule,
+  TuiFormatNumberPipeModule,
   TuiGroupModule,
   TuiHostedDropdownModule,
   TuiLoaderModule,
@@ -25,6 +26,7 @@ import { ReservationService } from './reservation.service';
 import { TuiLetModule } from '@taiga-ui/cdk';
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
 import { ServicesService } from '../services/services.service';
+import { TableReservationComponent } from './table-reservation/table-reservation.component';
 
 @NgModule({
   imports: [
@@ -50,9 +52,14 @@ import { ServicesService } from '../services/services.service';
     TuiInputDateModule,
     TuiInputTimeModule,
     TuiHostedDropdownModule,
+    TuiFormatNumberPipeModule,
   ],
   providers: [ReservationService, ServicesService],
-  declarations: [ReservationComponent, CreateReservationComponent],
+  declarations: [
+    ReservationComponent,
+    CreateReservationComponent,
+    TableReservationComponent,
+  ],
   exports: [ReservationComponent],
 })
 export class ReservationModule {}

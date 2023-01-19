@@ -22,18 +22,18 @@
       <tui-accordion-item
         *ngFor="let item of menu"
         [borders]="null"
-        [showArrow]="!!item.child"
+        [showArrow]="false"
         [routerLink]="item.link"
         routerLinkActive>
         <tui-svg [src]="item.icon" class="tui-space_right-2"></tui-svg>
         {{ item.name }}
-        <ng-container *ngIf="item.child" tuiAccordionItemContent>
-          <ng-container *ngFor="let link of item.child">
-            <a tuiLink class="tui-row" [routerLink]="link.link">{{
-              link.name
-            }}</a>
-          </ng-container>
-        </ng-container>
+        <!--        <ng-container *ngIf="item.child" tuiAccordionItemContent>-->
+        <!--          <ng-container *ngFor="let link of item.child">-->
+        <!--            <a tuiLink class="tui-row" [routerLink]="link.link">{{-->
+        <!--              link.name-->
+        <!--            }}</a>-->
+        <!--          </ng-container>-->
+        <!--        </ng-container>-->
       </tui-accordion-item>
     </tui-accordion>
   </tui-scrollbar>
