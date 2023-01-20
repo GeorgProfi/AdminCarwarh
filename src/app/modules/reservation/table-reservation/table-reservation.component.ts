@@ -11,20 +11,19 @@ import { tuiCreateTimePeriods } from '@taiga-ui/kit';
 export class TableReservationComponent {
   constructor(private reservationService: ReservationService) {}
 
-  readonly data = [
-    {
-      name: `Alex Inkin`,
-      balance: 1323525,
-    },
-    {
-      name: `Roman Sedov`,
-      balance: 423242,
-    },
-  ] as const;
+  readonly times = tuiCreateTimePeriods();
 
-  readonly columns = ['time', '1', '2', '3', '4', '5'];
-
-  reserv = [[1, 2, 3], [1, 2], [1]];
-
-  times = tuiCreateTimePeriods();
+  reserv = [
+    [
+      { time: 1, duration: 1 },
+      { time: 8, duration: 3 },
+      { time: 14, duration: 5 },
+    ],
+    [
+      { time: 1, duration: 1 },
+      { time: 2, duration: 1 },
+    ],
+    [{ time: 1, duration: 1 }],
+    [{ time: 1, duration: 1 }],
+  ];
 }

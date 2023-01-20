@@ -3,20 +3,16 @@
     <div class="tui-col_md-1">
       <div class="tui-row tui-col_md-12">Время</div>
     </div>
-    <div class="tui-col_md-3">
-      <div class="tui-row tui-col_md-12">1</div>
-    </div>
-    <div class="tui-col_md-3">
-      <div class="tui-row tui-col_md-12">2</div>
-    </div>
-    <div class="tui-col_md-3">
-      <div class="tui-row tui-col_md-12">3</div>
+    <div class="tui-col_md-3" *ngFor="let post of reserv; let i = index">
+      <div class="tui-row tui-col_md-12">
+        {{ i + 1 }}
+      </div>
     </div>
   </div>
 
   <div class="tui-row">
     <div class="time_column tui-col_md-1">
-      <div *ngFor="let time of times" class="tui-row tui-col_md-12">
+      <div *ngFor="let time of times" class="tui-row tui-col_md-12 time">
         {{ time }}
       </div>
     </div>
@@ -24,9 +20,11 @@
     <div class="tui-col_md-11">
       <div class="tui-row">
         <div class="column tui-col_md-3" *ngFor="let post of reserv">
-          <div *ngFor="let res of post" class="row tui-row tui-col_md-12">
-            1
-          </div>
+          <tui-island
+            *ngFor="let res of post"
+            [class]="'order-' + res.time + '-' + res.duration">
+            KEK
+          </tui-island>
         </div>
       </div>
     </div>

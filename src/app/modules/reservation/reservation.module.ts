@@ -16,6 +16,7 @@ import {
   TuiInputDateModule,
   TuiInputModule,
   TuiInputTimeModule,
+  TuiIslandModule,
   TuiPaginationModule,
   TuiSelectModule,
 } from '@taiga-ui/kit';
@@ -53,6 +54,7 @@ import { TableReservationComponent } from './table-reservation/table-reservation
     TuiInputTimeModule,
     TuiHostedDropdownModule,
     TuiFormatNumberPipeModule,
+    TuiIslandModule,
   ],
   providers: [ReservationService, ServicesService],
   declarations: [
