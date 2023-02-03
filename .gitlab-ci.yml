@@ -7,7 +7,7 @@ stages:
 build-env:
   stage: build
   tags:
-    - car_wach_frontend
+    - car_wash_frontend
   only:
     - master
   script:
@@ -26,7 +26,7 @@ build-env:
 build-node:
   stage: build
   tags:
-    - car_wach_frontend
+    - car_wash_frontend
   only:
     - master
   script:
@@ -36,17 +36,17 @@ build-node:
 run-node-tests:
   stage: tests
   tags:
-    - car_wach_frontend
+    - car_wash_frontend
   only:
     - master
   script:
     - echo "run node tests"
     #- docker run -i --rm --env-file .env --name car_wash_frontend_test car_wash_frontend_img npm run test
 
-run-backend:
+run-frontend:
   stage: run
   tags:
-    - car_wach_frontend
+    - car_wash_frontend
   only:
     - master
   script:
@@ -68,7 +68,7 @@ run-backend:
 test-startup-logs:
   stage: logs
   tags:
-    - car_wach_frontend
+    - car_wash_frontend
   only:
     - master
   script:
