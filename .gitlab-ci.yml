@@ -31,7 +31,7 @@ build-node:
     - master
   script:
     - echo "build docker image ..."
-    - docker image build --build-arg HTTP_PORT=${CW_FRONT_PORT}. -t car_wash_frontend_img
+    - docker image build --build-arg HTTP_PORT=${CW_FRONT_PORT} . -t car_wash_frontend_img
 
 run-node-tests:
   stage: tests
