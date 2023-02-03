@@ -1,0 +1,83 @@
+stages:
+  - build
+  - tests
+  - run
+  - logs
+
+build-env:
+  stage: build
+  tags:
+    - car_wach_frontend
+  only:
+    - master
+  script:
+    - echo "create .env file ..."
+    - touch .env
+    - echo HOST=${CW_FRONT_HOST}>>.env
+    - echo PORT=${CW_FRONT_PORT}>>.env
+    - echo BACKEND_URL=${CW_FRONT_BACKEND_URL}>>.env
+    - echo IS_PRODUCTION=true>>.env
+
+  artifacts:
+    when: on_success
+    paths:
+      - .env
+
+build-node:
+  stage: build
+  tags:
+    - car_wach_frontend
+  only:
+    - master
+  script:
+    - echo "build docker image ..."
+    - docker image build . -t car_wash_frontend_img
+
+run-tests:
+  stage: tests
+  tags:
+    - car_wach_frontend
+  only:
+    - master
+  script:
+    - > 
+      docker run
+      -i --rm
+      --env-file .env
+      --name car_wash_frontend_test
+      car_wash_frontend_img
+      npm run test
+
+run-backend:
+  stage: run
+  tags:
+    - car_wach_frontend
+  only:
+    - master
+  script:
+    - echo "stop docker container ..."
+    - if [ "$( docker container inspect -f '{{.State.Running}}' car_wash_frontend_cntr )" == "true" ]; then docker stop car_wash_frontend_cntr; fi
+    - echo "remove docker container ..."
+    - if [ "$( docker container inspect -f '{{.Name}}' car_wash_frontend_cntr )" == "/car_wash_frontend_cntr" ]; then docker rm car_wash_frontend_cntr; fi
+    - echo "create and run docker container ..."
+    - > 
+      docker run
+      -d
+      -p ${CW_BACK_PORT}:${CW_BACK_PORT}
+      --env-file .env
+      --add-host host.docker.internal:host-gateway
+      --name car_wash_frontend_cntr
+      car_wash_frontend_img
+    - rm .env
+
+test-logs:
+  stage: logs
+  tags:
+    - car_wach_frontend
+  only:
+    - master
+  script:
+    - sleep 30
+    - docker logs car_wash_frontend_cntr 2>errors.log
+    - cat ./errors.log
+    - if [ "$(stat --format=%s './errors.log')" != "0" ]; then exit 1; fi
