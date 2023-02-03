@@ -13,10 +13,8 @@ build-env:
   script:
     - echo "create .env file ..."
     - touch .env
-    - echo HOST=${CW_FRONT_HOST}>>.env
     - echo PORT=${CW_FRONT_PORT}>>.env
     - echo BACKEND_URL=${CW_FRONT_BACKEND_URL}>>.env
-    - echo IS_PRODUCTION=false>>.env
 
   artifacts:
     when: on_success
