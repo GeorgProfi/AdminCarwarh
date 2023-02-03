@@ -1,10 +1,13 @@
-FROM node:18.14-alpine
+FROM node:18.14-alpine as build
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm i
-
 COPY . .
+RUN npm run build
 
-CMD ["npm", "run", "start:host"]
+FROM nginx:1.23.3-alpine
+COPY --from=build /app/dist/car-wash-owner-panel /usr/share/nginx/html
+
+EXPOSE 80
