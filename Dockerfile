@@ -1,4 +1,4 @@
-FROM node:19-alpine
+FROM node:18.14-alpine
 
 RUN npm install -g npm@9.4.0
 
@@ -10,4 +10,4 @@ RUN npm i
 COPY . .
 RUN npm run build
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start"]
