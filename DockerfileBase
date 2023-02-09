@@ -1,8 +1,12 @@
+ARG HTTP_PORT=80
+
 FROM node:18.14-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm i
+RUN echo $HTTP_PORT > ./port
+RUN cat ./port
 COPY . .
 RUN npm run build

@@ -12,7 +12,7 @@ base-image-build:
     - master
   script:
     - echo "build base docker image ..."
-    - docker image build . -t car_wash_frontend_base_img -f DockerfileBase 
+    - docker image build . --build-arg HTTP_PORT=${CW_FRONT_PORT} -t car_wash_frontend_base_img -f DockerfileBase 
 
 base-image-test:
   stage: build_and_test
@@ -32,7 +32,7 @@ nginx-image-build:
     - master
   script:
     - echo "build nginx docker image ..."
-    - docker image build . --build-arg HTTP_PORT=${CW_FRONT_PORT} -t car_wash_frontend_img
+    - docker image build . --build-arg "HTTP_PORT=${CW_FRONT_PORT}" -t car_wash_frontend_img
 
 run-nginx-server:
   stage: run
