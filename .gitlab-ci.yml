@@ -4,7 +4,7 @@ stages:
   - run
   - logs
 
-build-base-image:
+base-image-build:
   stage: prepare
   tags:
     - car_wash_frontend
@@ -34,7 +34,7 @@ nginx-image-build:
     - echo "build nginx docker image ..."
     - docker image build . --build-arg HTTP_PORT=${CW_FRONT_PORT} -t car_wash_frontend_img
 
-run-frontend:
+run-nginx-server:
   stage: run
   tags:
     - car_wash_frontend
