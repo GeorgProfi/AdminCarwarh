@@ -1,45 +1,38 @@
 stages:
-  - build
-  - tests
+  - prepare
+  - build_and_test
   - run
   - logs
 
-build-env:
-  stage: build
+build-base-image:
+  stage: prepare
   tags:
     - car_wash_frontend
   only:
     - master
   script:
-    - echo "create .env file ..."
-    - touch .env
-    - echo PORT=${CW_FRONT_PORT}>>.env
-    - echo BACKEND_URL=${CW_FRONT_BACKEND_URL}>>.env
+    - echo "build base docker image ..."
+    - docker image build . -t car_wash_frontend_base_img -f DockerfileBase 
 
-  artifacts:
-    when: on_success
-    paths:
-      - .env
-
-build-node:
-  stage: build
+test-base-image:
+  stage: build_and_test
   tags:
     - car_wash_frontend
   only:
     - master
   script:
-    - echo "build docker image ..."
-    - docker image build --build-arg HTTP_PORT=${CW_FRONT_PORT} . -t car_wash_frontend_img
+    - echo "test base docker image ..."
+    - docker run -i --rm --name car_wash_frontend_test car_wash_frontend_base_img npm run test
 
-run-node-tests:
-  stage: tests
+build-nginx-image:
+  stage: build_and_test
   tags:
     - car_wash_frontend
   only:
     - master
   script:
-    - echo "run node tests"
-    #- docker run -i --rm --env-file .env --name car_wash_frontend_test car_wash_frontend_img npm run test
+    - echo "build nginx docker image ..."
+    - docker image build . --build-arg HTTP_PORT=${CW_FRONT_PORT} -t car_wash_frontend_img
 
 run-frontend:
   stage: run
@@ -57,11 +50,9 @@ run-frontend:
       docker run
       -d
       -p ${CW_FRONT_PORT}:${CW_FRONT_PORT}
-      --env-file .env
-      --add-host host.docker.internal:host-gateway
+      --env HTTP_PORT=${CW_FRONT_PORT}
       --name car_wash_frontend_cntr
       car_wash_frontend_img
-    - rm .env
 
 test-startup-logs:
   stage: logs
