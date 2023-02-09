@@ -14,7 +14,7 @@ build-base-image:
     - echo "build base docker image ..."
     - docker image build . -t car_wash_frontend_base_img -f DockerfileBase 
 
-test-base-image:
+base-image-test:
   stage: build_and_test
   tags:
     - car_wash_frontend
@@ -24,7 +24,7 @@ test-base-image:
     - echo "test base docker image ..."
     - docker run -i --rm --name car_wash_frontend_test car_wash_frontend_base_img npm run test
 
-build-nginx-image:
+nginx-image-build:
   stage: build_and_test
   tags:
     - car_wash_frontend
