@@ -12,7 +12,7 @@ base-image-build:
     - master
   script:
     - echo "build base docker image ..."
-    - docker image build . --build-arg HTTP_PORT=${CW_FRONT_PORT} -t car_wash_frontend_base_img -f DockerfileBase 
+    - docker image build . --build-arg HTTP_PORT=80 -t car_wash_frontend_base_img -f DockerfileBase
 
 base-image-test:
   stage: build_and_test
@@ -32,7 +32,7 @@ nginx-image-build:
     - master
   script:
     - echo "build nginx docker image ..."
-    - docker image build . --build-arg "HTTP_PORT=${CW_FRONT_PORT}" -t car_wash_frontend_img
+    - docker image build . --build-arg "HTTP_PORT=80" -t car_wash_frontend_img
 
 run-nginx-server:
   stage: run
@@ -46,11 +46,11 @@ run-nginx-server:
     - echo "remove docker container ..."
     - if [ "$( docker container inspect -f '{{.Name}}' car_wash_frontend_cntr )" == "/car_wash_frontend_cntr" ]; then docker rm car_wash_frontend_cntr; fi
     - echo "create and run docker container ..."
-    - > 
+    - >
       docker run
       -d
-      -p ${CW_FRONT_PORT}:${CW_FRONT_PORT}
-      --env HTTP_PORT=${CW_FRONT_PORT}
+      -p 80:80
+      --env HTTP_PORT=80
       --name car_wash_frontend_cntr
       car_wash_frontend_img
 
