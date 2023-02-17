@@ -6,7 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { StationService } from '../station.service';
+import { StationService } from '../../../common/services/api/station.service';
 import { TuiTime } from '@taiga-ui/cdk';
 import { CreateStationDto } from '../dto/create-station.dto';
 import { DateTime } from 'luxon';

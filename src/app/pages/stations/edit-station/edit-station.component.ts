@@ -4,7 +4,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { StationService } from '../station.service';
+import { StationService } from '../../../common/services/api/station.service';
 import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { TuiTime } from '@taiga-ui/cdk';

@@ -4,7 +4,7 @@ import {
   Inject,
   Injector,
 } from '@angular/core';
-import { StationService } from './station.service';
+import { StationService } from '../../common/services/api/station.service';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditStationComponent } from './edit-station/edit-station.component';

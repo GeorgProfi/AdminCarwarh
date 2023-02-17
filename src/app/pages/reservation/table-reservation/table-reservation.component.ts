@@ -10,6 +10,7 @@ import {
   TuiStringHandler,
 } from '@taiga-ui/cdk';
 import { Station } from '../../../common/entities/station.entity';
+import { StationService } from '../../../common/services/api/station.service';
 
 @Component({
   selector: 'app-table-reservation',
@@ -20,25 +21,14 @@ import { Station } from '../../../common/entities/station.entity';
 export class TableReservationComponent {
   constructor(
     private reservationService: ReservationService,
+    private stationService: StationService,
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService
   ) {}
 
   day$ = new BehaviorSubject(new TuiDay(2022, 0, 15));
-  station$ = new BehaviorSubject('');
-  stations$ = new BehaviorSubject<Station[]>([
-    {
-      id: '123',
-      name: 'LOL',
-      address: '',
-      status: 1,
-      endWork: new Date(),
-      description: '',
-      startWork: new Date(),
-      postCount: 3,
-      services: [],
-    },
-  ]);
+  stations$ = this.stationService.getALLStation();
+  stationId!: string;
 
   @tuiPure
   stringify(

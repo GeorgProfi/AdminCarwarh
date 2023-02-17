@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { map, Observable } from 'rxjs';
-import { PaginateRes } from '../../common/dto/paginate-response.dto';
-import { Station } from '../../common/entities/station.entity';
-import { CreateStationDto } from './dto/create-station.dto';
-import { UpdateStationDto } from './dto/update-station.dto';
-import { Pagination } from '../../common/dto/pagination.dto';
+import { PaginateRes } from '../../dto/paginate-response.dto';
+import { Station } from '../../entities/station.entity';
+import { CreateStationDto } from '../../../pages/stations/dto/create-station.dto';
+import { UpdateStationDto } from '../../../pages/stations/dto/update-station.dto';
+import { Pagination } from '../../dto/pagination.dto';
 
 @Injectable({ providedIn: 'root' })
 export class StationService {
@@ -25,8 +25,10 @@ export class StationService {
       );
   }
 
-  getALLStation(): Observable<Station[]> {
-    return this.http.get<Station[]>(`${environment.apiUrl}/station/all`);
+  getALLStation(serviceIds?: string[]): Observable<Station[]> {
+    return this.http.put<Station[]>(`${environment.apiUrl}/station/all`, {
+      serviceIds,
+    });
   }
 
   createStation(data: CreateStationDto): Observable<Station> {

@@ -90,7 +90,10 @@
           [data]="sortedData">
           <tr tuiTr *cdkVirtualFor="let item of sortedData">
             <td tuiTd *tuiCell="'name'">
-              <a tuiLink [routerLink]="['edit', item.id]">
+              <a
+                tuiLink
+                [routerLink]="['edit']"
+                [queryParams]="{ id: item.id }">
                 {{ item.name }}
               </a>
             </td>

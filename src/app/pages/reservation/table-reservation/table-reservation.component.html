@@ -8,7 +8,7 @@
     class="b-form"
     [tuiTextfieldLabelOutside]="true"
     [valueContent]="stations ? stringify(stations) : loading"
-    [(ngModel)]="station$">
+    [(ngModel)]="stationId">
     Станция
     <ng-template tuiDataList>
       <tui-data-list *ngIf="stations; else loading">

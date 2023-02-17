@@ -27,7 +27,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'loyalty-system', pathMatch: 'prefix' },
       // { path: 'loyalty-system', component: LoyaltySystemComponent },
       { path: 'clients', component: ClientsComponent },
-      { path: 'clients/edit/:id', component: EditClientComponent },
+      { path: 'clients/edit', component: EditClientComponent },
       { path: 'stations', component: StationComponent },
       {
         path: 'stations/edit/:id',
