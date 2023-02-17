@@ -1,0 +1,63 @@
+//.table {
+//  width: 100%;
+//
+//  .column {
+//    border: 1px solid var(--tui-base-03);
+//  }
+//
+//  .row {
+//    position: absolute;
+//    background-color: rgba(208, 2, 27, 0.3);
+//    height: 100px;
+//    top: 500px;
+//  }
+//}
+
+.table-res {
+  margin-top: 5px;
+}
+
+.header-post {
+  text-align: center;
+}
+
+@start-pos-table: 250;
+@step: 50;
+
+.time {
+  height: 50px;
+  align-content: center;
+}
+
+.column {
+  position: relative;
+  //height: 200px;
+  border: 1px solid var(--tui-base-03);
+}
+
+wrap-column {
+  position: absolute;
+  border: 1px solid var(--tui-base-03);
+}
+
+@max-time: 24;
+@max-duration: 24;
+
+.make-duration(@time, @duration: 1) when (@duration =< @max-duration) {
+  .order-@{time}-@{duration} {
+    position: absolute;
+    background-color: var(--tui-positive-hover);
+    width: 50%;
+    left: 20px;
+    top: @time * 50px;
+    height: (@duration) * 50px - 30;
+  }
+  .make-duration(@time, @duration + 1);
+}
+
+.make-time(@time: 0) when (@time =< @max-time) {
+  .make-duration(@time);
+  .make-time(@time + 1);
+}
+
+.make-time();

@@ -28,19 +28,13 @@ export class MenuComponent {
     },
     {
       name: 'Настройки',
-      icon: 'tuiIconDrag',
-      child: [
-        {
-          name: 'Настройки личного кабинета',
-          icon: 'tuiIconDrag',
-          link: 'setting-profile',
-        },
-        {
-          name: 'Настройки компании',
-          icon: 'tuiIconDrag',
-          link: 'setting-company',
-        },
-      ],
+      icon: 'tuiIconSettings',
+      link: 'setting-company',
+    },
+    {
+      name: 'Личный кабинет',
+      icon: 'tuiIconUser',
+      link: 'setting-profile',
     },
 
     { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },

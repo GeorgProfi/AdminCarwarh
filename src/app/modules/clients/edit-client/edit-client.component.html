@@ -1,15 +1,16 @@
 <form [formGroup]="clientForm">
-  <div class="tui-form__row">
-    <tui-input formControlName="name">
-      Имя
-      <input tuiTextfield value="test" />
-      <span class="tui-required"></span>
-    </tui-input>
-    <tui-error
-      formControlName="name"
-      [error]="[] | tuiFieldError | async"></tui-error>
-  </div>
-
+  <tui-island>
+    <div class="tui-form__row">
+      <tui-input formControlName="name">
+        Имя
+        <input tuiTextfield value="test" />
+        <span class="tui-required"></span>
+      </tui-input>
+      <tui-error
+        formControlName="name"
+        [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+  </tui-island>
   <div class="tui-form__buttons">
     <button class="tui-form__button" tuiButton appearance="primary">
       Сохранить

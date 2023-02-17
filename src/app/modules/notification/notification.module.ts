@@ -15,6 +15,7 @@ import {
   TuiFieldErrorPipeModule,
   TuiInputFilesModule,
   TuiInputModule,
+  TuiIslandModule,
   TuiPaginationModule,
   TuiSelectModule,
   TuiTextAreaModule,
@@ -53,6 +54,7 @@ import { EditNotificationComponent } from './edit-notification/edit-notification
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     TuiLinkModule,
+    TuiIslandModule,
   ],
   providers: [NotificationService],
   declarations: [

@@ -64,7 +64,17 @@ export class StationComponent {
   );
   readonly data$: Observable<readonly Station[]> = this.request$.pipe(
     filter(tuiIsPresent),
-    map(data => data.rows.filter(tuiIsPresent)),
+    map(data =>
+      data.rows.map(el => {
+        switch (el.status) {
+          case 0:
+            el.status = 'Закрыто';
+            break;
+        }
+        return el;
+      })
+    ),
+    map(data => data.filter(tuiIsPresent)),
     startWith([])
   );
   readonly total$ = this.request$.pipe(
