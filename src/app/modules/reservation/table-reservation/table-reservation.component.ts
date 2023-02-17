@@ -23,9 +23,8 @@ export class TableReservationComponent implements OnInit {
     private readonly alertService: TuiAlertService
   ) {}
 
-  day = new TuiDay(2022, 0, 15);
-
-  station$ = new BehaviorSubject('');
+  day$ = new BehaviorSubject(new TuiDay(2022, 0, 15));
+  stations$ = new BehaviorSubject('');
 
   ngOnInit() {
     this.reservationService

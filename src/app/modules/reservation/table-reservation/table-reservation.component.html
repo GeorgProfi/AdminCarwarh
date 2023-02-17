@@ -3,11 +3,13 @@
   class="tui-form__row tui-space_bottom-5"
   [adaptive]="true"
   [collapsed]="true">
-  <tui-select>
+  <tui-select *tuiLet="stations$ | async as stations">
     Станция
     <tui-data-list-wrapper></tui-data-list-wrapper>
   </tui-select>
-  <tui-input-date [(ngModel)]="day"> Choose a date </tui-input-date>
+  <tui-input-date [ngModel]="day$ | async" (ngModelChange)="day$.next($event)">
+    Choose a date
+  </tui-input-date>
 </div>
 
 <div class="table tui-space_bottom-5 tui-space_top-5">
