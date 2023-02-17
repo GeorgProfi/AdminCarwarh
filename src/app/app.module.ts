@@ -12,22 +12,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth-page/auth.module';
-import { HomeModule } from './modules/home/home.module';
+import { HomeModule } from './pages/home/home.module';
 import { AuthService } from './auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
-import { ClientsModule } from './modules/clients/clients.module';
-import { StationModule } from './modules/stations/station.module';
-import { LoyaltySystemModule } from './modules/loyalty-system/loyalty-system.module';
-import { SettingModule } from './modules/setting/setting.module';
-import { NotificationModule } from './modules/notification/notification.module';
+import { ClientsModule } from './pages/clients/clients.module';
+import { StationModule } from './pages/stations/station.module';
+import { LoyaltySystemModule } from './pages/loyalty-system/loyalty-system.module';
+import { SettingModule } from './pages/setting/setting.module';
+import { NotificationModule } from './pages/notification/notification.module';
 import { of } from 'rxjs';
 import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
-import { DebugModule } from './modules/debug/debug.module';
-import { ReservationModule } from './modules/reservation/reservation.module';
-import { Error404Module } from './modules/error-404/error-404.module';
+import { DebugModule } from './pages/debug/debug.module';
+import { ReservationModule } from './pages/reservation/reservation.module';
+import { Error404Module } from './pages/error-404/error-404.module';
 import { LayoutModule } from './layouts/left-menu/layout.module';
-import { ServicesModule } from './modules/services/services.module';
+import { ServicesModule } from './pages/services/services.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,7 +45,6 @@ import { ServicesModule } from './modules/services/services.module';
     // My app
     Error404Module,
     AuthModule,
-    //LayoutModule,
     LayoutModule,
     HomeModule,
     ClientsModule,
