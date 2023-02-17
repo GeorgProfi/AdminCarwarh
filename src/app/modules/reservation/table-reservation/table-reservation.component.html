@@ -58,7 +58,9 @@
         *ngFor="let post of reserv.slice(index, index + 4)">
         <tui-island
           *ngFor="let res of post"
-          [class]="'order-' + res.time + '-' + res.duration"
+          [style.top.px]="res.time * 50"
+          [style.height.px]="res.duration * 50 - 30"
+          class="order"
           (click)="clickOrder()">
           <p class="tui-island__category">10:00 - 13:00</p>
           <p *ngIf="res.duration > 1" class="tui-island__category">
