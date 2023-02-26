@@ -9,9 +9,6 @@ export class Service {
   type!: string;
   price!: number;
   discount!: number;
-  bonuses!: number;
-
-  toString(): string {
-    return `${this.name}`;
-  }
+  bonusPercentage!: number;
+  duration!: number;
 }

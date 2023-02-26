@@ -30,7 +30,7 @@ const routes: Routes = [
       { path: 'clients/edit', component: EditClientComponent },
       { path: 'stations', component: StationComponent },
       {
-        path: 'stations/edit/:id',
+        path: 'stations/edit',
         component: EditStationComponent,
       },
       { path: 'services', component: ServicesComponent },

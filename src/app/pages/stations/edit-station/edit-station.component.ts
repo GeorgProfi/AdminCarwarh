@@ -5,12 +5,19 @@ import {
   OnInit,
 } from '@angular/core';
 import { StationService } from '../../../common/services/api/station.service';
-import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { TuiTime } from '@taiga-ui/cdk';
+import {
+  TuiContextWithImplicit,
+  tuiPure,
+  TuiStringHandler,
+  TuiTime,
+} from '@taiga-ui/cdk';
 import { Service } from '../../../common/entities/service.entity';
+import { ServicesService } from '../../../common/services/api/services.service';
+import { ClassService } from '../../../common/entities/class-service.entity';
 
 interface Post {
+  id: string;
   name: string;
   services: Service[];
 }
@@ -24,88 +31,167 @@ interface Post {
 export class EditStationComponent implements OnInit {
   constructor(
     private stationService: StationService,
-    private route: ActivatedRoute,
+    private servicesService: ServicesService,
+    private router: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
+  stationId: string = this.router.snapshot.queryParams['id'];
 
+  /*
+  station
+   */
+  address: string = '';
+  name: string = '';
+  startWork: TuiTime = new TuiTime(0, 0);
+  endWork: TuiTime = new TuiTime(0, 0);
+  description: string = '';
+
+  readonly $classServices = this.servicesService.getAllClassServices();
+  @tuiPure
+  stringify(
+    classServices: ClassService[]
+  ): TuiStringHandler<TuiContextWithImplicit<string>> {
+    const map = new Map(
+      classServices.map(({ id, name }) => [id, name] as [string, string])
+    );
+    return ({ $implicit }: TuiContextWithImplicit<string>) =>
+      map.get($implicit) || '';
+  }
+
+  /*
+  station services
+   */
   readonly columnsServices = [
     `name`,
     'duration',
     'bonusPercentage',
     'price',
     'discount',
-    `actions`,
+    `action-2`,
   ];
-
-  readonly columnsServicesOnPost = [`name`, `actions`];
-
-  address: string = '';
-  name: string = '';
-  startWork: TuiTime = new TuiTime(0, 0);
-  endWork: TuiTime = new TuiTime(0, 0);
-  description: string = '';
   services: Service[] = [];
+  classServiceForStationId!: string;
+  duration!: number;
+  bonusPercentage!: number;
+  price!: number;
+  discount!: number;
 
-  posts: Post[] = [{ name: 'создать', services: [] }];
-
-  newPost = '';
-
-  forTypeServices: { [key: string]: Service[] } = {};
-
-  createPost() {
-    this.posts.push({ name: this.newPost, services: [] });
-  }
-
-  deleteServiceInPost(post: Post, service: Service) {
-    console.log(post);
-    const index = post.services.indexOf(service);
-    if (index > -1) {
-      post.services.splice(index, 1);
+  addService() {
+    if (!confirm(`Вы уверены?`)) {
+      return;
     }
-    this.cdr.detectChanges();
-    console.log(post);
-  }
-
-  id!: string;
-
-  // $services
-
-  ngOnInit() {
-    this.route.paramMap
-      .pipe(switchMap(params => params.getAll('id')))
-      .subscribe(id => {
-        this.stationService.getStationById(id).subscribe(data => {
-          const station = data.station;
-          const services = data.services;
-          const posts = data.posts;
-
-          this.name = station.name;
-          this.description = station.description;
-          this.address = station.address;
-
-          this.services = services;
-
-          posts.forEach((post: Post) => {
-            post.services.map((service: Service) =>
-              services.indexOf(service.id)
-            );
-          });
-          this.posts = posts;
-
-          this.services.forEach((service: Service) => {
-            if (!this.forTypeServices[service.type]) {
-              this.forTypeServices[service.type] = [];
-            }
-            this.forTypeServices[service.type].push(service);
-          });
-
-          console.log(data);
-        });
+    this.stationService
+      .addServiceOnStation({
+        idClassService: this.classServiceForStationId,
+        stationId: this.stationId,
+        bonusPercentage: this.bonusPercentage,
+        price: this.price,
+        discount: this.discount,
+        duration: this.duration,
+      })
+      .subscribe(() => {
+        this.services.push({
+          name: 'NEW',
+          bonusPercentage: this.bonusPercentage,
+          price: this.price,
+          discount: this.discount,
+          duration: this.duration,
+        } as Service);
       });
   }
 
-  addService() {
-    console.log('addService');
+  removeServiceForStation(index: number) {
+    if (!confirm(`Вы еблан? ${index}`)) {
+      return;
+    }
+    this.stationService
+      .removeService({
+        stationId: this.stationId,
+        serviceId: this.services[index].id,
+      })
+      .subscribe(() => {
+        this.services.splice(index, 1);
+      });
+  }
+
+  updateServices() {
+    if (!confirm(`Вы еблан?`)) {
+      return;
+    }
+    //this.stationService.updateServices(this.services);
+  }
+
+  /*
+  station posts
+   */
+  readonly columnsServicesOnPost = [`name`, `actions`];
+  posts: Post[] = [];
+  namePost!: string;
+  indexPost: number = 0;
+  stationServiceIdForPost!: string;
+  createPost() {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService
+      .addPost({
+        stationId: this.stationId,
+        name: this.namePost,
+      })
+      .subscribe(data => {
+        console.log(data);
+      });
+  }
+  selectPost(index: number) {
+    this.indexPost = index;
+  }
+  addServicePost() {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService
+      .addServicePost({
+        postId: this.posts[this.indexPost].id,
+        serviceId: this.stationServiceIdForPost,
+      })
+      .subscribe(() => {
+        this.posts[this.indexPost].services.push({ name: 'new' } as Service);
+      });
+  }
+  removeServicePost(serviceId: string) {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService
+      .removeServicePost({
+        postId: this.posts[this.indexPost].id,
+        serviceId: serviceId,
+      })
+      .subscribe(() => {
+        this.posts[this.indexPost].services.splice(this.indexPost, 1);
+      });
+  }
+
+  /******************************************************/
+
+  ngOnInit() {
+    this.stationService.getStationById(this.stationId).subscribe(station => {
+      console.log(station);
+      this.name = station.name;
+      this.description = station.description;
+      this.address = station.address;
+      this.services = station.services.map((service: any) => {
+        service.name = service.classServices.name;
+        return service;
+      });
+      this.posts = station.posts.map((post: Post) => {
+        post.services = post.services.map((service: any) => {
+          service.name = service.classServices.name;
+          return service;
+        });
+        return post;
+      });
+    });
   }
 
   onSubmit(): void {}

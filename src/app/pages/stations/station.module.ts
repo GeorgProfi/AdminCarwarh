@@ -32,6 +32,7 @@ import {
   TuiCheckboxBlockModule,
   TuiDataListDropdownManagerModule,
   TuiDataListWrapperModule,
+  TuiFilterByInputPipeModule,
   TuiInputCountModule,
   TuiInputModule,
   TuiInputNumberModule,
@@ -102,6 +103,7 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     TuiInputNumberModule,
     RouterModule,
     TuiTabsModule,
+    TuiFilterByInputPipeModule,
   ],
   declarations: [
     StationComponent,

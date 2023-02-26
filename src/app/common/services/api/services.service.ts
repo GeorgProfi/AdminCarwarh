@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class ServicesService {
   constructor(private http: HttpClient) {}
 
-  getAllServices(): Observable<Service[]> {
+  getAllClassServices(): Observable<Service[]> {
     return this.http.get<Service[]>(`${environment.apiUrl}/services/all`);
   }
 

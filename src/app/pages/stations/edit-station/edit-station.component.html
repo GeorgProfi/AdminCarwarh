@@ -16,15 +16,19 @@
   <tui-accordion-item class="tui-form__row">
     Редактор услуг
     <ng-template tuiAccordionItemContent>
-      <table tuiTable [columns]="columnsServices" class="tui-form__row">
+      <table
+        tuiTable
+        class="tui-form__row"
+        [style.width.%]="100"
+        [columns]="columnsServices">
         <thead>
           <tr tuiThGroup>
-            <th *tuiHead="'name'" tuiTh>Название</th>
+            <th *tuiHead="'name'" tuiTh [style.width.rem]="100">Название</th>
             <th *tuiHead="'duration'" tuiTh>Длительность</th>
             <th *tuiHead="'bonusPercentage'" tuiTh>Процент бонусов</th>
             <th *tuiHead="'price'" tuiTh>Цена</th>
             <th *tuiHead="'discount'" tuiTh>Скидка</th>
-            <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
+            <th *tuiHead="'action-2'" tuiTh [sorter]="null"></th>
           </tr>
         </thead>
         <tbody
@@ -32,59 +36,102 @@
           tuiTbody
           [data]="servicesSort">
           <tr tuiTr>
-            <td *tuiCell="'name'" tuiTd>name</td>
+            <td *tuiCell="'name'" tuiTd>
+              <tui-select
+                *tuiLet="$classServices | async as classServices"
+                class="b-form"
+                [tuiTextfieldLabelOutside]="true"
+                [valueContent]="
+                  classServices ? stringify(classServices) : loading
+                "
+                [(ngModel)]="classServiceForStationId">
+                Услуга
+                <ng-template tuiDataList>
+                  <tui-data-list *ngIf="classServices; else loading">
+                    <button
+                      *ngFor="let service of classServices"
+                      tuiOption
+                      [value]="service.id">
+                      {{ service.name }}
+                    </button>
+                  </tui-data-list>
+                </ng-template>
+                <ng-template #loading>
+                  <tui-loader class="tui-space_vertical-3 loader"></tui-loader>
+                </ng-template>
+              </tui-select>
+            </td>
             <td *tuiCell="'duration'" tuiTd>
-              <tui-input-number></tui-input-number>
+              <tui-input-number [(ngModel)]="duration"></tui-input-number>
             </td>
             <td *tuiCell="'bonusPercentage'" tuiTd>
-              <tui-input-number></tui-input-number>
+              <tui-input-number
+                [(ngModel)]="bonusPercentage"></tui-input-number>
             </td>
             <td *tuiCell="'price'" tuiTd>
-              <tui-input-number></tui-input-number>
+              <tui-input-number [(ngModel)]="price"></tui-input-number>
             </td>
             <td *tuiCell="'discount'" tuiTd>
-              <tui-input-number></tui-input-number>
+              <tui-input-number [(ngModel)]="discount"></tui-input-number>
             </td>
-            <td *tuiCell="'actions'" tuiTd>
+            <td *tuiCell="'action-2'" tuiTd>
               <button
                 tuiIconButton
                 appearance="flat"
                 size="s"
                 icon="tuiIconPlus"
-                title="Remove"
                 shape="rounded"
-                class="remove"></button>
+                (click)="addService()"></button>
             </td>
           </tr>
-          <tr *ngFor="let service of servicesSort; let i = index" tuiTr>
-            <td *tuiCell="'name'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>
-            <td *tuiCell="'duration'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>
-            <td *tuiCell="'bonusPercentage'" tuiTd>
-              {{ i + 1 }}. {{ service.name }}
+          <tr *ngFor="let service of services; let i = index" tuiTr>
+            <td *tuiCell="'name'" tuiTd>
+              {{ service.name }}
             </td>
-            <td *tuiCell="'price'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>
-            <td *tuiCell="'discount'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>
-            <td *tuiCell="'actions'" tuiTd>
+            <td *tuiCell="'duration'" tuiTd>
+              <tui-input-number
+                [(ngModel)]="service.duration"></tui-input-number>
+            </td>
+            <td *tuiCell="'bonusPercentage'" tuiTd>
+              <tui-input-number
+                [(ngModel)]="service.bonusPercentage"></tui-input-number>
+            </td>
+            <td *tuiCell="'price'" tuiTd>
+              <tui-input-number [(ngModel)]="service.price"></tui-input-number>
+            </td>
+            <td *tuiCell="'discount'" tuiTd>
+              <tui-input-number
+                [(ngModel)]="service.discount"></tui-input-number>
+            </td>
+            <td *tuiCell="'action-2'" tuiTd>
               <button
                 tuiIconButton
                 appearance="flat"
                 size="s"
                 icon="tuiIconTrash"
-                title="Remove"
                 shape="rounded"
-                class="remove"></button>
+                (click)="removeServiceForStation(i)"></button>
             </td>
           </tr>
         </tbody>
       </table>
+      <button
+        tuiButton
+        type="button"
+        appearance="primary"
+        size="xs"
+        class="tui-form__row tui-form__button"
+        (click)="updateServices()">
+        Обновить
+      </button>
     </ng-template>
   </tui-accordion-item>
 
   <tui-accordion-item class="tui-form__row">
     Редактор постов
     <ng-template tuiAccordionItemContent>
-      <div tuiGroup class="tui-form__row">
-        <tui-input [(ngModel)]="newPost">
+      <div tuiGroup>
+        <tui-input [(ngModel)]="namePost">
           Введите название нового поста
         </tui-input>
         <button
@@ -95,23 +142,22 @@
           Создать пост
         </button>
       </div>
-      <section class="content tui-form__row">
+      <div
+        class="content-post tui-form__row"
+        *ngIf="posts.length > 0; else nothing">
         <nav tuiTabs vertical="left" class="left">
-          <button tuiTab content="one">Пост 1</button>
-          <button tuiTab>Пост 2</button>
-          <button tuiTab>Пост 3</button>
+          <button
+            tuiTab
+            *ngFor="let post of posts; let i = index"
+            (click)="selectPost(i)">
+            {{ post.name }}
+          </button>
         </nav>
-        <div>
-          <ng-template #one>
-            <p>one</p>
-          </ng-template>
-          <ng-template #two>
-            <p>two</p>
-          </ng-template>
-          <ng-template #three>
-            <p>one</p>
-          </ng-template>
-          <table tuiTable [columns]="columnsServicesOnPost">
+        <div [style.width.%]="100">
+          <table
+            tuiTable
+            [style.width.%]="100"
+            [columns]="columnsServicesOnPost">
             <thead>
               <tr tuiThGroup>
                 <th *tuiHead="'name'" tuiTh>Название</th>
@@ -119,118 +165,62 @@
               </tr>
             </thead>
             <tbody
-              *tuiLet="services | tuiTableSort as servicesSort"
+              *tuiLet="posts[indexPost].services as servicesSort"
               tuiTbody
               [data]="servicesSort">
               <tr tuiTr>
-                <td *tuiCell="'name'" tuiTd>name</td>
+                <td *tuiCell="'name'" tuiTd>
+                  <tui-select
+                    class="b-form"
+                    [tuiTextfieldLabelOutside]="true"
+                    [valueContent]="services ? stringify(services) : loading"
+                    [(ngModel)]="stationServiceIdForPost">
+                    Услуга
+                    <ng-template tuiDataList>
+                      <tui-data-list *ngIf="services; else loading">
+                        <button
+                          *ngFor="let service of services"
+                          tuiOption
+                          [value]="service.id">
+                          {{ service.name }}
+                        </button>
+                      </tui-data-list>
+                    </ng-template>
+                    <ng-template #loading>
+                      <tui-loader
+                        class="tui-space_vertical-3 loader"></tui-loader>
+                    </ng-template>
+                  </tui-select>
+                </td>
                 <td *tuiCell="'actions'" tuiTd>
                   <button
                     tuiIconButton
                     appearance="flat"
                     size="s"
                     icon="tuiIconPlus"
-                    title="Remove"
                     shape="rounded"
-                    class="remove"></button>
+                    (click)="addServicePost()"></button>
                 </td>
               </tr>
               <tr *ngFor="let service of servicesSort; let i = index" tuiTr>
-                <td *tuiCell="'name'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>
+                <td *tuiCell="'name'" tuiTd>{{ service.name }}</td>
                 <td *tuiCell="'actions'" tuiTd>
                   <button
                     tuiIconButton
                     appearance="flat"
                     size="s"
                     icon="tuiIconTrash"
-                    title="Remove"
                     shape="rounded"
-                    class="remove"></button>
+                    (click)="removeServicePost(service.id)"></button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </section>
+      </div>
+      <ng-template #nothing> Нет постов </ng-template>
     </ng-template>
   </tui-accordion-item>
-
-  <!--<tui-accordion class="tui-form__row">-->
-  <!--  <tui-accordion-item *ngFor="let post of posts">-->
-  <!--    {{ post.name }}-->
-  <!--    <ng-template tuiAccordionItemContent>-->
-  <!--      <div tuiGroup class="tui-form__row">-->
-  <!--        <tui-input [(ngModel)]="post.name"> Название </tui-input>-->
-
-  <!--        <tui-hosted-dropdown-->
-  <!--          #dropdown-->
-  <!--          class="tui-form__button"-->
-  <!--          [tuiDropdownMaxHeight]="500"-->
-  <!--          [content]="content">-->
-  <!--          <button tuiButton [pseudoHover]="dropdown.open || null">-->
-  <!--            Выбрать услуги-->
-  <!--          </button>-->
-  <!--        </tui-hosted-dropdown>-->
-  <!--      </div>-->
-
-  <!--      <ng-template #content>-->
-  <!--        <tui-data-list>-->
-  <!--          <button tuiOption class="link" (click)="addService()">-->
-  <!--            Добавить услугу-->
-  <!--          </button>-->
-  <!--          <tui-opt-group tuiMultiSelectGroup [(ngModel)]="post.services">-->
-  <!--            <tui-opt-group-->
-  <!--              tuiMultiSelectGroup-->
-  <!--              *ngFor="let item of forTypeServices | keyvalue"-->
-  <!--              [label]="item.key">-->
-  <!--              <button-->
-  <!--                *ngFor="let service of item.value"-->
-  <!--                tuiOption-->
-  <!--                [value]="service">-->
-  <!--                {{ service.name }}-->
-  <!--              </button>-->
-  <!--            </tui-opt-group>-->
-  <!--          </tui-opt-group>-->
-  <!--        </tui-data-list>-->
-  <!--      </ng-template>-->
-
-  <!--      <table tuiTable [columns]="columns" class="tui-form__row">-->
-  <!--        <thead>-->
-  <!--          <tr tuiThGroup>-->
-  <!--            <th *tuiHead="'name'" tuiTh>Название</th>-->
-  <!--            <th *tuiHead="'type'" tuiTh>Тип</th>-->
-  <!--            <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>-->
-  <!--          </tr>-->
-  <!--        </thead>-->
-  <!--        <tbody-->
-  <!--          *tuiLet="post.services | tuiTableSort as servicesSort"-->
-  <!--          tuiTbody-->
-  <!--          [data]="servicesSort">-->
-  <!--          <tr *ngFor="let service of servicesSort; let i = index" tuiTr>-->
-  <!--            <td *tuiCell="'name'" tuiTd>{{ i + 1 }}. {{ service.name }}</td>-->
-  <!--            <td *tuiCell="'type'" tuiTd>-->
-  <!--              <tui-tag-->
-  <!--                class="tui-space_right-1"-->
-  <!--                [value]="service.type"-->
-  <!--                [autoColor]="true"></tui-tag>-->
-  <!--            </td>-->
-  <!--            <td *tuiCell="'actions'" tuiTd>-->
-  <!--              <button-->
-  <!--                tuiIconButton-->
-  <!--                appearance="flat"-->
-  <!--                size="s"-->
-  <!--                icon="tuiIconTrash"-->
-  <!--                title="Remove"-->
-  <!--                shape="rounded"-->
-  <!--                (click)="deleteServiceInPost(post, service)"-->
-  <!--                class="remove"></button>-->
-  <!--            </td>-->
-  <!--          </tr>-->
-  <!--        </tbody>-->
-  <!--      </table>-->
-  <!--    </ng-template>-->
-  <!--  </tui-accordion-item>-->
-  <!--</tui-accordion>-->
 </tui-island>
 <div class="tui-form__buttons">
   <button

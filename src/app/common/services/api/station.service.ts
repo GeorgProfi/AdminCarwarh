@@ -5,7 +5,6 @@ import { map, Observable } from 'rxjs';
 import { PaginateRes } from '../../dto/paginate-response.dto';
 import { Station } from '../../entities/station.entity';
 import { CreateStationDto } from '../../../pages/stations/dto/create-station.dto';
-import { UpdateStationDto } from '../../../pages/stations/dto/update-station.dto';
 import { Pagination } from '../../dto/pagination.dto';
 
 @Injectable({ providedIn: 'root' })
@@ -39,11 +38,53 @@ export class StationService {
     return this.http.get<any>(`${environment.apiUrl}/station/get/${id}`);
   }
 
-  deleteStationById(id: string): Observable<void> {
-    return this.http.delete<void>(`${environment.apiUrl}/station/${id}`);
+  addPost(data: { stationId: string; name: string }) {
+    return this.http.post<any>(`${environment.apiUrl}/station/post`, data);
   }
 
-  updateStation(id: string, data: UpdateStationDto): Observable<Station> {
-    return this.http.put<Station>(`${environment.apiUrl}/station/${id}`, data);
+  addServiceOnStation(data: {
+    idClassService: string;
+    stationId: string;
+    price: number;
+    duration: number;
+    discount: number;
+    bonusPercentage: number;
+  }) {
+    return this.http.post<any>(`${environment.apiUrl}/station/service`, data);
+  }
+
+  updateServices(
+    data: {
+      idClassService: string;
+      stationId: string;
+      price: number;
+      duration: number;
+      discount: number;
+      bonusPercentage: number;
+    }[]
+  ) {
+    return this.http.put(`${environment.apiUrl}/station/service`, data);
+  }
+
+  removeService(data: { stationId: string; serviceId: string }) {
+    return this.http.delete<any>(`${environment.apiUrl}/station/service`, {
+      params: data,
+    });
+  }
+
+  addServicePost(data: { postId: string; serviceId: string }) {
+    return this.http.post<any>(
+      `${environment.apiUrl}/station/service-on-post`,
+      data
+    );
+  }
+
+  removeServicePost(data: { postId: string; serviceId: string }) {
+    return this.http.delete<any>(
+      `${environment.apiUrl}/station/service-on-post`,
+      {
+        params: data,
+      }
+    );
   }
 }
