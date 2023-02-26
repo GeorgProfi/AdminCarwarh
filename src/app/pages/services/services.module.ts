@@ -16,6 +16,7 @@ import {
   TuiDataListWrapperModule,
   TuiFieldErrorPipeModule,
   TuiInputModule,
+  TuiInputNumberModule,
   TuiInputTimeModule,
   TuiIslandModule,
   TuiPaginationModule,
@@ -66,6 +67,7 @@ import { RouterLink, RouterModule } from '@angular/router';
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     TuiLinkModule,
+    TuiInputNumberModule,
   ],
   declarations: [
     ServicesComponent,

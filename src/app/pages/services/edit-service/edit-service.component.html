@@ -1,18 +1,115 @@
-<form [formGroup]="serviceForm">
-  <tui-island>
-    <div class="tui-form__row">
-      <tui-input formControlName="name">
-        Имя
-        <span class="tui-required"></span>
-      </tui-input>
-      <tui-error
-        formControlName="name"
-        [error]="[] | tuiFieldError | async"></tui-error>
-    </div>
-  </tui-island>
-  <div class="tui-form__buttons">
-    <button class="tui-form__button" tuiButton appearance="primary">
-      Сохранить
+<tui-island>
+  <div tuiGroup class="tui-form__row">
+    <tui-input [(ngModel)]="name"> Название </tui-input>
+    <button
+      tuiButton
+      class="tui-form__button"
+      (click)="updateService()"
+      appearance="primary">
+      Обновить
     </button>
   </div>
-</form>
+  <table
+    tuiTable
+    class="tui-form__row"
+    [style.width.%]="100"
+    [columns]="columnsServices">
+    <thead>
+      <tr tuiThGroup>
+        <th *tuiHead="'station'" tuiTh [style.width.rem]="100">Станция</th>
+        <th *tuiHead="'duration'" tuiTh>Длительность</th>
+        <th *tuiHead="'bonusPercentage'" tuiTh>Процент бонусов</th>
+        <th *tuiHead="'price'" tuiTh>Цена</th>
+        <th *tuiHead="'discount'" tuiTh>Скидка</th>
+        <th *tuiHead="'action-2'" tuiTh [sorter]="null"></th>
+      </tr>
+    </thead>
+    <tbody
+      *tuiLet="services | tuiTableSort as servicesSort"
+      tuiTbody
+      [data]="servicesSort">
+      <tr tuiTr>
+        <td *tuiCell="'station'" tuiTd>
+          <tui-select
+            *tuiLet="stations$ | async as stations"
+            class="b-form"
+            [tuiTextfieldLabelOutside]="true"
+            [valueContent]="stations ? stringify(stations) : loading"
+            [(ngModel)]="stationId">
+            Услуга
+            <ng-template tuiDataList>
+              <tui-data-list *ngIf="stations; else loading">
+                <button
+                  *ngFor="let station of stations"
+                  tuiOption
+                  [value]="station.id">
+                  {{ station.name }}
+                </button>
+              </tui-data-list>
+            </ng-template>
+            <ng-template #loading>
+              <tui-loader class="tui-space_vertical-3 loader"></tui-loader>
+            </ng-template>
+          </tui-select>
+        </td>
+        <td *tuiCell="'duration'" tuiTd>
+          <tui-input-number [(ngModel)]="duration"></tui-input-number>
+        </td>
+        <td *tuiCell="'bonusPercentage'" tuiTd>
+          <tui-input-number [(ngModel)]="bonusPercentage"></tui-input-number>
+        </td>
+        <td *tuiCell="'price'" tuiTd>
+          <tui-input-number [(ngModel)]="price"></tui-input-number>
+        </td>
+        <td *tuiCell="'discount'" tuiTd>
+          <tui-input-number [(ngModel)]="discount"></tui-input-number>
+        </td>
+        <td *tuiCell="'action-2'" tuiTd>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconPlus"
+            shape="rounded"
+            (click)="addService()"></button>
+        </td>
+      </tr>
+      <tr *ngFor="let service of services; let i = index" tuiTr>
+        <td *tuiCell="'station'" tuiTd>{{ service.station }}</td>
+        <td *tuiCell="'duration'" tuiTd>
+          <tui-input-number [(ngModel)]="service.duration"></tui-input-number>
+        </td>
+        <td *tuiCell="'bonusPercentage'" tuiTd>
+          <tui-input-number
+            [(ngModel)]="service.bonusPercentage"></tui-input-number>
+        </td>
+        <td *tuiCell="'price'" tuiTd>
+          <tui-input-number [(ngModel)]="service.price"></tui-input-number>
+        </td>
+        <td *tuiCell="'discount'" tuiTd>
+          <tui-input-number [(ngModel)]="service.discount"></tui-input-number>
+        </td>
+        <td *tuiCell="'action-2'" tuiTd>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconTrash"
+            shape="rounded"
+            (click)="removeService(service.stationId, service.id)"></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="tui-form__buttons">
+    <button
+      tuiButton
+      type="button"
+      appearance="primary"
+      size="xs"
+      class="tui-form__button"
+      (click)="updateServices()">
+      Обновить
+    </button>
+  </div>
+</tui-island>

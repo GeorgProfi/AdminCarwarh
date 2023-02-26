@@ -31,6 +31,12 @@ export class ServicesService {
     return this.http.get<Service>(`${environment.apiUrl}/services/get/${id}`);
   }
 
+  getServicesForClass(id: string) {
+    return this.http.get<any[]>(
+      `${environment.apiUrl}/services/get-services-for-class/${id}`
+    );
+  }
+
   updateService(id: string, data: UpdateServiceDto) {
     return this.http.put<Service>(`${environment.apiUrl}/services/${id}`, data);
   }
