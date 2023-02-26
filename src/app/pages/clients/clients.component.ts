@@ -43,6 +43,7 @@ export class ClientsComponent {
     'name',
     'phone',
     'email',
+    'bonuses',
     'numberOfVisits',
     'dateOfRegistration',
   ];
@@ -84,13 +85,23 @@ export class ClientsComponent {
     sorter: string,
     direction: -1 | 1
   ) {
-    return this.clientsService.getClientsList({
-      page,
-      pageSize,
-      search,
-      sorter,
-      direction,
-    });
+    return this.clientsService
+      .getClientsList({
+        page,
+        pageSize,
+        search,
+        sorter,
+        direction,
+      })
+      .pipe(
+        map(data => {
+          data.rows.map((row: any) => {
+            row.bonuses = row.card.bonuses;
+            return row;
+          });
+          return data;
+        })
+      );
   }
 
   updateData() {}

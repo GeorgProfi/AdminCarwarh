@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { PaginateRes } from '../../dto/paginate-response.dto';
 import { Client } from '../../entities/client.entity';
 import { environment } from '../../../../environments/environment';
-import { UpdateClientDto } from '../../../pages/clients/dto/update-client.dto';
 import { Pagination } from '../../dto/pagination.dto';
 
 @Injectable({ providedIn: 'root' })
@@ -36,15 +35,19 @@ export class ClientsService {
     });
   }
 
-  getClientById(id: string) {
-    return this.http.get<Client>(`${environment.apiUrl}/client/get/${id}`);
+  getClientAndCard(idClient: string) {
+    return this.http.get<Client>(
+      `${environment.apiUrl}/client/get-full/${idClient}`
+    );
   }
 
-  updateClient(id: string, data: UpdateClientDto) {
-    return this.http.put<Client>(`${environment.apiUrl}/client/${id}`, data);
-  }
-
-  deleteClient(id: string) {
-    return this.http.delete<void>(`${environment.apiUrl}/client/${id}`);
+  saveDataClient(data: {
+    clientId: string;
+    name?: string;
+    phone?: string;
+    email?: string;
+    bonuses?: number;
+  }) {
+    return this.http.put(`${environment.apiUrl}/client/update`, data);
   }
 }

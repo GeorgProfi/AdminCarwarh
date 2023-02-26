@@ -1,19 +1,29 @@
-<form [formGroup]="clientForm">
-  <tui-island>
-    <div class="tui-form__row">
-      <tui-input formControlName="name">
-        Имя
-        <input tuiTextfield value="test" />
-        <span class="tui-required"></span>
-      </tui-input>
-      <tui-error
-        formControlName="name"
-        [error]="[] | tuiFieldError | async"></tui-error>
-    </div>
-  </tui-island>
-  <div class="tui-form__buttons">
-    <button class="tui-form__button" tuiButton appearance="primary">
-      Сохранить
-    </button>
+<tui-island>
+  <tui-input class="tui-form__row" [(ngModel)]="name"> Имя </tui-input>
+  <div tuiGroup class="tui-form__row">
+    <tui-input-phone [(ngModel)]="phone">
+      Телефон
+      <input tuiTextfield autocomplete="tel" />
+    </tui-input-phone>
+    <tui-input [(ngModel)]="email"> email </tui-input>
   </div>
-</form>
+
+  <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">
+    Карта клиента
+  </h3>
+  <tui-input-number
+    class="tui-form__row"
+    [(ngModel)]="bonuses"
+    [postfix]="'RUB' | tuiCurrency">
+    Число бонусов
+  </tui-input-number>
+</tui-island>
+<div class="tui-form__buttons">
+  <button
+    class="tui-form__button"
+    tuiButton
+    appearance="primary"
+    (click)="saveData()">
+    Сохранить
+  </button>
+</div>

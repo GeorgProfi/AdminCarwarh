@@ -1,5 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientsService } from '../../../common/services/api/clients.service';
 
@@ -16,23 +15,34 @@ export class EditClientComponent implements OnInit {
   ) {}
 
   id: string = this.router.snapshot.queryParams['id'];
-  clientForm = new FormGroup({
-    name: new FormControl(``, Validators.required),
-  });
+  name!: string;
+  phone!: string;
+  email!: string;
+  bonuses!: number;
 
-  // $client = this.clientsService.getClientById(this.id).pipe(
-  //   map(data => {
-  //     this.clientForm.patchValue({
-  //       name: data.name,
-  //     });
-  //   })
-  // );
+  saveData() {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    console.log(this.id);
+    this.clientsService
+      .saveDataClient({
+        clientId: this.id,
+        name: this.name,
+        phone: this.phone,
+        email: this.email,
+        bonuses: this.bonuses,
+      })
+      .subscribe();
+  }
 
   ngOnInit(): void {
-    this.clientsService.getClientById(this.id).subscribe(data => {
-      this.clientForm.patchValue({
-        name: data.name,
-      });
+    this.clientsService.getClientAndCard(this.id).subscribe((data: any) => {
+      this.name = data.name;
+      this.phone = data.phone;
+      this.email = data.email;
+      this.bonuses = data.card.bonuses;
+      console.log(data);
     });
   }
 }

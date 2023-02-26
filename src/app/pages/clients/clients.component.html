@@ -68,6 +68,14 @@
             </th>
             <th
               tuiTh
+              *tuiHead="'bonuses'"
+              [sticky]="true"
+              [style.top.px]="-viewport['_renderedContentOffset']"
+              tuiSortable>
+              Бонусы
+            </th>
+            <th
+              tuiTh
               *tuiHead="'numberOfVisits'"
               [sticky]="true"
               [style.top.px]="-viewport['_renderedContentOffset']"
@@ -102,6 +110,9 @@
             </td>
             <td tuiTd *tuiCell="'email'">
               {{ item.email }}
+            </td>
+            <td tuiTd *tuiCell="'bonuses'">
+              {{ item.bonuses }}
             </td>
             <td tuiTd *tuiCell="'numberOfVisits'">
               {{ item.numberOfVisits }}

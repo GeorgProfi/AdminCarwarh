@@ -101,7 +101,7 @@ export class EditStationComponent implements OnInit {
   }
 
   removeServiceForStation(index: number) {
-    if (!confirm(`Вы еблан? ${index}`)) {
+    if (!confirm(`Вы уверены? ${index}`)) {
       return;
     }
     this.stationService
@@ -115,7 +115,7 @@ export class EditStationComponent implements OnInit {
   }
 
   updateServices() {
-    if (!confirm(`Вы еблан?`)) {
+    if (!confirm(`Вы уверены?`)) {
       return;
     }
     //this.stationService.updateServices(this.services);

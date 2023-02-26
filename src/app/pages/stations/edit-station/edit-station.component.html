@@ -13,6 +13,17 @@
     Описание
   </tui-text-area>
 
+  <div class="tui-form__buttons">
+    <button
+      class="tui-form__button"
+      tuiButton
+      size="s"
+      (click)="onSubmit()"
+      appearance="primary">
+      Сохранить
+    </button>
+  </div>
+
   <tui-accordion-item class="tui-form__row">
     Редактор услуг
     <ng-template tuiAccordionItemContent>
@@ -115,15 +126,17 @@
           </tr>
         </tbody>
       </table>
-      <button
-        tuiButton
-        type="button"
-        appearance="primary"
-        size="xs"
-        class="tui-form__row tui-form__button"
-        (click)="updateServices()">
-        Обновить
-      </button>
+      <div class="tui-form__buttons">
+        <button
+          tuiButton
+          type="button"
+          appearance="primary"
+          size="xs"
+          class="tui-form__button"
+          (click)="updateServices()">
+          Обновить
+        </button>
+      </div>
     </ng-template>
   </tui-accordion-item>
 
@@ -222,12 +235,3 @@
     </ng-template>
   </tui-accordion-item>
 </tui-island>
-<div class="tui-form__buttons">
-  <button
-    class="tui-form__button"
-    tuiButton
-    (click)="onSubmit()"
-    appearance="primary">
-    Сохранить
-  </button>
-</div>

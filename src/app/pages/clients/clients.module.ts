@@ -33,6 +33,7 @@ import {
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
 
 @NgModule({
   imports: [
@@ -66,6 +67,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     TuiLinkModule,
     TuiScrollbarModule,
     ScrollingModule,
+    TuiCurrencyPipeModule,
   ],
   declarations: [ClientsComponent, CreateClientComponent, EditClientComponent],
   exports: [ClientsComponent],
