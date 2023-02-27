@@ -6,8 +6,6 @@ import {
 } from '@angular/core';
 import { StationService } from '../../common/services/api/station.service';
 import { TuiDialogService } from '@taiga-ui/core';
-import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
-import { EditStationComponent } from './edit-station/edit-station.component';
 import { Station } from '../../common/entities/station.entity';
 import {
   BehaviorSubject,
@@ -42,7 +40,7 @@ export class StationComponent {
 
   sizes = [10, 20, 5];
   size = this.sizes[0];
-  columns: string[] = ['name', 'address', 'schedule', 'status'];
+  columns: string[] = ['action', 'name', 'address', 'schedule'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -106,25 +104,7 @@ export class StationComponent {
     console.log('updateData');
   }
 
-  toggleEdit(filial: Station) {
-    console.log('toggleEdit');
-    this.dialogService
-      .open<Station>(
-        new PolymorpheusComponent(EditStationComponent, this.injector),
-        {
-          data: filial,
-          dismissible: false,
-          label: `Редактировать`,
-        }
-      )
-      .subscribe({
-        next: data => {
-          // TODO: обновить ячейку
-          console.info(`Dialog emitted data = ${data}`);
-        },
-        complete: () => {
-          console.info(`Dialog closed`);
-        },
-      });
+  setVisibleStation(idStation: string) {
+    console.log('setVisibleStation');
   }
 }

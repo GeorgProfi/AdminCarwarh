@@ -40,11 +40,12 @@ export class EditStationComponent implements OnInit {
   /*
   station
    */
-  address: string = '';
-  name: string = '';
+  address!: string;
+  name!: string;
   startWork: TuiTime = new TuiTime(0, 0);
   endWork: TuiTime = new TuiTime(0, 0);
-  description: string = '';
+  aroundClock!: boolean;
+  description!: string;
 
   readonly $classServices = this.servicesService.getAllClassServices();
   @tuiPure
@@ -62,6 +63,7 @@ export class EditStationComponent implements OnInit {
   station services
    */
   readonly columnsServices = [
+    `action-1`,
     `name`,
     'duration',
     'bonusPercentage',
@@ -121,6 +123,12 @@ export class EditStationComponent implements OnInit {
     //this.stationService.updateServices(this.services);
   }
 
+  setVisibleService(index: number) {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+  }
+
   /*
   station posts
    */
@@ -171,6 +179,10 @@ export class EditStationComponent implements OnInit {
         this.posts[this.indexPost].services.splice(this.indexPost, 1);
       });
   }
+  updateNamePost() {}
+  removePost() {
+    //this.stationService.removePost()
+  }
 
   /******************************************************/
 
@@ -180,6 +192,7 @@ export class EditStationComponent implements OnInit {
       this.name = station.name;
       this.description = station.description;
       this.address = station.address;
+      this.aroundClock = station.aroundClock;
       this.services = station.services.map((service: any) => {
         service.name = service.classServices.name;
         return service;
@@ -194,5 +207,15 @@ export class EditStationComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {}
+  updateStation(): void {
+    this.stationService.updateStation({
+      id: this.stationId,
+      name: this.name,
+      address: this.address,
+      startWork: new Date(this.startWork.toString()),
+      endWork: new Date(this.startWork.toString()),
+      aroundClock: true,
+      description: this.description,
+    });
+  }
 }

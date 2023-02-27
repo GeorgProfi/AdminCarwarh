@@ -18,7 +18,7 @@
       class="tui-form__button"
       tuiButton
       size="s"
-      (click)="onSubmit()"
+      (click)="updateStation()"
       appearance="primary">
       Сохранить
     </button>
@@ -34,6 +34,7 @@
         [columns]="columnsServices">
         <thead>
           <tr tuiThGroup>
+            <th *tuiHead="'action-1'" tuiTh [sorter]="null"></th>
             <th *tuiHead="'name'" tuiTh [style.width.rem]="100">Название</th>
             <th *tuiHead="'duration'" tuiTh>Длительность</th>
             <th *tuiHead="'bonusPercentage'" tuiTh>Процент бонусов</th>
@@ -47,6 +48,7 @@
           tuiTbody
           [data]="servicesSort">
           <tr tuiTr>
+            <td *tuiCell="'action-1'" tuiTd></td>
             <td *tuiCell="'name'" tuiTd>
               <tui-select
                 *tuiLet="$classServices | async as classServices"
@@ -96,6 +98,15 @@
             </td>
           </tr>
           <tr *ngFor="let service of services; let i = index" tuiTr>
+            <td *tuiCell="'action-1'" tuiTd>
+              <button
+                tuiIconButton
+                appearance="flat"
+                size="s"
+                icon="tuiIconCheck"
+                shape="rounded"
+                (click)="setVisibleService(i)"></button>
+            </td>
             <td *tuiCell="'name'" tuiTd>
               {{ service.name }}
             </td>
@@ -167,8 +178,21 @@
           </button>
         </nav>
         <div [style.width.%]="100">
+          <div tuiGroup class="tui-form__row">
+            <tui-input [(ngModel)]="posts[indexPost].name">
+              Название поста
+            </tui-input>
+            <button
+              class="tui-form__button"
+              tuiButton
+              (click)="updateNamePost()"
+              appearance="primary">
+              Сохранить
+            </button>
+          </div>
           <table
             tuiTable
+            class="tui-form__row"
             [style.width.%]="100"
             [columns]="columnsServicesOnPost">
             <thead>
@@ -229,6 +253,17 @@
               </tr>
             </tbody>
           </table>
+          <div class="tui-form__buttons">
+            <button
+              tuiButton
+              type="button"
+              appearance="accent"
+              size="xs"
+              class="tui-form__button"
+              (click)="removePost()">
+              Удалить пост
+            </button>
+          </div>
         </div>
       </div>
       <ng-template #nothing> Нет постов </ng-template>

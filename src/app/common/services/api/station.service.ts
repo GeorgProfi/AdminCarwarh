@@ -34,12 +34,28 @@ export class StationService {
     return this.http.post<Station>(`${environment.apiUrl}/station`, data);
   }
 
+  updateStation(data: {
+    id: string;
+    name?: string;
+    address?: string;
+    startWork?: Date;
+    endWork?: Date;
+    aroundClock?: boolean;
+    description?: string;
+  }) {
+    return this.http.put<any>(`${environment.apiUrl}/station/update`, data);
+  }
+
   getStationById(id: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/station/get/${id}`);
   }
 
   addPost(data: { stationId: string; name: string }) {
     return this.http.post<any>(`${environment.apiUrl}/station/post`, data);
+  }
+
+  removePost(id: string) {
+    return this.http.delete(`${environment.apiUrl}/station/post/${id}`);
   }
 
   addServiceOnStation(data: {

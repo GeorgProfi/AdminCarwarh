@@ -34,10 +34,10 @@
     (directionChange)="direction$.next($event)">
     <thead>
       <tr tuiThGroup>
+        <th tuiTh *tuiHead="'action'" [sorter]="null"></th>
         <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
         <th tuiTh *tuiHead="'address'" tuiSortable>Адрес</th>
         <th tuiTh *tuiHead="'schedule'" tuiSortable>Расписание</th>
-        <th tuiTh *tuiHead="'status'" tuiSortable>Статус</th>
       </tr>
     </thead>
     <tbody
@@ -45,6 +45,15 @@
       *tuiLet="data | tuiTableSort as sortedData"
       [data]="sortedData">
       <tr tuiTr *ngFor="let item of sortedData">
+        <td *tuiCell="'action'" tuiTd>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconCheck"
+            shape="rounded"
+            (click)="setVisibleStation(item.id)"></button>
+        </td>
         <td tuiTd *tuiCell="'name'">
           <a tuiLink [routerLink]="['edit']" [queryParams]="{ id: item.id }">
             {{ item.name }}
@@ -54,14 +63,11 @@
           {{ item.address }}
         </td>
         <td tuiTd *tuiCell="'schedule'">
-          {{ item.startWork | time }} - {{ item.endWork | time }}
-        </td>
-        <td tuiTd *tuiCell="'status'">
-          <tui-tag
-            [autoColor]="true"
-            class="tag support-{{ item.status + 1 }}"
-            [hoverable]="true"
-            [value]="item.status"></tui-tag>
+          {{
+            item.aroundClock
+              ? 'Круглосуточно'
+              : (item.startWork | time) + ' - ' + (item.endWork | time)
+          }}
         </td>
       </tr>
     </tbody>
