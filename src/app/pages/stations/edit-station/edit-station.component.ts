@@ -8,7 +8,6 @@ import { StationService } from '../../../common/services/api/station.service';
 import { ActivatedRoute } from '@angular/router';
 import {
   TuiContextWithImplicit,
-  tuiPure,
   TuiStringHandler,
   TuiTime,
 } from '@taiga-ui/cdk';
@@ -47,8 +46,8 @@ export class EditStationComponent implements OnInit {
   aroundClock!: boolean;
   description!: string;
 
-  readonly $classServices = this.servicesService.getAllClassServices();
-  @tuiPure
+  classServices!: ClassService[];
+  //@tuiPure
   stringify(
     classServices: ClassService[]
   ): TuiStringHandler<TuiContextWithImplicit<string>> {
@@ -91,9 +90,10 @@ export class EditStationComponent implements OnInit {
         discount: this.discount,
         duration: this.duration,
       })
-      .subscribe(() => {
+      .subscribe(data => {
         this.services.push({
-          name: 'NEW',
+          id: data.id,
+          name: data.classServices.name,
           bonusPercentage: this.bonusPercentage,
           price: this.price,
           discount: this.discount,
@@ -120,13 +120,22 @@ export class EditStationComponent implements OnInit {
     if (!confirm(`Вы уверены?`)) {
       return;
     }
-    //this.stationService.updateServices(this.services);
+    this.stationService.updateServices(this.services).subscribe();
   }
 
   setVisibleService(index: number) {
     if (!confirm(`Вы уверены?`)) {
       return;
     }
+    const service = this.services[index];
+    this.stationService
+      .setVisibleService({
+        serviceId: service.id,
+        visible: !service.visible,
+      })
+      .subscribe(() => {
+        service.visible = !service.visible;
+      });
   }
 
   /*
@@ -148,6 +157,8 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(data => {
         console.log(data);
+        data.services = [];
+        this.posts.push(data);
       });
   }
   selectPost(index: number) {
@@ -162,8 +173,11 @@ export class EditStationComponent implements OnInit {
         postId: this.posts[this.indexPost].id,
         serviceId: this.stationServiceIdForPost,
       })
-      .subscribe(() => {
-        this.posts[this.indexPost].services.push({ name: 'new' } as Service);
+      .subscribe(data => {
+        const service = this.services.find(
+          service => service.id === this.stationServiceIdForPost
+        ) as Service;
+        this.posts[this.indexPost].services.push(service);
       });
   }
   removeServicePost(serviceId: string) {
@@ -179,14 +193,35 @@ export class EditStationComponent implements OnInit {
         this.posts[this.indexPost].services.splice(this.indexPost, 1);
       });
   }
-  updateNamePost() {}
+  updateNamePost() {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService
+      .renamePost({
+        postId: this.posts[this.indexPost].id,
+        name: this.posts[this.indexPost].name,
+      })
+      .subscribe();
+  }
   removePost() {
-    //this.stationService.removePost()
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService
+      .removePost(this.posts[this.indexPost].id)
+      .subscribe(() => {
+        this.posts.splice(this.indexPost, 1);
+        this.indexPost = 0;
+      });
   }
 
   /******************************************************/
 
   ngOnInit() {
+    this.servicesService.getAllClassServices().subscribe(services => {
+      this.classServices = services;
+    });
     this.stationService.getStationById(this.stationId).subscribe(station => {
       console.log(station);
       this.name = station.name;
@@ -208,14 +243,19 @@ export class EditStationComponent implements OnInit {
   }
 
   updateStation(): void {
-    this.stationService.updateStation({
-      id: this.stationId,
-      name: this.name,
-      address: this.address,
-      startWork: new Date(this.startWork.toString()),
-      endWork: new Date(this.startWork.toString()),
-      aroundClock: true,
-      description: this.description,
-    });
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService
+      .updateStation({
+        id: this.stationId,
+        name: this.name,
+        address: this.address,
+        startWork: new Date(this.startWork.toString()),
+        endWork: new Date(this.startWork.toString()),
+        aroundClock: false,
+        description: this.description,
+      })
+      .subscribe();
   }
 }

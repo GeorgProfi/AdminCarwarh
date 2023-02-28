@@ -11,4 +11,5 @@ export class Service {
   discount!: number;
   bonusPercentage!: number;
   duration!: number;
+  visible!: boolean;
 }

@@ -51,7 +51,6 @@
             <td *tuiCell="'action-1'" tuiTd></td>
             <td *tuiCell="'name'" tuiTd>
               <tui-select
-                *tuiLet="$classServices | async as classServices"
                 class="b-form"
                 [tuiTextfieldLabelOutside]="true"
                 [valueContent]="
@@ -103,7 +102,7 @@
                 tuiIconButton
                 appearance="flat"
                 size="s"
-                icon="tuiIconCheck"
+                [icon]="service.visible ? 'tuiIconCheck' : 'tuiIconClose'"
                 shape="rounded"
                 (click)="setVisibleService(i)"></button>
             </td>

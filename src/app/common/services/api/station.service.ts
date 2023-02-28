@@ -6,6 +6,7 @@ import { PaginateRes } from '../../dto/paginate-response.dto';
 import { Station } from '../../entities/station.entity';
 import { CreateStationDto } from '../../../pages/stations/dto/create-station.dto';
 import { Pagination } from '../../dto/pagination.dto';
+import { Service } from '../../entities/service.entity';
 
 @Injectable({ providedIn: 'root' })
 export class StationService {
@@ -54,6 +55,13 @@ export class StationService {
     return this.http.post<any>(`${environment.apiUrl}/station/post`, data);
   }
 
+  renamePost(data: { postId: string; name: string }) {
+    return this.http.put<any>(
+      `${environment.apiUrl}/station/post/rename`,
+      data
+    );
+  }
+
   removePost(id: string) {
     return this.http.delete(`${environment.apiUrl}/station/post/${id}`);
   }
@@ -69,17 +77,12 @@ export class StationService {
     return this.http.post<any>(`${environment.apiUrl}/station/service`, data);
   }
 
-  updateServices(
-    data: {
-      idClassService: string;
-      stationId: string;
-      price: number;
-      duration: number;
-      discount: number;
-      bonusPercentage: number;
-    }[]
-  ) {
+  updateServices(data: Service[]) {
     return this.http.put(`${environment.apiUrl}/station/service`, data);
+  }
+
+  setVisibleService(data: { serviceId: string; visible: boolean }) {
+    return this.http.put(`${environment.apiUrl}/station/service/visible`, data);
   }
 
   removeService(data: { stationId: string; serviceId: string }) {
