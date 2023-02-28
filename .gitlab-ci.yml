@@ -7,7 +7,7 @@ stages:
 base-image-build:
   stage: prepare
   tags:
-    - car_wash_frontend
+    - car-wash-owner-panel
   only:
     - master
   script:
@@ -17,7 +17,7 @@ base-image-build:
 base-image-test:
   stage: build_and_test
   tags:
-    - car_wash_frontend
+    - car-wash-owner-panel
   only:
     - master
   script:
@@ -27,7 +27,7 @@ base-image-test:
 nginx-image-build:
   stage: build_and_test
   tags:
-    - car_wash_frontend
+    - car-wash-owner-panel
   only:
     - master
   script:
@@ -37,7 +37,7 @@ nginx-image-build:
 run-nginx-server:
   stage: run
   tags:
-    - car_wash_frontend
+    - car-wash-owner-panel
   only:
     - master
   script:
@@ -57,7 +57,7 @@ run-nginx-server:
 test-startup-logs:
   stage: logs
   tags:
-    - car_wash_frontend
+    - car-wash-owner-panel
   only:
     - master
   script:
