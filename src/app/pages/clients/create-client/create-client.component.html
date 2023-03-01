@@ -2,20 +2,25 @@
   Регистрация клиента
   <ng-template tuiAccordionItemContent>
     <tui-expand [expanded]="!expandedCode">
-      <div tuiGroup class="tui-form__row">
-        <tui-input-phone [formControl]="phone">
-          Телефон
-          <span class="tui-required"></span>
-          <input tuiTextfield autocomplete="tel" />
-        </tui-input-phone>
-        <button
-          tuiButton
-          class="tui-form__button"
-          (click)="onSubmit()"
-          appearance="primary">
-          Зарегистрировать
-        </button>
-      </div>
+      <form [formGroup]="form">
+        <div tuiGroup class="tui-form__row">
+          <tui-input-phone formControlName="phone">
+            Телефон
+            <span class="tui-required"></span>
+            <input tuiTextfield autocomplete="tel" />
+          </tui-input-phone>
+          <tui-input formControlName="name"> Имя </tui-input>
+        </div>
+        <div class="tui-form__buttons tui-form__buttons_align_center">
+          <button
+            tuiButton
+            class="tui-form__button"
+            (click)="onSubmit()"
+            appearance="primary">
+            Зарегистрировать
+          </button>
+        </div>
+      </form>
     </tui-expand>
 
     <tui-expand [expanded]="expandedCode">

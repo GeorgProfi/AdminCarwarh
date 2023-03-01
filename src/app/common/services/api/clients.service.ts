@@ -16,12 +16,14 @@ export class ClientsService {
     );
   }
 
-  requestRegistrationClient(phone: string) {
+  requestRegistrationClient(data: { phone: string; name?: string }) {
+    console.log(data);
     const deviceId = localStorage.getItem('device_id');
     return this.http.post<Client>(
       `${environment.apiUrl}/auth/client/request/with-company`,
       {
-        phone,
+        phone: data.phone,
+        nameClient: data.name,
         deviceId,
       }
     );

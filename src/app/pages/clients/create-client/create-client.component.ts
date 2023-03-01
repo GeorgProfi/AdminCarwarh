@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { ClientsService } from '../../../common/services/api/clients.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-create-client',
@@ -8,7 +9,11 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./create-client.component.less'],
 })
 export class CreateClientComponent {
-  constructor(private clientsService: ClientsService) {}
+  constructor(
+    private clientsService: ClientsService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService
+  ) {}
 
   @Output() createEvent = new EventEmitter();
 
@@ -17,15 +22,26 @@ export class CreateClientComponent {
     this.expanded = !this.expanded;
   }
 
-  phone = new FormControl('', Validators.required);
+  form = new FormGroup({
+    phone: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    name: new FormControl(``, {
+      nonNullable: true,
+    }),
+  });
+
   onSubmit(): void {
-    const phone: string = this.phone.value as string;
-    this.clientsService.requestRegistrationClient(phone).subscribe({
+    const data: any = this.form.value;
+    this.clientsService.requestRegistrationClient(data).subscribe({
       next: () => {
         this.expandedCode = true;
-        this.phone.reset();
       },
       error: error => {
+        this.alertService
+          .open('ошибка', { status: TuiNotification.Error })
+          .subscribe();
         console.error(error);
       },
     });
@@ -38,10 +54,22 @@ export class CreateClientComponent {
   onAcceptCode() {
     this.loader = true;
     const code: string = this.code.value as string;
-    this.clientsService.codeRegistrationClient(code).subscribe(() => {
-      this.loader = false;
-      this.expandedCode = false;
-      this.code.reset();
-    });
+    this.clientsService.codeRegistrationClient(code).subscribe(
+      () => {
+        this.alertService
+          .open('успех', { status: TuiNotification.Success })
+          .subscribe();
+        this.loader = false;
+        this.expandedCode = false;
+        this.code.reset();
+      },
+      () => {
+        this.alertService
+          .open('ошибка', { status: TuiNotification.Error })
+          .subscribe();
+        this.loader = false;
+        this.code.reset();
+      }
+    );
   }
 }

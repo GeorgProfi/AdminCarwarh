@@ -102,7 +102,7 @@
                 tuiLink
                 [routerLink]="['edit']"
                 [queryParams]="{ id: item.id }">
-                {{ item.name }}
+                {{ item.name ? item.name : 'Не указано' }}
               </a>
             </td>
             <td tuiTd *tuiCell="'phone'">
