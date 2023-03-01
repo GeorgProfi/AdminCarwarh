@@ -12,19 +12,19 @@
       <div tuiGroup class="tui-form__row">
         <tui-checkbox-block
           contentAlign="right"
-          [formControl]="aroundClock"
+          formControlName="aroundClock"
           (change)="changeAroundClock()">
           Круглосуточно
         </tui-checkbox-block>
         <tui-input-time
+          *ngIf="!formCreateStation.get('aroundClock')?.value"
           tuiUnfinishedValidator
-          [readOnly]="!!aroundClock.value"
           formControlName="startWork">
           Начало работы
         </tui-input-time>
         <tui-input-time
+          *ngIf="!formCreateStation.get('aroundClock')?.value"
           tuiUnfinishedValidator
-          [readOnly]="!!aroundClock.value"
           formControlName="endWork">
           Окончание работы
         </tui-input-time>

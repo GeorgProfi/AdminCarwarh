@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  Inject,
   OnInit,
 } from '@angular/core';
 import { StationService } from '../../../common/services/api/station.service';
@@ -14,6 +14,10 @@ import {
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { ClassService } from '../../../common/entities/class-service.entity';
+import { DateTime } from 'luxon';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
+import { CreateStationDto } from '../dto/create-station.dto';
 
 interface Post {
   id: string;
@@ -32,7 +36,8 @@ export class EditStationComponent implements OnInit {
     private stationService: StationService,
     private servicesService: ServicesService,
     private router: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService
   ) {}
   stationId: string = this.router.snapshot.queryParams['id'];
 
@@ -45,6 +50,34 @@ export class EditStationComponent implements OnInit {
   endWork: TuiTime = new TuiTime(0, 0);
   aroundClock!: boolean;
   description!: string;
+
+  formEditStation = new FormGroup({
+    address: new FormControl(``, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    name: new FormControl(``, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    postCount: new FormControl(3, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    aroundClock: new FormControl<boolean>(false, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    startWork: new FormControl(new TuiTime(8, 0), {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    endWork: new FormControl(new TuiTime(18, 0), {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    description: new FormControl(``, { nonNullable: true }),
+  });
 
   classServices!: ClassService[];
   //@tuiPure
@@ -224,10 +257,14 @@ export class EditStationComponent implements OnInit {
     });
     this.stationService.getStationById(this.stationId).subscribe(station => {
       console.log(station);
-      this.name = station.name;
-      this.description = station.description;
-      this.address = station.address;
-      this.aroundClock = station.aroundClock;
+      this.formEditStation.patchValue({
+        name: station.name,
+        address: station.address,
+        aroundClock: station.aroundClock,
+        description: station.description,
+        startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
+        endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
+      });
       this.services = station.services.map((service: any) => {
         service.name = service.classServices.name;
         return service;
@@ -242,20 +279,61 @@ export class EditStationComponent implements OnInit {
     });
   }
 
+  changeAroundClock() {
+    if (this.formEditStation.controls.aroundClock.value) {
+      this.formEditStation.controls.startWork.disable();
+      this.formEditStation.controls.endWork.disable();
+    } else {
+      this.formEditStation.controls.startWork.enable();
+      this.formEditStation.controls.endWork.enable();
+    }
+  }
+
+  formatTime(time: TuiTime) {
+    return DateTime.local(2022, 1, 1, time.hours, time.minutes).toJSDate();
+  }
+
   updateStation(): void {
+    if (!this.formEditStation.valid) {
+      this.alertService
+        .open('Форма не валидна', { status: TuiNotification.Warning })
+        .subscribe();
+      return;
+    }
+
     if (!confirm(`Вы уверены?`)) {
       return;
     }
+
+    const data: CreateStationDto = this.formEditStation
+      .value as unknown as CreateStationDto;
+    if (!data.aroundClock) {
+      // Без этого кринжа не работает =))))
+      data.startWork = this.formatTime(data.startWork as unknown as TuiTime);
+      data.endWork = this.formatTime(data.endWork as unknown as TuiTime);
+    }
+
     this.stationService
       .updateStation({
         id: this.stationId,
-        name: this.name,
-        address: this.address,
-        startWork: new Date(this.startWork.toString()),
-        endWork: new Date(this.startWork.toString()),
-        aroundClock: false,
-        description: this.description,
+        name: data.name,
+        address: data.address,
+        aroundClock: data.aroundClock,
+        description: data.description,
+        startWork: data.startWork,
+        endWork: data.endWork,
       })
-      .subscribe();
+      .subscribe(
+        () => {
+          this.alertService
+            .open('Обновил', { status: TuiNotification.Success })
+            .subscribe();
+        },
+        () => {
+          this.alertService
+            .open('Ошибка сервера', { status: TuiNotification.Error })
+            .subscribe();
+        }
+      );
   }
 }

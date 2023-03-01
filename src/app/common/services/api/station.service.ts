@@ -4,7 +4,6 @@ import { environment } from '../../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { PaginateRes } from '../../dto/paginate-response.dto';
 import { Station } from '../../entities/station.entity';
-import { CreateStationDto } from '../../../pages/stations/dto/create-station.dto';
 import { Pagination } from '../../dto/pagination.dto';
 import { Service } from '../../entities/service.entity';
 
@@ -31,7 +30,14 @@ export class StationService {
     });
   }
 
-  createStation(data: CreateStationDto): Observable<Station> {
+  createStation(data: {
+    address: string;
+    name: string;
+    postCount: number;
+    startWork: Date;
+    endWork: Date;
+    description?: string;
+  }): Observable<Station> {
     return this.http.post<Station>(`${environment.apiUrl}/station`, data);
   }
 

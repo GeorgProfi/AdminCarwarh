@@ -21,7 +21,7 @@ export class EditServiceComponent implements OnInit {
     private stationService: StationService
   ) {}
 
-  stations$ = this.stationService.getALLStation();
+  stations!: Station[];
   stationId!: string;
   @tuiPure
   stringify(
@@ -37,6 +37,7 @@ export class EditServiceComponent implements OnInit {
   name!: string;
 
   readonly columnsServices = [
+    `action-1`,
     `station`,
     'duration',
     'bonusPercentage',
@@ -63,9 +64,10 @@ export class EditServiceComponent implements OnInit {
         discount: this.discount,
         duration: this.duration,
       })
-      .subscribe(() => {
+      .subscribe(data => {
         this.services.push({
-          station: 'NEW',
+          id: data.id,
+          stationName: data.station.name,
           bonusPercentage: this.bonusPercentage,
           price: this.price,
           discount: this.discount,
@@ -88,7 +90,27 @@ export class EditServiceComponent implements OnInit {
       });
   }
 
-  updateServices() {}
+  setVisibleService(index: number) {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    const service = this.services[index];
+    this.stationService
+      .setVisibleService({
+        serviceId: service.id,
+        visible: !service.visible,
+      })
+      .subscribe(() => {
+        service.visible = !service.visible;
+      });
+  }
+
+  updateServices() {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService.updateServices(this.services).subscribe();
+  }
 
   id: string = this.router.snapshot.params['id'];
 
@@ -100,12 +122,15 @@ export class EditServiceComponent implements OnInit {
     this.servicesService.getServiceById(this.id).subscribe(data => {
       this.name = data.name;
     });
+    this.stationService.getALLStation().subscribe(stations => {
+      this.stations = stations;
+    });
     this.servicesService
       .getServicesForClass(this.id)
       .subscribe((data: any[]) => {
         console.log(data);
         data.map(data => {
-          data.station = data.station.name;
+          data.stationName = data.station.name;
           return data;
         });
         this.services = data;

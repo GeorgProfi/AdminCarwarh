@@ -1,28 +1,46 @@
 <tui-island>
-  <tui-input class="tui-form__row" [(ngModel)]="address"> Адрес </tui-input>
-  <div tuiGroup class="tui-form__row">
-    <tui-input [(ngModel)]="name"> Название </tui-input>
-    <tui-input-time tuiUnfinishedValidator [(ngModel)]="startWork">
-      Начало работы
-    </tui-input-time>
-    <tui-input-time tuiUnfinishedValidator [(ngModel)]="endWork">
-      Окончание работы
-    </tui-input-time>
-  </div>
-  <tui-text-area class="tui-form__row" [(ngModel)]="description">
-    Описание
-  </tui-text-area>
+  <form [formGroup]="formEditStation">
+    <tui-input class="tui-form__row" formControlName="address">
+      Адрес
+    </tui-input>
+    <tui-input class="tui-form__row" formControlName="name">
+      Название
+    </tui-input>
+    <div tuiGroup class="tui-form__row">
+      <tui-checkbox-block
+        contentAlign="right"
+        formControlName="aroundClock"
+        (change)="changeAroundClock()">
+        Круглосуточно
+      </tui-checkbox-block>
+      <tui-input-time
+        *ngIf="!formEditStation.get('aroundClock')?.value"
+        tuiUnfinishedValidator
+        formControlName="startWork">
+        Начало работы
+      </tui-input-time>
+      <tui-input-time
+        *ngIf="!formEditStation.get('aroundClock')?.value"
+        tuiUnfinishedValidator
+        formControlName="endWork">
+        Окончание работы
+      </tui-input-time>
+    </div>
+    <tui-text-area class="tui-form__row" formControlName="description"
+      >Описание</tui-text-area
+    >
 
-  <div class="tui-form__buttons">
-    <button
-      class="tui-form__button"
-      tuiButton
-      size="s"
-      (click)="updateStation()"
-      appearance="primary">
-      Сохранить
-    </button>
-  </div>
+    <div class="tui-form__buttons">
+      <button
+        class="tui-form__button"
+        tuiButton
+        size="s"
+        (click)="updateStation()"
+        appearance="primary">
+        Сохранить
+      </button>
+    </div>
+  </form>
 
   <tui-accordion-item class="tui-form__row">
     Редактор услуг

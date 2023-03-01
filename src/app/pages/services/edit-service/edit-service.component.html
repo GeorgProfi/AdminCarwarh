@@ -16,6 +16,7 @@
     [columns]="columnsServices">
     <thead>
       <tr tuiThGroup>
+        <th *tuiHead="'action-1'" tuiTh [sorter]="null"></th>
         <th *tuiHead="'station'" tuiTh [style.width.rem]="100">Станция</th>
         <th *tuiHead="'duration'" tuiTh>Длительность</th>
         <th *tuiHead="'bonusPercentage'" tuiTh>Процент бонусов</th>
@@ -29,14 +30,14 @@
       tuiTbody
       [data]="servicesSort">
       <tr tuiTr>
+        <td *tuiCell="'action-1'" tuiTd></td>
         <td *tuiCell="'station'" tuiTd>
           <tui-select
-            *tuiLet="stations$ | async as stations"
             class="b-form"
             [tuiTextfieldLabelOutside]="true"
             [valueContent]="stations ? stringify(stations) : loading"
             [(ngModel)]="stationId">
-            Услуга
+            Станция
             <ng-template tuiDataList>
               <tui-data-list *ngIf="stations; else loading">
                 <button
@@ -75,7 +76,16 @@
         </td>
       </tr>
       <tr *ngFor="let service of services; let i = index" tuiTr>
-        <td *tuiCell="'station'" tuiTd>{{ service.station }}</td>
+        <td *tuiCell="'action-1'" tuiTd>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            [icon]="service.visible ? 'tuiIconCheck' : 'tuiIconClose'"
+            shape="rounded"
+            (click)="setVisibleService(i)"></button>
+        </td>
+        <td *tuiCell="'station'" tuiTd>{{ service.stationName }}</td>
         <td *tuiCell="'duration'" tuiTd>
           <tui-input-number [(ngModel)]="service.duration"></tui-input-number>
         </td>

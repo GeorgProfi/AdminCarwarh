@@ -27,64 +27,79 @@ export class CreateStationComponent {
 
   @Output() createEvent = new EventEmitter();
 
-  expanded = false;
-  toggle(): void {
-    this.expanded = !this.expanded;
-  }
-
   formCreateStation = new FormGroup({
-    address: new FormControl(``, Validators.required),
-    name: new FormControl(``, Validators.required),
-    postCount: new FormControl(3, Validators.required),
-    //aroundClock: new FormControl(false),
-    startWork: new FormControl(new TuiTime(8, 0), Validators.required),
-    endWork: new FormControl(new TuiTime(18, 0), Validators.required),
-    description: new FormControl(``),
+    address: new FormControl(``, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    name: new FormControl(``, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    postCount: new FormControl(3, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    aroundClock: new FormControl<boolean>(false, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    startWork: new FormControl(new TuiTime(8, 0), {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    endWork: new FormControl(new TuiTime(18, 0), {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    description: new FormControl(``, { nonNullable: true }),
   });
 
-  aroundClock = new FormControl(false);
-
   changeAroundClock() {
-    this.formCreateStation.patchValue({
-      startWork: new TuiTime(0, 0),
-      endWork: new TuiTime(0, 0),
-    });
+    if (this.formCreateStation.controls.aroundClock.value) {
+      this.formCreateStation.controls.startWork.disable();
+      this.formCreateStation.controls.endWork.disable();
+    } else {
+      this.formCreateStation.controls.startWork.enable();
+      this.formCreateStation.controls.endWork.enable();
+    }
   }
 
-  setServices() {
-    console.log('setServices');
+  formatTime(time: TuiTime) {
+    return DateTime.local(2022, 1, 1, time.hours, time.minutes).toJSDate();
   }
 
   onSubmit(): void {
-    // Без этого кринжа не работает =))))
-    const startWorkTui: TuiTime = this.formCreateStation.value
-      .startWork as unknown as TuiTime;
-    const endWorkTui: TuiTime = this.formCreateStation.value
-      .endWork as unknown as TuiTime;
-    const startWork = DateTime.local(
-      2022,
-      1,
-      1,
-      startWorkTui.hours,
-      startWorkTui.minutes
-    ).toJSDate();
-    const endWork = DateTime.local(
-      2022,
-      1,
-      1,
-      endWorkTui.hours,
-      endWorkTui.minutes
-    ).toJSDate();
+    if (!this.formCreateStation.valid) {
+      this.alertService
+        .open('Форма не валидна', { status: TuiNotification.Warning })
+        .subscribe();
+      return;
+    }
+
     const data: CreateStationDto = this.formCreateStation
       .value as unknown as CreateStationDto;
-    data.startWork = startWork;
-    data.endWork = endWork;
-    this.stationService.createStation(data).subscribe(data => {
-      this.formCreateStation.reset();
-      this.createEvent.emit();
-      this.alertService
-        .open('Создал', { status: TuiNotification.Success })
-        .subscribe();
-    });
+    if (!data.aroundClock) {
+      // Без этого кринжа не работает =))))
+      data.startWork = this.formatTime(data.startWork as unknown as TuiTime);
+      data.endWork = this.formatTime(data.endWork as unknown as TuiTime);
+    }
+
+    this.stationService.createStation(data).subscribe(
+      data => {
+        this.formCreateStation.controls.startWork.enable();
+        this.formCreateStation.controls.endWork.enable();
+        this.formCreateStation.reset();
+        this.createEvent.emit();
+        this.alertService
+          .open('Создал', { status: TuiNotification.Success })
+          .subscribe();
+      },
+      error => {
+        this.alertService
+          .open('Ошибка сервера', { status: TuiNotification.Error })
+          .subscribe();
+      }
+    );
   }
 }
