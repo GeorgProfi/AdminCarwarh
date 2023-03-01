@@ -24,22 +24,108 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', redirectTo: 'loyalty-system', pathMatch: 'prefix' },
-      // { path: 'loyalty-system', component: LoyaltySystemComponent },
-      { path: 'clients', component: ClientsComponent },
-      { path: 'clients/edit', component: EditClientComponent },
-      { path: 'stations', component: StationComponent },
+      {
+        path: '',
+        redirectTo: 'clients',
+        pathMatch: 'prefix',
+      },
+      {
+        path: 'clients',
+        component: ClientsComponent,
+        title: 'Клиенты',
+        data: {
+          breadcrumbs: [{ title: 'Клиенты' }],
+        },
+      },
+      {
+        path: 'clients/edit',
+        component: EditClientComponent,
+        title: 'Редактор клиента',
+        data: {
+          breadcrumbs: [
+            { title: 'Клиенты', url: 'clients' },
+            { title: 'Редактор' },
+          ],
+        },
+      },
+      {
+        path: 'stations',
+        component: StationComponent,
+        title: 'Станции',
+        data: {
+          breadcrumbs: [{ title: 'Станции' }],
+        },
+      },
       {
         path: 'stations/edit',
         component: EditStationComponent,
+        title: 'Редактор станции',
+        data: {
+          breadcrumbs: [
+            { title: 'Станции', url: 'stations' },
+            { title: 'Редактор' },
+          ],
+        },
       },
-      { path: 'services', component: ServicesComponent },
-      { path: 'services/edit/:id', component: EditServiceComponent },
-      { path: 'reservation', component: ReservationComponent },
-      { path: 'notification', component: NotificationComponent },
-      { path: 'notification/edit/:id', component: EditNotificationComponent },
-      { path: 'setting-company', component: SettingCompanyComponent },
-      { path: 'setting-profile', component: SettingProfileComponent },
+      {
+        path: 'services',
+        component: ServicesComponent,
+        title: 'Услуги',
+        data: {
+          breadcrumbs: [{ title: 'Услуги' }],
+        },
+      },
+      {
+        path: 'services/edit/:id',
+        component: EditServiceComponent,
+        title: 'Редактор услуги',
+        data: {
+          breadcrumbs: [
+            { title: 'Услуги', url: 'services' },
+            { title: 'Редактор' },
+          ],
+        },
+      },
+      {
+        path: 'reservation',
+        component: ReservationComponent,
+        title: 'Запись на время',
+      },
+      {
+        path: 'notification',
+        component: NotificationComponent,
+        title: 'Уведомления',
+        data: {
+          breadcrumbs: [{ title: 'Уведомления' }],
+        },
+      },
+      {
+        path: 'notification/edit/:id',
+        component: EditNotificationComponent,
+        title: 'Редактор уведомления',
+        data: {
+          breadcrumbs: [
+            { title: 'Уведомления', url: 'notification' },
+            { title: 'Редактор' },
+          ],
+        },
+      },
+      {
+        path: 'setting-company',
+        component: SettingCompanyComponent,
+        title: 'Настрки компании',
+        data: {
+          breadcrumbs: [{ title: 'Настройки компании' }],
+        },
+      },
+      {
+        path: 'setting-profile',
+        component: SettingProfileComponent,
+        title: 'Настрки профиля',
+        data: {
+          breadcrumbs: [{ title: 'Настройки профиля' }],
+        },
+      },
 
       { path: 'debug', component: DebugComponent },
     ],

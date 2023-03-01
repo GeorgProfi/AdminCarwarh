@@ -18,6 +18,7 @@ import { LayoutComponent } from './layout.component';
 import { MenuComponent } from './menu/menu.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { TuiLetModule } from '@taiga-ui/cdk';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
     TuiLinkModule,
     TuiMoneyModule,
     TuiBreadcrumbsModule,
+    TuiLetModule,
   ],
   declarations: [
     MenuComponent,

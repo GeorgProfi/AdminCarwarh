@@ -1,5 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { distinctUntilChanged, filter, map } from 'rxjs';
+
+//import { filter } from 'rxjs/operators';
+
+interface Breadcrumbs {
+  title: string;
+  url: string;
+}
 
 @Component({
   selector: `app-breadcrumbs`,
@@ -7,19 +15,11 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbsComponent {
-  constructor(private router: ActivatedRoute) {}
-  items = [
-    {
-      caption: `breadcrumbs`,
-      routerLink: `/components/select`,
-    },
-    {
-      caption: `not`,
-      routerLink: `/components/multi-select`,
-    },
-    {
-      caption: `work`,
-      routerLink: `/components/multi-select`,
-    },
-  ];
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+
+  $breadcrumbs = this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    distinctUntilChanged(),
+    map(() => this.activatedRoute.firstChild?.snapshot.data['breadcrumbs'])
+  );
 }
