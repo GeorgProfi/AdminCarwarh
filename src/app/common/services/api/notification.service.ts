@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { PaginateRes } from '../../dto/paginate-response.dto';
 import { environment } from '../../../../environments/environment';
 import { Notification } from '../../entities/notification.entity';
-import { CreateNotificationDto } from '../../../pages/notification/dto/create-notification.dto';
-import { UpdateNotificationDto } from '../../../pages/notification/dto/update-notification.dto';
+import { CreateNotificationDto } from '../../../pages/marketing/notification/dto/create-notification.dto';
+import { UpdateNotificationDto } from '../../../pages/marketing/notification/dto/update-notification.dto';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {

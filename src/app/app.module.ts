@@ -20,7 +20,6 @@ import { ClientsModule } from './pages/clients/clients.module';
 import { StationModule } from './pages/stations/station.module';
 import { LoyaltySystemModule } from './pages/loyalty-system/loyalty-system.module';
 import { SettingModule } from './pages/setting/setting.module';
-import { NotificationModule } from './pages/notification/notification.module';
 import { of } from 'rxjs';
 import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 import { DebugModule } from './pages/debug/debug.module';
@@ -28,6 +27,7 @@ import { ReservationModule } from './pages/reservation/reservation.module';
 import { Error404Module } from './pages/error-404/error-404.module';
 import { LayoutModule } from './layouts/left-menu/layout.module';
 import { ServicesModule } from './pages/services/services.module';
+import { MarketingModule } from './pages/marketing/marketing.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -52,8 +52,9 @@ import { ServicesModule } from './pages/services/services.module';
     LoyaltySystemModule,
     ServicesModule,
     SettingModule,
-    NotificationModule,
     ReservationModule,
+
+    MarketingModule,
 
     DebugModule,
   ],

@@ -1,0 +1,18 @@
+<form [formGroup]="notificationForm">
+  <tui-island>
+    <div class="tui-form__row">
+      <tui-input formControlName="title">
+        Заголовок
+        <span class="tui-required"></span>
+      </tui-input>
+      <tui-error
+        formControlName="title"
+        [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+  </tui-island>
+  <div class="tui-form__buttons">
+    <button class="tui-form__button" tuiButton appearance="primary">
+      Сохранить
+    </button>
+  </div>
+</form>

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CreateNotificationDto } from '../dto/create-notification.dto';
-import { NotificationService } from '../../../common/services/api/notification.service';
+import { NotificationService } from '../../../../common/services/api/notification.service';
 
 @Component({
   selector: 'app-create-notification',

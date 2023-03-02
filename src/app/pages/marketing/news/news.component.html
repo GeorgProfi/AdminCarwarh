@@ -1,4 +1,4 @@
-<app-create-notification></app-create-notification>
+<app-create-news></app-create-news>
 
 <div
   tuiGroup
@@ -13,13 +13,6 @@
     (ngModelChange)="search$.next($event)">
     Поиск
   </tui-input>
-  <!--  <tui-select-->
-  <!--    tuiTextfieldSize="m"-->
-  <!--    [(ngModel)]="size"-->
-  <!--    (ngModelChange)="size$.next($event)">-->
-  <!--    Размер страницы-->
-  <!--    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>-->
-  <!--  </tui-select>-->
 </div>
 
 <tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
@@ -43,7 +36,7 @@
       [data]="sortedData">
       <tr tuiTr *ngFor="let item of sortedData">
         <td tuiTd *tuiCell="'title'">
-          <a tuiLink [routerLink]="['edit', item.id]">
+          <a tuiLink [routerLink]="['/news/edit', item.id]">
             {{ item.title }}
           </a>
         </td>

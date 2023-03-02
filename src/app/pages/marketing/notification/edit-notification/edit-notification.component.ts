@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NotificationService } from '../../../common/services/api/notification.service';
+import { NotificationService } from '../../../../common/services/api/notification.service';
 
 @Component({
   selector: 'app-edit-notification',

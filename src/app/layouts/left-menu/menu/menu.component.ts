@@ -22,9 +22,9 @@ export class MenuComponent {
     { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
     { name: 'Запись на время', icon: 'tuiIconTime', link: 'reservation' },
     {
-      name: 'Рассылки уведомлений',
-      icon: 'tuiIconBell',
-      link: 'notification',
+      name: 'Маркетинг',
+      icon: 'tuiIconBriefcase',
+      link: 'marketing',
     },
     {
       name: 'Настройки',

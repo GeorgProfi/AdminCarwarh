@@ -9,8 +9,8 @@ import {
 } from 'rxjs';
 import { debounceTime, filter, share, startWith } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
-import { Notification } from '../../common/entities/notification.entity';
-import { NotificationService } from '../../common/services/api/notification.service';
+import { Notification } from '../../../common/entities/notification.entity';
+import { NotificationService } from '../../../common/services/api/notification.service';
 
 type Key = 'title';
 

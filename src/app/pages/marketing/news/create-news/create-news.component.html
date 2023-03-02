@@ -1,0 +1,22 @@
+<tui-accordion-item>
+  Создание новости
+  <ng-template tuiAccordionItemContent>
+    <form [formGroup]="formCreateNotification">
+      <div class="tui-form__row">
+        <tui-input formControlName="title"> Заголовок </tui-input>
+      </div>
+      <div class="tui-form__row">
+        <tui-text-area formControlName="content">Контент</tui-text-area>
+      </div>
+      <div class="tui-form__buttons tui-form__buttons_align_center">
+        <button
+          class="tui-form__button"
+          tuiButton
+          (click)="onSubmit()"
+          appearance="primary">
+          Создать
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</tui-accordion-item>
