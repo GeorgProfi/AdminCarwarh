@@ -72,14 +72,14 @@
                 class="b-form"
                 [tuiTextfieldLabelOutside]="true"
                 [valueContent]="
-                  classServices ? stringify(classServices) : loading
+                  filterClassServices ? stringify(filterClassServices) : loading
                 "
                 [(ngModel)]="classServiceForStationId">
                 Услуга
                 <ng-template tuiDataList>
-                  <tui-data-list *ngIf="classServices; else loading">
+                  <tui-data-list *ngIf="filterClassServices; else loading">
                     <button
-                      *ngFor="let service of classServices"
+                      *ngFor="let service of filterClassServices"
                       tuiOption
                       [value]="service.id">
                       {{ service.name }}
@@ -114,7 +114,9 @@
                 (click)="addService()"></button>
             </td>
           </tr>
-          <tr *ngFor="let service of services; let i = index" tuiTr>
+          <tr
+            *ngFor="let service of services | tuiTableSort; let i = index"
+            tuiTr>
             <td *tuiCell="'action-1'" tuiTd>
               <button
                 tuiIconButton
@@ -227,13 +229,17 @@
                   <tui-select
                     class="b-form"
                     [tuiTextfieldLabelOutside]="true"
-                    [valueContent]="services ? stringify(services) : loading"
+                    [valueContent]="
+                      posts[indexPost].freeServices
+                        ? stringify(posts[indexPost].freeServices)
+                        : loading
+                    "
                     [(ngModel)]="stationServiceIdForPost">
                     Услуга
                     <ng-template tuiDataList>
                       <tui-data-list *ngIf="services; else loading">
                         <button
-                          *ngFor="let service of services"
+                          *ngFor="let service of posts[indexPost].freeServices"
                           tuiOption
                           [value]="service.id">
                           {{ service.name }}
@@ -257,7 +263,9 @@
                 </td>
               </tr>
               <tr *ngFor="let service of servicesSort; let i = index" tuiTr>
-                <td *tuiCell="'name'" tuiTd>{{ service.name }}</td>
+                <td *tuiCell="'name'" tuiTd>
+                  {{ service.classServices.name }}
+                </td>
                 <td *tuiCell="'actions'" tuiTd>
                   <button
                     tuiIconButton

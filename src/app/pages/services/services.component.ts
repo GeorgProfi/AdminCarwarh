@@ -34,7 +34,7 @@ export class ServicesComponent {
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
-  size$ = new BehaviorSubject(10);
+  size$ = new BehaviorSubject(50);
   sorter$ = new BehaviorSubject<Key>(`name`);
   direction$ = new BehaviorSubject<-1 | 1>(-1);
 

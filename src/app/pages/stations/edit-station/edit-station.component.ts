@@ -23,6 +23,7 @@ interface Post {
   id: string;
   name: string;
   services: Service[];
+  freeServices: Service[];
 }
 
 @Component({
@@ -44,13 +45,6 @@ export class EditStationComponent implements OnInit {
   /*
   station
    */
-  address!: string;
-  name!: string;
-  startWork: TuiTime = new TuiTime(0, 0);
-  endWork: TuiTime = new TuiTime(0, 0);
-  aroundClock!: boolean;
-  description!: string;
-
   formEditStation = new FormGroup({
     address: new FormControl(``, {
       nonNullable: true,
@@ -79,7 +73,22 @@ export class EditStationComponent implements OnInit {
     description: new FormControl(``, { nonNullable: true }),
   });
 
-  classServices!: ClassService[];
+  getStation() {
+    this.stationService.getStationById(this.stationId).subscribe(station => {
+      console.log(station);
+      this.formEditStation.patchValue({
+        name: station.name,
+        address: station.address,
+        aroundClock: station.aroundClock,
+        description: station.description,
+        startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
+        endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
+      });
+    });
+  }
+
+  classServices$ = this.servicesService.getAllClassServices();
+  filterClassServices!: ClassService[];
   //@tuiPure
   stringify(
     classServices: ClassService[]
@@ -110,6 +119,22 @@ export class EditStationComponent implements OnInit {
   price!: number;
   discount!: number;
 
+  getServices() {
+    this.stationService.getServices(this.stationId).subscribe(services => {
+      const usedService: string[] = [];
+      this.services = services.map((service: any) => {
+        usedService.push(service.classServices.id);
+        service.name = service.classServices.name;
+        return service;
+      });
+      this.classServices$.subscribe(classServices => {
+        this.filterClassServices = classServices.filter(
+          s => !usedService.includes(s.id)
+        );
+      });
+    });
+  }
+
   addService() {
     if (!confirm(`Вы уверены?`)) {
       return;
@@ -124,14 +149,7 @@ export class EditStationComponent implements OnInit {
         duration: this.duration,
       })
       .subscribe(data => {
-        this.services.push({
-          id: data.id,
-          name: data.classServices.name,
-          bonusPercentage: this.bonusPercentage,
-          price: this.price,
-          discount: this.discount,
-          duration: this.duration,
-        } as Service);
+        this.getServices();
       });
   }
 
@@ -145,7 +163,7 @@ export class EditStationComponent implements OnInit {
         serviceId: this.services[index].id,
       })
       .subscribe(() => {
-        this.services.splice(index, 1);
+        this.getServices();
       });
   }
 
@@ -153,7 +171,9 @@ export class EditStationComponent implements OnInit {
     if (!confirm(`Вы уверены?`)) {
       return;
     }
-    this.stationService.updateServices(this.services).subscribe();
+    this.stationService.updateServices(this.services).subscribe(() => {
+      this.getServices();
+    });
   }
 
   setVisibleService(index: number) {
@@ -167,7 +187,7 @@ export class EditStationComponent implements OnInit {
         visible: !service.visible,
       })
       .subscribe(() => {
-        service.visible = !service.visible;
+        this.getServices();
       });
   }
 
@@ -179,6 +199,20 @@ export class EditStationComponent implements OnInit {
   namePost!: string;
   indexPost: number = 0;
   stationServiceIdForPost!: string;
+
+  getPosts() {
+    this.stationService.getPosts(this.stationId).subscribe(posts => {
+      // Пиздец
+      this.posts = posts.map((post: Post) => {
+        post.freeServices = this.services.filter(s => {
+          for (const ps of post.services) if (ps.id === s.id) return false;
+          return true;
+        });
+        return post;
+      });
+    });
+  }
+
   createPost() {
     if (!confirm(`Вы уверены?`)) {
       return;
@@ -189,9 +223,7 @@ export class EditStationComponent implements OnInit {
         name: this.namePost,
       })
       .subscribe(data => {
-        console.log(data);
-        data.services = [];
-        this.posts.push(data);
+        this.getPosts();
       });
   }
   selectPost(index: number) {
@@ -207,10 +239,7 @@ export class EditStationComponent implements OnInit {
         serviceId: this.stationServiceIdForPost,
       })
       .subscribe(data => {
-        const service = this.services.find(
-          service => service.id === this.stationServiceIdForPost
-        ) as Service;
-        this.posts[this.indexPost].services.push(service);
+        this.getPosts();
       });
   }
   removeServicePost(serviceId: string) {
@@ -223,7 +252,7 @@ export class EditStationComponent implements OnInit {
         serviceId: serviceId,
       })
       .subscribe(() => {
-        this.posts[this.indexPost].services.splice(this.indexPost, 1);
+        this.getPosts();
       });
   }
   updateNamePost() {
@@ -235,7 +264,9 @@ export class EditStationComponent implements OnInit {
         postId: this.posts[this.indexPost].id,
         name: this.posts[this.indexPost].name,
       })
-      .subscribe();
+      .subscribe(() => {
+        this.getPosts();
+      });
   }
   removePost() {
     if (!confirm(`Вы уверены?`)) {
@@ -244,39 +275,16 @@ export class EditStationComponent implements OnInit {
     this.stationService
       .removePost(this.posts[this.indexPost].id)
       .subscribe(() => {
-        this.posts.splice(this.indexPost, 1);
-        this.indexPost = 0;
+        this.getPosts();
       });
   }
 
   /******************************************************/
 
   ngOnInit() {
-    this.servicesService.getAllClassServices().subscribe(services => {
-      this.classServices = services;
-    });
-    this.stationService.getStationById(this.stationId).subscribe(station => {
-      console.log(station);
-      this.formEditStation.patchValue({
-        name: station.name,
-        address: station.address,
-        aroundClock: station.aroundClock,
-        description: station.description,
-        startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
-        endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
-      });
-      this.services = station.services.map((service: any) => {
-        service.name = service.classServices.name;
-        return service;
-      });
-      this.posts = station.posts.map((post: Post) => {
-        post.services = post.services.map((service: any) => {
-          service.name = service.classServices.name;
-          return service;
-        });
-        return post;
-      });
-    });
+    this.getStation();
+    this.getServices();
+    this.getPosts();
   }
 
   changeAroundClock() {

@@ -50,7 +50,7 @@ export class ClientsComponent {
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
-  size$ = new BehaviorSubject(10);
+  size$ = new BehaviorSubject(100);
   sorter$ = new BehaviorSubject<Key>(`name`);
   direction$ = new BehaviorSubject<-1 | 1>(1);
 

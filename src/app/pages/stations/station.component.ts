@@ -38,20 +38,20 @@ export class StationComponent {
     @Inject(Injector) private readonly injector: Injector
   ) {}
 
-  sizes = [10, 20, 5];
-  size = this.sizes[0];
+  // sizes = [10, 20, 5];
+  // size = this.sizes[0];
   columns: string[] = ['action', 'name', 'address', 'schedule'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
-  size$ = new BehaviorSubject(10);
+  size$ = new BehaviorSubject(50);
   sorter$ = new BehaviorSubject<Key>(`name`);
   direction$ = new BehaviorSubject<-1 | 1>(-1);
 
   readonly request$ = combineLatest([
     this.page$,
     this.size$,
-    this.search$.pipe(debounceTime(500), distinctUntilChanged()),
+    this.search$.pipe(debounceTime(500), distinctUntilChanged(), startWith('')),
     this.sorter$,
     this.direction$,
   ]).pipe(
@@ -62,16 +62,7 @@ export class StationComponent {
   );
   readonly data$: Observable<readonly Station[]> = this.request$.pipe(
     filter(tuiIsPresent),
-    map(data =>
-      data.rows.map(el => {
-        switch (el.status) {
-          case 0:
-            el.status = 'Закрыто';
-            break;
-        }
-        return el;
-      })
-    ),
+    map(data => data.rows),
     map(data => data.filter(tuiIsPresent)),
     startWith([])
   );
@@ -81,8 +72,6 @@ export class StationComponent {
     startWith(1)
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
-
-  search = ``;
 
   private getData(
     page: number,
@@ -100,11 +89,16 @@ export class StationComponent {
     });
   }
 
-  updateData() {
-    console.log('updateData');
+  refreshData() {
+    // TODO: Я хз как по нормальному обновить данные ¯\_(ツ)_/¯
+    this.size$.next(this.size$.value);
   }
 
-  setVisibleStation(idStation: string) {
-    console.log('setVisibleStation');
+  setVisibleStation(stationId: string, visible: boolean) {
+    this.stationService
+      .setVisibleStation({ stationId, visible: !visible })
+      .subscribe(() => {
+        this.refreshData();
+      });
   }
 }

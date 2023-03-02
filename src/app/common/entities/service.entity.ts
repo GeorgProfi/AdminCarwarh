@@ -12,4 +12,5 @@ export class Service {
   bonusPercentage!: number;
   duration!: number;
   visible!: boolean;
+  classServices: any;
 }

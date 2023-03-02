@@ -30,6 +30,18 @@ export class StationService {
     });
   }
 
+  getServices(stationId: string): Observable<Service[]> {
+    return this.http.get<Service[]>(`${environment.apiUrl}/station/service`, {
+      params: { stationId },
+    });
+  }
+
+  getPosts(stationId: string) {
+    return this.http.get<any[]>(`${environment.apiUrl}/station/post`, {
+      params: { stationId },
+    });
+  }
+
   createStation(data: {
     address: string;
     name: string;
@@ -51,6 +63,10 @@ export class StationService {
     description?: string;
   }) {
     return this.http.put<any>(`${environment.apiUrl}/station/update`, data);
+  }
+
+  setVisibleStation(data: { stationId: string; visible: boolean }) {
+    return this.http.put(`${environment.apiUrl}/station/visible`, data);
   }
 
   getStationById(id: string): Observable<any> {

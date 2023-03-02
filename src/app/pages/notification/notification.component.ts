@@ -28,7 +28,7 @@ export class NotificationComponent {
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
-  size$ = new BehaviorSubject(10);
+  size$ = new BehaviorSubject(50);
   sorter$ = new BehaviorSubject<Key>(`title`);
   direction$ = new BehaviorSubject<-1 | 1>(-1);
 

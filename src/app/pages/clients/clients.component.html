@@ -13,13 +13,13 @@
     (ngModelChange)="search$.next($event)">
     Поиск
   </tui-input>
-  <tui-select
-    tuiTextfieldSize="m"
-    [ngModel]="size$ | async"
-    (ngModelChange)="size$.next($event)">
-    Размер страницы
-    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>
-  </tui-select>
+  <!--  <tui-select-->
+  <!--    tuiTextfieldSize="m"-->
+  <!--    [ngModel]="size$ | async"-->
+  <!--    (ngModelChange)="size$.next($event)">-->
+  <!--    Размер страницы-->
+  <!--    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>-->
+  <!--  </tui-select>-->
 </div>
 
 <tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">

@@ -1,4 +1,4 @@
-<app-create-station (createEvent)="updateData()"></app-create-station>
+<app-create-station (createEvent)="refreshData()"></app-create-station>
 
 <div
   tuiGroup
@@ -13,13 +13,13 @@
     (ngModelChange)="search$.next($event)">
     Поиск
   </tui-input>
-  <tui-select
-    tuiTextfieldSize="m"
-    [(ngModel)]="size"
-    (ngModelChange)="size$.next($event)">
-    Размер страницы
-    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>
-  </tui-select>
+  <!--  <tui-select-->
+  <!--    tuiTextfieldSize="m"-->
+  <!--    [(ngModel)]="size"-->
+  <!--    (ngModelChange)="size$.next($event)">-->
+  <!--    Размер страницы-->
+  <!--    <tui-data-list-wrapper *tuiDataList [items]="sizes"></tui-data-list-wrapper>-->
+  <!--  </tui-select>-->
 </div>
 
 <tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
@@ -50,9 +50,9 @@
             tuiIconButton
             appearance="flat"
             size="s"
-            icon="tuiIconCheck"
+            [icon]="item.visible ? 'tuiIconCheck' : 'tuiIconClose'"
             shape="rounded"
-            (click)="setVisibleStation(item.id)"></button>
+            (click)="setVisibleStation(item.id, item.visible)"></button>
         </td>
         <td tuiTd *tuiCell="'name'">
           <a tuiLink [routerLink]="['edit']" [queryParams]="{ id: item.id }">
