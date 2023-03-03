@@ -5,7 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { StationService } from '../../../common/services/api/station.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   TuiContextWithImplicit,
   TuiStringHandler,
@@ -36,11 +36,12 @@ export class EditStationComponent implements OnInit {
   constructor(
     private stationService: StationService,
     private servicesService: ServicesService,
-    private router: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService
   ) {}
-  stationId: string = this.router.snapshot.queryParams['id'];
+  stationId: string = this.activatedRoute.snapshot.queryParams['id'];
 
   /*
   station
@@ -153,14 +154,14 @@ export class EditStationComponent implements OnInit {
       });
   }
 
-  removeServiceForStation(index: number) {
-    if (!confirm(`Вы уверены? ${index}`)) {
+  removeServiceForStation(serviceId: string) {
+    if (!confirm(`Вы уверены?`)) {
       return;
     }
     this.stationService
       .removeService({
         stationId: this.stationId,
-        serviceId: this.services[index].id,
+        serviceId: serviceId,
       })
       .subscribe(() => {
         this.getServices();
@@ -343,5 +344,14 @@ export class EditStationComponent implements OnInit {
             .subscribe();
         }
       );
+  }
+
+  removeStation() {
+    if (!confirm(`Вы уверены?`)) {
+      return;
+    }
+    this.stationService.removeStation(this.stationId).subscribe(async () => {
+      await this.router.navigateByUrl('stations');
+    });
   }
 }

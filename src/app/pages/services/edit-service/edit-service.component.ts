@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { StationService } from '../../../common/services/api/station.service';
 import {
@@ -16,7 +16,8 @@ import { Station } from '../../../common/entities/station.entity';
 })
 export class EditServiceComponent implements OnInit {
   constructor(
-    private router: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private servicesService: ServicesService,
     private stationService: StationService
   ) {}
@@ -112,7 +113,7 @@ export class EditServiceComponent implements OnInit {
     this.stationService.updateServices(this.services).subscribe();
   }
 
-  id: string = this.router.snapshot.params['id'];
+  id: string = this.activatedRoute.snapshot.params['id'];
 
   updateService() {
     console.log(1);
@@ -135,5 +136,11 @@ export class EditServiceComponent implements OnInit {
         });
         this.services = data;
       });
+  }
+
+  removeServiceClass() {
+    this.servicesService.removeServiceClass(this.id).subscribe(async () => {
+      await this.router.navigateByUrl('services');
+    });
   }
 }

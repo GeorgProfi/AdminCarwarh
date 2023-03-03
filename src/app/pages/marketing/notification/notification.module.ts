@@ -11,6 +11,7 @@ import {
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
+  TuiCheckboxBlockModule,
   TuiDataListWrapperModule,
   TuiFieldErrorPipeModule,
   TuiInputFilesModule,
@@ -54,6 +55,7 @@ import { EditNotificationComponent } from './edit-notification/edit-notification
     TuiFieldErrorPipeModule,
     TuiLinkModule,
     TuiIslandModule,
+    TuiCheckboxBlockModule,
   ],
   declarations: [
     NotificationComponent,

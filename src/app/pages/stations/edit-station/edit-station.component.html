@@ -29,15 +29,22 @@
     <tui-text-area class="tui-form__row" formControlName="description"
       >Описание</tui-text-area
     >
-
-    <div class="tui-form__buttons">
+    <div class="buttons">
       <button
-        class="tui-form__button"
+        class="tui-form__button left"
         tuiButton
         size="s"
         (click)="updateStation()"
         appearance="primary">
         Сохранить
+      </button>
+      <button
+        class="tui-form__button right"
+        tuiButton
+        size="s"
+        (click)="removeStation()"
+        appearance="accent">
+        Удалить
       </button>
     </div>
   </form>
@@ -151,7 +158,7 @@
                 size="s"
                 icon="tuiIconTrash"
                 shape="rounded"
-                (click)="removeServiceForStation(i)"></button>
+                (click)="removeServiceForStation(service.id)"></button>
             </td>
           </tr>
         </tbody>

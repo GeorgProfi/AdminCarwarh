@@ -123,7 +123,8 @@ const routes: Routes = [
         title: 'Редактор уведомления',
         data: {
           breadcrumbs: [
-            { title: 'Уведомления', url: 'notification' },
+            { title: 'Маркетинг', url: 'marketing' },
+            { title: 'Уведомления' },
             { title: 'Редактор' },
           ],
         },

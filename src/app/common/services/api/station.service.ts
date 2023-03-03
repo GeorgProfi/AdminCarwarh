@@ -128,4 +128,8 @@ export class StationService {
       }
     );
   }
+
+  removeStation(id: string) {
+    return this.http.delete<any>(`${environment.apiUrl}/station/delete/${id}`);
+  }
 }

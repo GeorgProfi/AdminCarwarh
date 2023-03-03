@@ -41,7 +41,9 @@ export class ServicesService {
     return this.http.put<Service>(`${environment.apiUrl}/services/${id}`, data);
   }
 
-  deleteService(id: string) {
-    return this.http.delete<void>(`${environment.apiUrl}/services/get/${id}`);
+  removeServiceClass(id: string) {
+    return this.http.delete<void>(
+      `${environment.apiUrl}/services/delete/${id}`
+    );
   }
 }
