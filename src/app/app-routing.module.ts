@@ -36,9 +36,6 @@ const routes: Routes = [
         path: 'clients',
         component: ClientsComponent,
         title: 'Клиенты',
-        data: {
-          breadcrumbs: [{ title: 'Клиенты' }],
-        },
       },
       {
         path: 'clients/edit',
@@ -55,9 +52,6 @@ const routes: Routes = [
         path: 'stations',
         component: StationComponent,
         title: 'Станции',
-        data: {
-          breadcrumbs: [{ title: 'Станции' }],
-        },
       },
       {
         path: 'stations/edit',
@@ -74,9 +68,6 @@ const routes: Routes = [
         path: 'services',
         component: ServicesComponent,
         title: 'Услуги',
-        data: {
-          breadcrumbs: [{ title: 'Услуги' }],
-        },
       },
       {
         path: 'services/edit/:id',
@@ -119,7 +110,11 @@ const routes: Routes = [
         component: EditNewsComponent,
         title: 'Редактор новостей',
         data: {
-          breadcrumbs: [{ title: 'Новости' }, { title: 'Редактор' }],
+          breadcrumbs: [
+            { title: 'Маркетинг', url: 'marketing' },
+            { title: 'Новости' },
+            { title: 'Редактор' },
+          ],
         },
       },
       {
@@ -137,17 +132,11 @@ const routes: Routes = [
         path: 'setting-company',
         component: SettingCompanyComponent,
         title: 'Настрки компании',
-        data: {
-          breadcrumbs: [{ title: 'Настройки компании' }],
-        },
       },
       {
         path: 'setting-profile',
         component: SettingProfileComponent,
         title: 'Настрки профиля',
-        data: {
-          breadcrumbs: [{ title: 'Настройки профиля' }],
-        },
       },
 
       { path: 'debug', component: DebugComponent },
