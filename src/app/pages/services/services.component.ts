@@ -41,7 +41,7 @@ export class ServicesComponent {
   readonly request$ = combineLatest([
     this.page$,
     this.size$,
-    this.search$.pipe(debounceTime(500), distinctUntilChanged()),
+    this.search$.pipe(debounceTime(500), distinctUntilChanged(), startWith('')),
     this.sorter$,
     this.direction$,
   ]).pipe(

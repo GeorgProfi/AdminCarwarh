@@ -112,7 +112,7 @@ const routes: Routes = [
         data: {
           breadcrumbs: [
             { title: 'Маркетинг', url: 'marketing' },
-            { title: 'Новости' },
+            { title: 'Новости', url: 'marketing/news' },
             { title: 'Редактор' },
           ],
         },
@@ -124,7 +124,7 @@ const routes: Routes = [
         data: {
           breadcrumbs: [
             { title: 'Маркетинг', url: 'marketing' },
-            { title: 'Уведомления' },
+            { title: 'Уведомления', url: 'marketing/notification' },
             { title: 'Редактор' },
           ],
         },

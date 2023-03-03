@@ -14,6 +14,7 @@ export class CreateNotificationComponent {
   formCreateNotification = new FormGroup({
     title: new FormControl(),
     content: new FormControl(),
+    send: new FormControl(false),
   });
 
   onSubmit() {

@@ -1,18 +1,43 @@
-<form [formGroup]="notificationForm">
-  <tui-island>
+<tui-island>
+  <form [formGroup]="notificationForm">
     <div class="tui-form__row">
       <tui-input formControlName="title">
         Заголовок
         <span class="tui-required"></span>
       </tui-input>
-      <tui-error
-        formControlName="title"
-        [error]="[] | tuiFieldError | async"></tui-error>
     </div>
-  </tui-island>
-  <div class="tui-form__buttons">
-    <button class="tui-form__button" tuiButton appearance="primary">
-      Сохранить
-    </button>
-  </div>
-</form>
+    <div class="tui-form__row">
+      <tui-text-area formControlName="content">Контент</tui-text-area>
+    </div>
+    <div class="tui-form__row">
+      <tui-input-files
+        *ngIf="!control.value"
+        accept="image/*"
+        [formControl]="control"
+        (reject)="onReject($event)"></tui-input-files>
+
+      <tui-files class="tui-space_top-1">
+        <tui-file
+          *ngIf="loadedFiles$ | async as file"
+          [file]="file"
+          (removed)="removeFile()"></tui-file>
+
+        <tui-file
+          *ngIf="rejectedFiles$ | async as file"
+          state="error"
+          [file]="file"
+          (removed)="clearRejected()"></tui-file>
+
+        <tui-file
+          *ngIf="loadingFiles$ | async as file"
+          state="loading"
+          [file]="file"></tui-file>
+      </tui-files>
+    </div>
+    <div class="tui-form__buttons">
+      <button class="tui-form__button" tuiButton appearance="primary">
+        Сохранить
+      </button>
+    </div>
+  </form>
+</tui-island>

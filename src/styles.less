@@ -2,3 +2,26 @@
 .negative {
   color: var(--tui-negative);
 }
+
+.flex-wrap {
+  display:flex;
+  text-align:center;
+  position: relative;
+
+  .left {
+    width:fit-content;
+    margin-right:auto;
+  }
+  .right {
+    width:fit-content;
+    margin-left:auto;
+  }
+  .center {
+    width:fit-content;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+}

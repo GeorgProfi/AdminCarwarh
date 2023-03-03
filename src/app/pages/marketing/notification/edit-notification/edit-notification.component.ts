@@ -18,10 +18,9 @@ export class EditNotificationComponent implements OnInit {
     title: new FormControl(``, Validators.required),
   });
 
-  id: string = '';
+  id: string = this.router.snapshot.params['id'];
 
   ngOnInit(): void {
-    this.id = this.router.snapshot.params['id'];
     this.notificationService.getNotification(this.id).subscribe(data => {
       this.notificationForm.patchValue({
         title: data.title,

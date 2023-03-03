@@ -8,14 +8,20 @@
       <div class="tui-form__row">
         <tui-text-area formControlName="content">Контент</tui-text-area>
       </div>
-      <div class="tui-form__buttons tui-form__buttons_align_center">
+      <div class="flex-wrap tui-form__row">
         <button
-          class="tui-form__button"
+          class="tui-form__button center"
           tuiButton
           (click)="onSubmit()"
           appearance="primary">
           Создать
         </button>
+        <tui-checkbox-block
+          contentAlign="right"
+          class="right"
+          formControlName="send">
+          Отправить
+        </tui-checkbox-block>
       </div>
     </form>
   </ng-template>
