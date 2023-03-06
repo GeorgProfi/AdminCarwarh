@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 })
 export class MarketingComponent {
   activeItemIndex = 0;
+
   menu = [
     { name: 'Уведомления', icon: 'tuiIconBell', link: 'notification' },
     { name: 'Новости', icon: 'tuiIconFlag', link: 'news' },

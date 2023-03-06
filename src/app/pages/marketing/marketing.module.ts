@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MarketingComponent } from './marketing.component';
 import { TuiTabsModule } from '@taiga-ui/kit';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TuiSvgModule } from '@taiga-ui/core';
 import { NotificationModule } from './notification/notification.module';
@@ -16,6 +16,8 @@ import { NewsModule } from './news/news.module';
     RouterOutlet,
     NotificationModule,
     NewsModule,
+    NgSwitch,
+    NgSwitchCase,
   ],
   declarations: [MarketingComponent],
   exports: [MarketingComponent],

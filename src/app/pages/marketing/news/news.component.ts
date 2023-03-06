@@ -33,7 +33,7 @@ export class NewsComponent {
   readonly request$ = combineLatest([
     this.page$,
     this.size$,
-    this.search$.pipe(debounceTime(500), distinctUntilChanged()),
+    this.search$.pipe(debounceTime(500), startWith(''), distinctUntilChanged()),
     this.sorter$,
     this.direction$,
   ]).pipe(

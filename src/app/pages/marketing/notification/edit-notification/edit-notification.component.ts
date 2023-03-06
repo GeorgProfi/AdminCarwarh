@@ -16,14 +16,26 @@ export class EditNotificationComponent implements OnInit {
 
   notificationForm = new FormGroup({
     title: new FormControl(``, Validators.required),
+    content: new FormControl(''),
   });
 
   id: string = this.router.snapshot.params['id'];
+
+  removeNotification() {
+    this.notificationService.removeNotification(this.id).subscribe(() => {});
+  }
+
+  pushNotification() {
+    this.notificationService.pushNotification(this.id).subscribe(() => {
+      console.log('send');
+    });
+  }
 
   ngOnInit(): void {
     this.notificationService.getNotification(this.id).subscribe(data => {
       this.notificationForm.patchValue({
         title: data.title,
+        content: data.title,
       });
     });
   }

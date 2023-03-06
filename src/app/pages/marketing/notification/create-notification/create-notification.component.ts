@@ -12,14 +12,14 @@ import { NotificationService } from '../../../../common/services/api/notificatio
 export class CreateNotificationComponent {
   constructor(private notificationService: NotificationService) {}
   formCreateNotification = new FormGroup({
-    title: new FormControl(),
-    content: new FormControl(),
-    send: new FormControl(false),
+    title: new FormControl('', { nonNullable: true }),
+    content: new FormControl('', { nonNullable: true }),
+    send: new FormControl(false, { nonNullable: true }),
   });
 
   onSubmit() {
     const data: CreateNotificationDto = this.formCreateNotification
-      .value as unknown as CreateNotificationDto;
+      .value as CreateNotificationDto;
     this.notificationService.createNotification(data).subscribe(data => {
       this.formCreateNotification.reset();
     });

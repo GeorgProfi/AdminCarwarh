@@ -6,7 +6,6 @@ import { PaginateRes } from '../../dto/paginate-response.dto';
 import { environment } from '../../../../environments/environment';
 import { Notification } from '../../entities/notification.entity';
 import { CreateNotificationDto } from '../../../pages/marketing/notification/dto/create-notification.dto';
-import { UpdateNotificationDto } from '../../../pages/marketing/notification/dto/update-notification.dto';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
@@ -27,19 +26,23 @@ export class NotificationService {
 
   createNotification(data: CreateNotificationDto) {
     return this.http.post<Notification>(
-      `${environment.apiUrl}/notification`,
+      `${environment.apiUrl}/notification/save`,
       data
     );
   }
 
-  updateNotification(data: UpdateNotificationDto) {
-    return this.http.put<Notification>(
-      `${environment.apiUrl}/notification`,
-      data
+  pushNotification(idNotification: string) {
+    return this.http.post<Notification>(
+      `${environment.apiUrl}/notification/push`,
+      {
+        idNotification,
+      }
     );
   }
 
-  deleteNotification(id: string) {
-    return this.http.delete<void>(`${environment.apiUrl}/notification/${id}`);
+  removeNotification(idNotification: string) {
+    return this.http.delete<Notification>(
+      `${environment.apiUrl}/notification/${idNotification}`
+    );
   }
 }

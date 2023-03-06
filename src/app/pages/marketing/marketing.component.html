@@ -1,14 +1,14 @@
 <tui-tabs
   class="tui-space_top-5 tui-space_bottom-5"
   [(activeItemIndex)]="activeItemIndex">
-  <button
-    tuiTab
-    *ngFor="let item of menu"
-    [routerLink]="item.link"
-    routerLinkActive>
+  <button tuiTab *ngFor="let item of menu">
     <tui-svg [src]="item.icon" class="tui-space_right-2"></tui-svg>
     {{ item.name }}
   </button>
 </tui-tabs>
 
-<router-outlet></router-outlet>
+<div [ngSwitch]="activeItemIndex">
+  <app-notification *ngSwitchCase="0"></app-notification>
+  <app-news *ngSwitchCase="1"></app-news>
+</div>
+<!--<router-outlet></router-outlet>-->
