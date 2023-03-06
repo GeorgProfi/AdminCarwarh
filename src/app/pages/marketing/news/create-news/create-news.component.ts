@@ -1,8 +1,17 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
-import { finalize, map, Observable, of, Subject, switchMap, timer } from 'rxjs';
+import {
+  catchError,
+  finalize,
+  map,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { TuiFileLike } from '@taiga-ui/kit';
+import { FilesService } from '../../../../common/services/api/files.service';
 
 @Component({
   selector: 'app-create-news',
@@ -10,7 +19,10 @@ import { TuiFileLike } from '@taiga-ui/kit';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateNewsComponent {
-  constructor(private newsService: NewsService) {}
+  constructor(
+    private newsService: NewsService,
+    private filesService: FilesService
+  ) {}
 
   formCreateNotification = new FormGroup({
     title: new FormControl(),
@@ -48,17 +60,33 @@ export class CreateNewsComponent {
   makeRequest(file: TuiFileLike): Observable<TuiFileLike | null> {
     this.loadingFiles$.next(file);
 
-    return timer(1000).pipe(
-      map(() => {
-        if (Math.random() > 0.5) {
-          return file;
-        }
+    const formData = new FormData();
+    formData.append('image', file as File);
 
+    return this.filesService.oneImageUpload(formData).pipe(
+      map(id => {
+        console.log(id);
+        return file;
+      }),
+      catchError(e => {
+        console.log(e);
         this.rejectedFiles$.next(file);
-
-        return null;
+        return of(null);
       }),
       finalize(() => this.loadingFiles$.next(null))
     );
+    // pipe(
+    //   map((id: any) => {
+    //     console.log(id);
+    //     if (Math.random() > 0.5) {
+    //       return file;
+    //     }
+    //
+    //     this.rejectedFiles$.next(file);
+    //
+    //     return null;
+    //   }),
+    //   finalize(() => this.loadingFiles$.next(null))
+    // );
   }
 }
