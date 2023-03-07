@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
 import {
@@ -24,23 +29,30 @@ export class CreateNewsComponent {
     private filesService: FilesService
   ) {}
 
+  @Output() createEvent = new EventEmitter();
+
   formCreateNotification = new FormGroup({
     title: new FormControl(),
-    content: new FormControl(),
+    text: new FormControl(),
   });
+  imageId?: string;
   onSubmit() {
     const data = this.formCreateNotification.value as any;
-    this.newsService.createNews(data).subscribe(data => {
-      this.formCreateNotification.reset();
-    });
+    this.newsService
+      .createNews({ ...data, imageId: this.imageId })
+      .subscribe(data => {
+        this.formCreateNotification.reset();
+        this.file.reset();
+        this.createEvent.emit();
+      });
   }
 
   // file:
-  readonly control = new FormControl();
+  readonly file = new FormControl();
 
   readonly rejectedFiles$ = new Subject<TuiFileLike | null>();
   readonly loadingFiles$ = new Subject<TuiFileLike | null>();
-  readonly loadedFiles$ = this.control.valueChanges.pipe(
+  readonly loadedFiles$ = this.file.valueChanges.pipe(
     switchMap(file => (file ? this.makeRequest(file) : of(null)))
   );
 
@@ -49,10 +61,12 @@ export class CreateNewsComponent {
   }
 
   removeFile(): void {
-    this.control.setValue(null);
+    this.imageId = undefined;
+    this.file.setValue(null);
   }
 
   clearRejected(): void {
+    this.imageId = undefined;
     this.removeFile();
     this.rejectedFiles$.next(null);
   }
@@ -64,8 +78,8 @@ export class CreateNewsComponent {
     formData.append('image', file as File);
 
     return this.filesService.oneImageUpload(formData).pipe(
-      map(id => {
-        console.log(id);
+      map((data: any) => {
+        this.imageId = data.id;
         return file;
       }),
       catchError(e => {
@@ -75,18 +89,5 @@ export class CreateNewsComponent {
       }),
       finalize(() => this.loadingFiles$.next(null))
     );
-    // pipe(
-    //   map((id: any) => {
-    //     console.log(id);
-    //     if (Math.random() > 0.5) {
-    //       return file;
-    //     }
-    //
-    //     this.rejectedFiles$.next(file);
-    //
-    //     return null;
-    //   }),
-    //   finalize(() => this.loadingFiles$.next(null))
-    // );
   }
 }

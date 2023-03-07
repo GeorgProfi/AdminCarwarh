@@ -7,7 +7,13 @@
       </tui-input>
     </div>
     <div class="tui-form__row">
-      <tui-text-area formControlName="content">Контент</tui-text-area>
+      <tui-text-area formControlName="text">Контент</tui-text-area>
+    </div>
+    {{ urlImage }}
+    <div *tuiLet="urlImage$ | async as urlImage" class="tui-form__row">
+      <div *ngIf="urlImage">
+        <img [ngSrc]="urlImage" width="400" height="200" priority />
+      </div>
     </div>
     <div class="tui-form__row">
       <tui-input-files
@@ -35,7 +41,11 @@
       </tui-files>
     </div>
     <div class="tui-form__buttons">
-      <button class="tui-form__button" tuiButton appearance="primary">
+      <button
+        class="tui-form__button"
+        tuiButton
+        appearance="primary"
+        (click)="save()">
         Сохранить
       </button>
     </div>

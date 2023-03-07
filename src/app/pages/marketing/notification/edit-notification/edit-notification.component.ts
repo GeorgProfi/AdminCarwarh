@@ -16,7 +16,7 @@ export class EditNotificationComponent implements OnInit {
 
   notificationForm = new FormGroup({
     title: new FormControl(``, Validators.required),
-    content: new FormControl(''),
+    text: new FormControl(''),
   });
 
   id: string = this.router.snapshot.params['id'];
@@ -35,7 +35,7 @@ export class EditNotificationComponent implements OnInit {
     this.notificationService.getNotification(this.id).subscribe(data => {
       this.notificationForm.patchValue({
         title: data.title,
-        content: data.title,
+        text: data.title,
       });
     });
   }

@@ -6,13 +6,13 @@
         <tui-input formControlName="title"> Заголовок </tui-input>
       </div>
       <div class="tui-form__row">
-        <tui-text-area formControlName="content">Контент</tui-text-area>
+        <tui-text-area formControlName="text">Контент</tui-text-area>
       </div>
       <div class="tui-form__row">
         <tui-input-files
-          *ngIf="!control.value"
+          *ngIf="!file.value"
           accept="image/*"
-          [formControl]="control"
+          [formControl]="file"
           (reject)="onReject($event)"></tui-input-files>
 
         <tui-files class="tui-space_top-1">

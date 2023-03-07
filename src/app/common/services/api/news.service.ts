@@ -18,7 +18,16 @@ export class NewsService {
     return this.http.get<any>(`${environment.apiUrl}/news/get/${id}`);
   }
 
-  createNews(data: { title: string; text: string }) {
-    return this.http.post(`${environment.apiUrl}/news`, data);
+  createNews(data: { title: string; text: string; imageId?: string }) {
+    return this.http.post(`${environment.apiUrl}/news/create`, data);
+  }
+
+  updateNews(data: {
+    id: string;
+    title?: string;
+    text?: string;
+    imageId?: string;
+  }) {
+    return this.http.put(`${environment.apiUrl}/news/update`, data);
   }
 }

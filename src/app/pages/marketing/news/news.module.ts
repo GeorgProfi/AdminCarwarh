@@ -21,7 +21,7 @@ import {
   TuiSelectModule,
   TuiTextAreaModule,
 } from '@taiga-ui/kit';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiTableModule } from '@taiga-ui/addon-table';
 import { TuiLetModule } from '@taiga-ui/cdk';
@@ -59,6 +59,7 @@ import { EditNewsComponent } from './edit-news/edit-news.component';
     TuiIslandModule,
     TuiTextAreaModule,
     TuiAccordionModule,
+    NgOptimizedImage,
   ],
 })
 export class NewsModule {}

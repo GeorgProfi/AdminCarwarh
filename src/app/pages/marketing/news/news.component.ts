@@ -54,6 +54,11 @@ export class NewsComponent {
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
 
+  refreshData() {
+    // TODO: Я хз как по нормальному обновить данные ¯\_(ツ)_/¯
+    this.size$.next(this.size$.value);
+  }
+
   private getData(
     page: number,
     pageSize: number,

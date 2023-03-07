@@ -13,7 +13,7 @@ export class CreateNotificationComponent {
   constructor(private notificationService: NotificationService) {}
   formCreateNotification = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
-    content: new FormControl('', { nonNullable: true }),
+    text: new FormControl('', { nonNullable: true }),
     send: new FormControl(false, { nonNullable: true }),
   });
 
