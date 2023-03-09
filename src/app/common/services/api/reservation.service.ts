@@ -13,10 +13,10 @@ export class ReservationService {
     data: GetReservationCompany
   ): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(
-      `${environment.apiUrl}/reservation/company`,
+      `${environment.apiUrl}/reservation/station`,
       {
         params: {
-          idStation: data.idStation,
+          stationId: data.stationId,
           day: data.day.toISOString(),
         },
       }

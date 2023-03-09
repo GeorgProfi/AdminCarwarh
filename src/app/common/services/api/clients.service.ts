@@ -9,6 +9,13 @@ import { Pagination } from '../../dto/pagination.dto';
 export class ClientsService {
   constructor(private http: HttpClient) {}
 
+  searchClient(search: string) {
+    console.log(search);
+    return this.http.get<Client[]>(`${environment.apiUrl}/client/search`, {
+      params: { search },
+    });
+  }
+
   getClientsList(data: Pagination) {
     return this.http.get<PaginateRes<Client>>(
       `${environment.apiUrl}/client/list`,

@@ -1,4 +1,4 @@
 export class GetReservationCompany {
-  idStation!: string;
+  stationId!: string;
   day!: Date;
 }

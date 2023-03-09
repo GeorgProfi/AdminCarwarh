@@ -8,6 +8,7 @@
     class="b-form"
     [tuiTextfieldLabelOutside]="true"
     [valueContent]="stations ? stringify(stations) : loading"
+    (ngModelChange)="selectStation($event)"
     [(ngModel)]="stationId">
     Станция
     <ng-template tuiDataList>
@@ -26,100 +27,75 @@
   </tui-input-date>
 </div>
 
-<div class="table tui-space_bottom-5 tui-space_top-5">
-  <div class="tui-row tui-space_bottom-5 tui-space_top-5">
-    <div class="tui-col_md-1">
-      <button
-        *ngIf="index > 0"
-        tuiIconButton
-        type="button"
-        size="s"
-        appearance="secondary"
-        icon="tuiIconArrowLeft"
-        (click)="pageDown()"
-        class="tui-space_right-3 tui-space_bottom-3"></button>
-    </div>
-    <div class="tui-col_md-10 tui-row">
-      <div
-        class="tui-col_md-3 header-post"
-        *ngFor="let post of reserv.slice(index, index + 4); let i = index">
-        ПОСТ {{ i + 1 + index }}
+<tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
+  <div
+    *ngIf="data$ | async as data"
+    class="table tui-space_bottom-5 tui-space_top-5">
+    <div class="tui-row tui-space_bottom-5 tui-space_top-5">
+      <div class="tui-col_md-1">
+        <button
+          *ngIf="index > 0"
+          tuiIconButton
+          type="button"
+          size="s"
+          appearance="secondary"
+          icon="tuiIconArrowLeft"
+          (click)="pageDown()"
+          class="tui-space_right-3 tui-space_bottom-3"></button>
+      </div>
+      <div class="tui-col_md-10 tui-row">
+        <div
+          class="tui-col_md-3 header-post"
+          *ngFor="let post of data.slice(index, index + 4); let i = index">
+          ПОСТ {{ post[0].post.name }}
+        </div>
+      </div>
+      <div class="tui-col_md-1">
+        <button
+          *ngIf="index + 4 < data.length"
+          tuiIconButton
+          type="button"
+          size="s"
+          appearance="secondary"
+          icon="tuiIconArrowRight"
+          (click)="pageUp()"
+          class="tui-space_right-3 tui-space_bottom-3"></button>
       </div>
     </div>
-    <div class="tui-col_md-1">
-      <button
-        *ngIf="index + 4 < reserv.length"
-        tuiIconButton
-        type="button"
-        size="s"
-        appearance="secondary"
-        icon="tuiIconArrowRight"
-        (click)="pageUp()"
-        class="tui-space_right-3 tui-space_bottom-3"></button>
+
+    <div class="tui-row">
+      <div class="time_column tui-col_md-1">
+        <div *ngFor="let time of times" class="time">
+          {{ time }}
+        </div>
+      </div>
+
+      <div class="tui-col_md-10 tui-row table-res">
+        <div
+          class="column tui-col_md-3"
+          *ngFor="let post of data.slice(index, index + 4)">
+          <tui-island
+            *ngFor="let res of post"
+            [style.top.px]="res.time * 50"
+            [style.height.px]="res.duration * 50 - 30"
+            class="order"
+            (click)="clickOrder()">
+            <p class="tui-island__category">10:00 - 13:00</p>
+            <p *ngIf="res.duration > 1" class="tui-island__category">
+              Автомойка стандарт (100 руб.)
+            </p>
+            <p *ngIf="res.duration > 2" class="tui-island__category">
+              Алексей В.В.
+            </p>
+          </tui-island>
+        </div>
+      </div>
+
+      <div class="time_column tui-col_md-1">
+        <div *ngFor="let time of times" class="time">
+          {{ time }}
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="tui-row">
-    <div class="time_column tui-col_md-1">
-      <div *ngFor="let time of times" class="time">
-        {{ time }}
-      </div>
-    </div>
-
-    <div class="tui-col_md-10 tui-row table-res">
-      <div
-        class="column tui-col_md-3"
-        *ngFor="let post of reserv.slice(index, index + 4)">
-        <tui-island
-          *ngFor="let res of post"
-          [style.top.px]="res.time * 50"
-          [style.height.px]="res.duration * 50 - 30"
-          class="order"
-          (click)="clickOrder()">
-          <p class="tui-island__category">10:00 - 13:00</p>
-          <p *ngIf="res.duration > 1" class="tui-island__category">
-            Автомойка стандарт (100 руб.)
-          </p>
-          <p *ngIf="res.duration > 2" class="tui-island__category">
-            Алексей В.В.
-          </p>
-        </tui-island>
-      </div>
-    </div>
-
-    <div class="time_column tui-col_md-1">
-      <div *ngFor="let time of times" class="time">
-        {{ time }}
-      </div>
-    </div>
-  </div>
-</div>
-
-<!--<table-->
-<!--  tuiTable-->
-<!--  class="table tui-space_bottom-5 tui-space_top-5"-->
-<!--  [columns]="columns">-->
-<!--  <thead>-->
-<!--    <tr tuiThGroup>-->
-<!--      <th tuiTh width="10">Time</th>-->
-<!--      <th tuiTh>-->
-<!--        <p>1</p>-->
-<!--        <p>2</p>-->
-<!--      </th>-->
-<!--      <th tuiTh>2</th>-->
-<!--      <th tuiTh>3</th>-->
-<!--      <th tuiTh>4</th>-->
-<!--      <th tuiTh>5</th>-->
-<!--    </tr>-->
-<!--  </thead>-->
-<!--  <tbody tuiTbody>-->
-<!--    <tr tuiTr *ngFor="let item of times">-->
-<!--      <td tuiTd *tuiCell="'time'">{{ item.time }}</td>-->
-<!--      <td tuiTd *tuiCell="'1'">{{ item[1] }}</td>-->
-<!--      <td tuiTd *tuiCell="'2'">{{ item[2] }}</td>-->
-<!--      <td tuiTd *tuiCell="'3'">{{ item[3] }}</td>-->
-<!--      <td tuiTd *tuiCell="'4'">{{ item[4] }}</td>-->
-<!--      <td tuiTd *tuiCell="'5'">{{ item[5] }}</td>-->
-<!--    </tr>-->
-<!--  </tbody>-->
-<!--</table>-->
+</tui-loader>

@@ -14,4 +14,11 @@ export interface Reservation {
   startWork: Date;
 
   endWork: Date;
+  post: {
+    name: string;
+    id: string;
+  };
+
+  time: number;
+  duration: number;
 }

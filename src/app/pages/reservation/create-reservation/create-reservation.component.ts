@@ -3,7 +3,11 @@ import { ReservationService } from '../../../common/services/api/reservation.ser
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { tuiCreateTimePeriods } from '@taiga-ui/kit';
-import { TuiDay } from '@taiga-ui/cdk';
+import { TuiBooleanHandler, TuiDay, tuiIsPresent } from '@taiga-ui/cdk';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, startWith, switchMap } from 'rxjs/operators';
+import { ClientsService } from '../../../common/services/api/clients.service';
+import { Client } from '../../../common/entities/client.entity';
 
 @Component({
   selector: 'app-create-reservation',
@@ -14,8 +18,23 @@ import { TuiDay } from '@taiga-ui/cdk';
 export class CreateReservationComponent {
   constructor(
     private reservationService: ReservationService,
-    private servicesService: ServicesService
+    private servicesService: ServicesService,
+    private clientsService: ClientsService
   ) {}
+
+  searchClient$ = new BehaviorSubject('');
+  readonly clients$: Observable<Client[]> = combineLatest([
+    this.searchClient$,
+  ]).pipe(
+    switchMap(query => this.clientsService.searchClient(...query)),
+    filter(tuiIsPresent),
+    startWith([])
+  );
+  readonly stringify = (item: { name: string }): string => `${item.name}`;
+
+  client!: string;
+  readonly disabledItemHandler: TuiBooleanHandler<string> = v =>
+    v.startsWith('T');
 
   // readonly services$ = this.servicesService.getAllClassServices().pipe(
   //   map((data: Service[]) => {

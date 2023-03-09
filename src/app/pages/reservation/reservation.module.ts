@@ -19,6 +19,7 @@ import {
   TuiIslandModule,
   TuiPaginationModule,
   TuiSelectModule,
+  TuiStringifyContentPipeModule,
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
@@ -53,6 +54,7 @@ import { TableReservationComponent } from './table-reservation/table-reservation
     TuiHostedDropdownModule,
     TuiFormatNumberPipeModule,
     TuiIslandModule,
+    TuiStringifyContentPipeModule,
   ],
   declarations: [
     ReservationComponent,
