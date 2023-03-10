@@ -3,41 +3,44 @@
   <ng-template tuiAccordionItemContent>
     <div class="tui-row">
       <div class="tui-col_md-6">
-        <h3 class="tui-form__header tui-form__header_margin-top_none">
-          Клиент
-        </h3>
-        <tui-input
-          class="tui-form__row"
-          [ngModel]="searchClient$ | async"
-          (ngModelChange)="searchClient$.next($event)">
-          Account
-
+        <tui-combo-box
+          class="b-form tui-form__row"
+          [stringify]="clientStringify"
+          [(ngModel)]="client"
+          (searchChange)="searchClient$.next($event)">
+          Поиск клиента
+          <input
+            tuiTextfield
+            placeholder="Поиск по имени/телефону"
+            (input)="searchClient$.next(extractValueFromEvent($event))" />
           <tui-data-list-wrapper
             *tuiDataList
-            emptyContent="No results found"
-            size="xs"
-            [items]="clients$ | async"
-            [itemContent]="
-              stringify | tuiStringifyContent
-            "></tui-data-list-wrapper>
-        </tui-input>
-        <h3 class="tui-form__header tui-form__header_margin-top_none">
+            [itemContent]="clientStringify | tuiStringifyContent"
+            [items]="clients$ | async"></tui-data-list-wrapper>
+        </tui-combo-box>
+
+        <h3
+          class="tui-form__header tui-form__header_margin-top_none tui-form__row">
           Список услуг
         </h3>
         <div
           tuiGroup
           class="tui-form__row"
           *ngFor="let service of services; index as idx">
-          <tui-input [(ngModel)]="service.name">
-            Введите название услуги
-          </tui-input>
-          <button
-            tuiIconButton
-            type="button"
-            appearance="outline"
-            size="l"
-            icon="tuiIconChevronDownLarge"
-            class="tui-group__auto-width-item"></button>
+          <tui-combo-box
+            *tuiLet="listServices$ | async as listServices"
+            class="b-form"
+            [(ngModel)]="services[idx]"
+            [stringify]="serviceStringify">
+            Поиск услуги
+            <input tuiTextfield placeholder="Поиск по названию" />
+            <tui-data-list-wrapper
+              *tuiDataList
+              [itemContent]="serviceStringify | tuiStringifyContent"
+              [items]="
+                listServices | tuiFilterByInputWith : serviceStringify
+              "></tui-data-list-wrapper>
+          </tui-combo-box>
           <button
             tuiIconButton
             type="button"
@@ -55,21 +58,22 @@
           class="tui-form__row">
           Добавить услугу
         </button>
-        <!--        <tui-select-->
-        <!--          *tuiLet="services$ | async as services"-->
-        <!--          class="b-form tui-col_md-12 tui-space_bottom-5"-->
-        <!--          [(ngModel)]="service">-->
-        <!--          Услуги-->
-        <!--          <tui-data-list-wrapper-->
-        <!--            *tuiDataList-->
-        <!--            [items]="services"></tui-data-list-wrapper>-->
-        <!--        </tui-select>-->
       </div>
       <div class="tui-col_md-6">
-        <tui-select class="tui-form__row">
-          Станция
-          <tui-data-list-wrapper></tui-data-list-wrapper>
-        </tui-select>
+        <tui-combo-box
+          *tuiLet="stations$ | async as stations"
+          class="b-form tui-form__row"
+          [stringify]="stationsStringify"
+          [(ngModel)]="station">
+          Поиск станции
+          <input tuiTextfield placeholder="Поиск по названию" />
+          <tui-data-list-wrapper
+            *tuiDataList
+            [itemContent]="stationsStringify | tuiStringifyContent"
+            [items]="
+              stations | tuiFilterByInputWith : stationsStringify
+            "></tui-data-list-wrapper>
+        </tui-combo-box>
         <tui-input-date class="tui-form__row" [(ngModel)]="day">
           Choose a date
         </tui-input-date>
@@ -86,7 +90,7 @@
       <button
         class="tui-form__button"
         tuiButton
-        (click)="onSubmit()"
+        (click)="createOrder()"
         appearance="primary">
         Создать
       </button>

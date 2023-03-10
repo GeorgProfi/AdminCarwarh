@@ -1,4 +1,11 @@
 export class Client {
+  constructor(props?: Partial<Client>) {
+    Object.assign(this, props);
+  }
+  toString() {
+    return `${this.name?.length ? this.name : 'Не указано'} (${this.phone})`;
+  }
+
   id!: string;
   carWashId!: string;
   name!: string;

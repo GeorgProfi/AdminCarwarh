@@ -10,7 +10,7 @@ export class ClientsService {
   constructor(private http: HttpClient) {}
 
   searchClient(search: string) {
-    console.log(search);
+    //console.log(search);
     return this.http.get<Client[]>(`${environment.apiUrl}/client/search`, {
       params: { search },
     });

@@ -22,4 +22,15 @@ export class ReservationService {
       }
     );
   }
+
+  searchFreeTimes(data: {
+    stationId: string;
+    servicesIds: string[];
+    day: Date;
+  }): Observable<string[]> {
+    return this.http.post<string[]>(
+      `${environment.apiUrl}/reservation/search`,
+      data
+    );
+  }
 }

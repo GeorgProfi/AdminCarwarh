@@ -12,7 +12,9 @@ import {
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
+  TuiComboBoxModule,
   TuiDataListWrapperModule,
+  TuiFilterByInputPipeModule,
   TuiInputDateModule,
   TuiInputModule,
   TuiInputTimeModule,
@@ -55,6 +57,8 @@ import { TableReservationComponent } from './table-reservation/table-reservation
     TuiFormatNumberPipeModule,
     TuiIslandModule,
     TuiStringifyContentPipeModule,
+    TuiComboBoxModule,
+    TuiFilterByInputPipeModule,
   ],
   declarations: [
     ReservationComponent,
