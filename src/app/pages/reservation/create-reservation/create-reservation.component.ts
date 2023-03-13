@@ -10,6 +10,7 @@ import { Client } from '../../../common/entities/client.entity';
 import { StationService } from '../../../common/services/api/station.service';
 import { Station } from '../../../common/entities/station.entity';
 import { tuiCreateTimePeriods } from '@taiga-ui/kit';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-create-reservation',
@@ -51,12 +52,13 @@ export class CreateReservationComponent {
     return service.name;
   }
 
-  services: Service[] = [{ name: '' } as Service];
+  services: Service[] = [{ name: '', id: '' } as Service];
   addService() {
     this.services.push({ name: '' } as Service);
   }
   removeService(idx: number) {
     this.services.splice(idx, 1);
+    this.searchTimes();
   }
 
   // Stations:
@@ -67,32 +69,55 @@ export class CreateReservationComponent {
   station!: Station;
 
   // Day:
-  day = new TuiDay(2022, 0, 15);
+  day = new TuiDay(2023, 1, 28);
 
   // Time:
-  // readonly request$ = combineLatest([this.day$, this.stationId$]).pipe(
-  //   switchMap(query =>
-  //     this.reservationService.searchFreeTimes(...query).pipe(startWith(null))
-  //   ),
-  //   share()
-  // );
-  readonly searchTimes$ = this.reservationService
-    .searchFreeTimes({
-      day: this.day.toLocalNativeDate(),
-      stationId: this.station.id,
-      servicesIds: this.services.map(service => service.id),
-    })
-    .pipe(
-      map((times: string[]) =>
-        times.map((time: string) => {
-          const t = new Date(time);
-          return new TuiTime(t.getHours(), t.getMinutes());
-        })
+  searchTimes() {
+    if (!this.station) {
+      return;
+    }
+    return this.reservationService
+      .searchFreeTimes({
+        day: this.day.toLocalNativeDate(),
+        stationId: this.station.id,
+        servicesIds: this.services.map(service => service.id),
+      })
+      .pipe(
+        map((times: string[]) =>
+          times.map((time: string) => {
+            const t = new Date(time);
+            return new TuiTime(t.getHours(), t.getMinutes());
+          })
+        )
       )
-    );
-  time = null;
-  times = tuiCreateTimePeriods();
+      .subscribe(times => {
+        this.times = times;
+      });
+  }
+  time!: TuiTime;
+  times: TuiTime[] | null = null;
+  timesTest = tuiCreateTimePeriods();
 
   // Create order:
-  createOrder(): void {}
+  createOrder() {
+    let a = new TuiTime(10, 10);
+    a.hours;
+    console.log(this.day.toLocalNativeDate().toISOString());
+    this.reservationService
+      .createReservation({
+        date: DateTime.fromObject({
+          day: this.day.day,
+          month: this.day.month,
+          year: this.day.year,
+          hour: this.time.hours,
+          minute: this.time.minutes,
+        }).toJSDate(),
+        clientId: this.client.id,
+        stationId: this.station.id,
+        servicesIds: this.services.map(service => service.id),
+      })
+      .subscribe(() => {
+        console.log('OPA');
+      });
+  }
 }

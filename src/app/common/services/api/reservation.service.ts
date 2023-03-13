@@ -33,4 +33,17 @@ export class ReservationService {
       data
     );
   }
+
+  createReservation(data: {
+    clientId: string;
+    stationId: string;
+    servicesIds: string[];
+    date: Date;
+  }) {
+    console.log(data);
+    return this.http.post<string[]>(
+      `${environment.apiUrl}/reservation/reservation-for-owner`,
+      data
+    );
+  }
 }

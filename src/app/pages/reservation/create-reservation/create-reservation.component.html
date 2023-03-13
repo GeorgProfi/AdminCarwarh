@@ -31,7 +31,8 @@
             *tuiLet="listServices$ | async as listServices"
             class="b-form"
             [(ngModel)]="services[idx]"
-            [stringify]="serviceStringify">
+            [stringify]="serviceStringify"
+            (ngModelChange)="searchTimes()">
             Поиск услуги
             <input tuiTextfield placeholder="Поиск по названию" />
             <tui-data-list-wrapper
@@ -64,7 +65,8 @@
           *tuiLet="stations$ | async as stations"
           class="b-form tui-form__row"
           [stringify]="stationsStringify"
-          [(ngModel)]="station">
+          [(ngModel)]="station"
+          (ngModelChange)="searchTimes()">
           Поиск станции
           <input tuiTextfield placeholder="Поиск по названию" />
           <tui-data-list-wrapper
@@ -74,12 +76,15 @@
               stations | tuiFilterByInputWith : stationsStringify
             "></tui-data-list-wrapper>
         </tui-combo-box>
-        <tui-input-date class="tui-form__row" [(ngModel)]="day">
+        <tui-input-date
+          class="tui-form__row"
+          [(ngModel)]="day"
+          (ngModelChange)="searchTimes()">
           Choose a date
         </tui-input-date>
         <tui-input-time
+          *ngIf="times"
           class="tui-form__row"
-          formControlName="testValue"
           [items]="times"
           [(ngModel)]="time">
           Input time
