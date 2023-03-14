@@ -37,7 +37,7 @@ export class CreateReservationComponent {
     return (event.target as HTMLInputElement)?.value || null;
   }
   clientStringify(client: Client): string {
-    return client.name?.length ? client.name : 'Не указано';
+    return (client.name?.length ? client.name : 'Не указано') + ` (${client.phone})` + ` (${client.email})`;
   }
   client: any;
 
@@ -52,11 +52,12 @@ export class CreateReservationComponent {
     return service.name;
   }
 
-  services: Service[] = [{ name: '', id: '' } as Service];
+  services: Service[] = [{ name: '' } as Service];
   addService() {
     this.services.push({ name: '' } as Service);
   }
   removeService(idx: number) {
+    this.times = null;
     this.services.splice(idx, 1);
     this.searchTimes();
   }
@@ -73,14 +74,15 @@ export class CreateReservationComponent {
 
   // Time:
   searchTimes() {
-    if (!this.station) {
+    console.log(this.services.filter(service => service.id).length);
+    if (!this.station || this.services.filter(service => service.id).length < 1) {
       return;
     }
-    return this.reservationService
+    this.reservationService
       .searchFreeTimes({
         day: this.day.toLocalNativeDate(),
         stationId: this.station.id,
-        servicesIds: this.services.map(service => service.id),
+        servicesIds: this.services.filter(service => service.id).map(service => service.id),
       })
       .pipe(
         map((times: string[]) =>
@@ -100,9 +102,6 @@ export class CreateReservationComponent {
 
   // Create order:
   createOrder() {
-    let a = new TuiTime(10, 10);
-    a.hours;
-    console.log(this.day.toLocalNativeDate().toISOString());
     this.reservationService
       .createReservation({
         date: DateTime.fromObject({
@@ -114,7 +113,7 @@ export class CreateReservationComponent {
         }).toJSDate(),
         clientId: this.client.id,
         stationId: this.station.id,
-        servicesIds: this.services.map(service => service.id),
+        servicesIds: this.services.filter(service => service.id).map(service => service.id),
       })
       .subscribe(() => {
         console.log('OPA');

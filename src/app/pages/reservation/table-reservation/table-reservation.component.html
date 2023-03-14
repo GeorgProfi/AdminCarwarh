@@ -3,25 +3,21 @@
   class="tui-form__row tui-space_bottom-5"
   [adaptive]="true"
   [collapsed]="true">
-  <tui-select
+  <tui-combo-box
     *tuiLet="stations$ | async as stations"
-    class="b-form"
-    [tuiTextfieldLabelOutside]="true"
-    [valueContent]="stations ? stringify(stations) : loading"
-    (ngModelChange)="selectStation($event)"
-    [(ngModel)]="stationId">
-    Станция
-    <ng-template tuiDataList>
-      <tui-data-list *ngIf="stations; else loading">
-        <button *ngFor="let station of stations" tuiOption [value]="station.id">
-          {{ station.name }}
-        </button>
-      </tui-data-list>
-    </ng-template>
-    <ng-template #loading>
-      <tui-loader class="tui-space_vertical-3 loader"></tui-loader>
-    </ng-template>
-  </tui-select>
+    class="b-form tui-form__row"
+    [stringify]="stationsStringify"
+    [(ngModel)]="station"
+    (ngModelChange)="selectStation($event)">
+    Поиск станции
+    <input tuiTextfield placeholder="Поиск по названию" />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [itemContent]="stationsStringify | tuiStringifyContent"
+      [items]="
+        stations | tuiFilterByInputWith : stationsStringify
+      "></tui-data-list-wrapper>
+  </tui-combo-box>
   <tui-input-date [ngModel]="day$ | async" (ngModelChange)="day$.next($event)">
     Choose a date
   </tui-input-date>
@@ -75,17 +71,16 @@
           class="column tui-col_md-3"
           *ngFor="let post of data.slice(index, index + 4)">
           <tui-island
-            *ngFor="let res of post"
-            [style.top.px]="res.time * 50"
-            [style.height.px]="res.duration * 50 - 30"
+            *ngFor="let order of post"
+            [style.top.px]="order.time * 50"
+            [style.height.px]="order.duration * 50 - 30"
             class="order"
-            (click)="clickOrder()">
-            <p class="tui-island__category">10:00 - 13:00</p>
-            <p *ngIf="res.duration > 1" class="tui-island__category">
-              Автомойка стандарт (100 руб.)
+            (click)="openEditOrder(order)">
+            <p class="tui-island__category">
+              {{ order.startWork | time }} - {{ order.endWork | time }}
             </p>
-            <p *ngIf="res.duration > 2" class="tui-island__category">
-              Алексей В.В.
+            <p *ngIf="order.duration > 1" class="tui-island__category">
+              Клиент: {{ order.client.name }}
             </p>
           </tui-island>
         </div>

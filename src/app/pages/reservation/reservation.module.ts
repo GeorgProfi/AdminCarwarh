@@ -4,6 +4,7 @@ import {
   TuiButtonModule,
   TuiCalendarModule,
   TuiDataListModule,
+  TuiDialogModule,
   TuiFormatNumberPipeModule,
   TuiGroupModule,
   TuiHostedDropdownModule,
@@ -29,6 +30,9 @@ import { TuiTableModule } from '@taiga-ui/addon-table';
 import { TuiLetModule } from '@taiga-ui/cdk';
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
 import { TableReservationComponent } from './table-reservation/table-reservation.component';
+import { StationModule } from '../stations/station.module';
+import { EditReservationComponent } from './edit-reservation/edit-reservation.component';
+import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 
 @NgModule({
   imports: [
@@ -59,11 +63,15 @@ import { TableReservationComponent } from './table-reservation/table-reservation
     TuiStringifyContentPipeModule,
     TuiComboBoxModule,
     TuiFilterByInputPipeModule,
+    StationModule,
+    TuiDialogModule,
+    TuiMoneyModule,
   ],
   declarations: [
     ReservationComponent,
     CreateReservationComponent,
     TableReservationComponent,
+    EditReservationComponent,
   ],
   exports: [ReservationComponent],
 })

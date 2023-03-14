@@ -109,6 +109,6 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     EditStationComponent,
     TimePipe,
   ],
-  exports: [StationComponent],
+  exports: [StationComponent, TimePipe],
 })
 export class StationModule {}

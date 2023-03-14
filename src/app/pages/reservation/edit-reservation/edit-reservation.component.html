@@ -1,0 +1,83 @@
+<div [style.margin.px]="40">
+  <div tuiGroup class="group tui-row tui-space_top-5">
+    <button tuiButton type="button" appearance="outline" size="l">
+      Ожидание клиента
+    </button>
+    <button tuiButton type="button" appearance="primary" size="l">
+      Клиент пришел
+    </button>
+    <button tuiButton type="button" appearance="outline" size="l">
+      Клиент не пришел
+    </button>
+    <button tuiButton type="button" appearance="outline" size="l">
+      Услуга оказана
+    </button>
+  </div>
+
+  <tui-island class="tui-row tui-space_top-5 tui-space_bottom-5">
+    <h3 class="tui-island__title">Клиент:</h3>
+    <p class="tui-island__paragraph">Имя: {{ client.name }}</p>
+    <p class="tui-island__paragraph">Телефон: {{ client.phone }}</p>
+    <p class="tui-island__paragraph">Email: {{ client.email }}</p>
+    <button
+      tuiButton
+      type="button"
+      appearance="flat"
+      size="m"
+      class="tui-island__footer-button">
+      Замена клиента
+    </button>
+  </tui-island>
+
+  <tui-island class="tui-row">
+    <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">
+      Список услуг
+    </h3>
+    <p class="tui-island__paragraph">
+      Стоимость: <tui-money [value]="10728.9"></tui-money>
+    </p>
+    <p class="tui-island__paragraph">Время: 2 ч. 30 мин. (9:30 - 12:00)</p>
+    <div
+      tuiGroup
+      class="tui-form__row"
+      *ngFor="let service of services; index as idx">
+      <tui-combo-box
+        *tuiLet="listServices$ | async as listServices"
+        class="b-form"
+        [(ngModel)]="services[idx]"
+        [stringify]="serviceStringify">
+        Поиск услуги
+        <input tuiTextfield placeholder="Поиск по названию" />
+        <tui-data-list-wrapper
+          *tuiDataList
+          [itemContent]="serviceStringify | tuiStringifyContent"
+          [items]="
+            listServices | tuiFilterByInputWith : serviceStringify
+          "></tui-data-list-wrapper>
+      </tui-combo-box>
+      <button
+        tuiIconButton
+        type="button"
+        appearance="outline"
+        size="l"
+        (click)="removeService(idx)"
+        icon="tuiIconCloseLarge"
+        class="tui-group__auto-width-item"></button>
+    </div>
+    <button
+      tuiButton
+      type="button"
+      appearance="flat"
+      size="m"
+      (click)="addService()"
+      class="tui-island__footer-button">
+      Добавить услугу
+    </button>
+  </tui-island>
+
+  <div class="tui-form__buttons tui-form__buttons_align_center">
+    <button tuiButton type="button" (click)="test()" class="tui-form__button">
+      Сохранить
+    </button>
+  </div>
+</div>
