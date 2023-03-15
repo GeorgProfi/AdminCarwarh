@@ -72,7 +72,7 @@
           *ngFor="let post of data.slice(index, index + 4)">
           <tui-island
             *ngFor="let order of post"
-            [style.top.px]="order.time * 50"
+            [style.top.px]="(order.time - startWorkStation) * 50"
             [style.height.px]="order.duration * 50 - 30"
             class="order"
             (click)="openEditOrder(order)">

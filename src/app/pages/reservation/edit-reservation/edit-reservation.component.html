@@ -1,15 +1,35 @@
 <div [style.margin.px]="40">
   <div tuiGroup class="group tui-row tui-space_top-5">
-    <button tuiButton type="button" appearance="outline" size="l">
+    <button
+      tuiButton
+      type="button"
+      [appearance]="status === 0 ? 'primary' : 'outline'"
+      size="l"
+      (click)="setStatus(0)">
       Ожидание клиента
     </button>
-    <button tuiButton type="button" appearance="primary" size="l">
+    <button
+      tuiButton
+      type="button"
+      [appearance]="status === 1 ? 'primary' : 'outline'"
+      size="l"
+      (click)="setStatus(1)">
       Клиент пришел
     </button>
-    <button tuiButton type="button" appearance="outline" size="l">
+    <button
+      tuiButton
+      type="button"
+      [appearance]="status === 2 ? 'primary' : 'outline'"
+      size="l"
+      (click)="setStatus(2)">
       Клиент не пришел
     </button>
-    <button tuiButton type="button" appearance="outline" size="l">
+    <button
+      tuiButton
+      type="button"
+      [appearance]="status === 3 ? 'primary' : 'outline'"
+      size="l"
+      (click)="setStatus(3)">
       Услуга оказана
     </button>
   </div>
@@ -19,13 +39,30 @@
     <p class="tui-island__paragraph">Имя: {{ client.name }}</p>
     <p class="tui-island__paragraph">Телефон: {{ client.phone }}</p>
     <p class="tui-island__paragraph">Email: {{ client.email }}</p>
+    <tui-combo-box
+      *ngIf="replaceClient"
+      class="b-form tui-form__row"
+      [stringify]="clientStringify"
+      [(ngModel)]="newClient"
+      (searchChange)="searchClient$.next($event)">
+      Поиск клиента
+      <input
+        tuiTextfield
+        placeholder="Поиск по имени/телефону"
+        (input)="searchClient$.next(extractValueFromEvent($event))" />
+      <tui-data-list-wrapper
+        *tuiDataList
+        [itemContent]="clientStringify | tuiStringifyContent"
+        [items]="clients$ | async"></tui-data-list-wrapper>
+    </tui-combo-box>
     <button
       tuiButton
       type="button"
-      appearance="flat"
+      [appearance]="replaceClient ? 'accent' : 'flat'"
       size="m"
-      class="tui-island__footer-button">
-      Замена клиента
+      class="tui-island__footer-button"
+      (click)="replaceClient = !replaceClient">
+      {{ replaceClient ? 'отмена' : 'Замена клиента' }}
     </button>
   </tui-island>
 
@@ -34,7 +71,7 @@
       Список услуг
     </h3>
     <p class="tui-island__paragraph">
-      Стоимость: <tui-money [value]="10728.9"></tui-money>
+      Стоимость: <tui-money [value]="purchaseAmount"></tui-money>
     </p>
     <p class="tui-island__paragraph">Время: 2 ч. 30 мин. (9:30 - 12:00)</p>
     <div
@@ -76,7 +113,7 @@
   </tui-island>
 
   <div class="tui-form__buttons tui-form__buttons_align_center">
-    <button tuiButton type="button" (click)="test()" class="tui-form__button">
+    <button tuiButton type="button" (click)="save()" class="tui-form__button">
       Сохранить
     </button>
   </div>

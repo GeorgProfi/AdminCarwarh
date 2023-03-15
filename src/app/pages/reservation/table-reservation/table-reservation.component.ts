@@ -30,6 +30,7 @@ export class TableReservationComponent {
 
   // Dialog edit order:
   openEditOrder(order: any): void {
+    console.log(order);
     const dialogEditOrder = this.dialogService.open<any>(
       new PolymorpheusComponent(EditReservationComponent, this.injector),
       {
@@ -62,6 +63,7 @@ export class TableReservationComponent {
     return station.name;
   }
   station!: Station;
+  startWorkStation!: number;
 
   selectStation(station: Station) {
     this.stationId$.next(station.id);
@@ -73,7 +75,16 @@ export class TableReservationComponent {
   );
   readonly data$ = this.request$.pipe(
     filter(tuiIsPresent),
-    map(orders => {
+    map((data: any) => {
+      console.log(data);
+      const startWork = new Date(data.station.startWork);
+      const endWork = new Date(data.station.endWork);
+      this.times = data.station.aroundClock
+        ? tuiCreateTimePeriods()
+        : tuiCreateTimePeriods(startWork.getHours(), endWork.getHours());
+      this.startWorkStation = startWork.getHours() * 2;
+
+      let orders: any[] = data.orders;
       for (const order of orders) {
         let s: any = new Date(order.startWork);
         s = s.getHours() * 60 + s.getMinutes();
@@ -82,14 +93,13 @@ export class TableReservationComponent {
         order.time = (s / 30) | 0;
         order.duration = ((e - s) / 30) | 0;
       }
-      console.log(orders);
-      const data: any[][] = [];
+      const ordersPost: any[][] = [];
       while (orders.length > 0) {
         const postId = orders[0].post.id;
-        data.push(orders.filter(order => order.post.id === postId));
+        ordersPost.push(orders.filter(order => order.post.id === postId));
         orders = orders.filter(order => order.post.id !== postId);
       }
-      return data;
+      return ordersPost;
     }),
     startWith([])
   );
@@ -102,7 +112,7 @@ export class TableReservationComponent {
     });
   }
 
-  readonly times = tuiCreateTimePeriods();
+  times = tuiCreateTimePeriods();
 
   index = 0;
   pageUp() {
