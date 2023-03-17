@@ -1,19 +1,9 @@
 <tui-island>
   <div tuiGroup class="tui-form__row">
     <tui-input [(ngModel)]="name"> Название </tui-input>
-    <button
-      tuiButton
-      class="tui-form__button"
-      (click)="updateService()"
-      appearance="primary">
-      Обновить
-    </button>
+    <button tuiButton class="tui-form__button" (click)="updateService()" appearance="primary">Обновить</button>
   </div>
-  <table
-    tuiTable
-    class="tui-form__row"
-    [style.width.%]="100"
-    [columns]="columnsServices">
+  <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columnsServices">
     <thead>
       <tr tuiThGroup>
         <th *tuiHead="'action-1'" tuiTh [sorter]="null"></th>
@@ -25,33 +15,22 @@
         <th *tuiHead="'action-2'" tuiTh [sorter]="null"></th>
       </tr>
     </thead>
-    <tbody
-      *tuiLet="services | tuiTableSort as servicesSort"
-      tuiTbody
-      [data]="servicesSort">
+    <tbody *tuiLet="services | tuiTableSort as servicesSort" tuiTbody [data]="servicesSort">
       <tr tuiTr>
         <td *tuiCell="'action-1'" tuiTd></td>
         <td *tuiCell="'station'" tuiTd>
-          <tui-select
+          <tui-combo-box
+            *tuiLet="listStation$ | async as listStation"
             class="b-form"
-            [tuiTextfieldLabelOutside]="true"
-            [valueContent]="stations ? stringify(stations) : loading"
-            [(ngModel)]="stationId">
-            Станция
-            <ng-template tuiDataList>
-              <tui-data-list *ngIf="stations; else loading">
-                <button
-                  *ngFor="let station of stations"
-                  tuiOption
-                  [value]="station.id">
-                  {{ station.name }}
-                </button>
-              </tui-data-list>
-            </ng-template>
-            <ng-template #loading>
-              <tui-loader class="tui-space_vertical-3 loader"></tui-loader>
-            </ng-template>
-          </tui-select>
+            [(ngModel)]="station"
+            [stringify]="stationStringify">
+            Поиск станции
+            <input tuiTextfield placeholder="Поиск по названию" />
+            <tui-data-list-wrapper
+              *tuiDataList
+              [itemContent]="stationStringify | tuiStringifyContent"
+              [items]="listStation | tuiFilterByInputWith : stationStringify"></tui-data-list-wrapper>
+          </tui-combo-box>
         </td>
         <td *tuiCell="'duration'" tuiTd>
           <tui-input-number [(ngModel)]="duration"></tui-input-number>
@@ -90,8 +69,7 @@
           <tui-input-number [(ngModel)]="service.duration"></tui-input-number>
         </td>
         <td *tuiCell="'bonusPercentage'" tuiTd>
-          <tui-input-number
-            [(ngModel)]="service.bonusPercentage"></tui-input-number>
+          <tui-input-number [(ngModel)]="service.bonusPercentage"></tui-input-number>
         </td>
         <td *tuiCell="'price'" tuiTd>
           <tui-input-number [(ngModel)]="service.price"></tui-input-number>
@@ -112,23 +90,12 @@
     </tbody>
   </table>
   <div class="tui-form__buttons">
-    <button
-      tuiButton
-      type="button"
-      appearance="primary"
-      size="xs"
-      class="tui-form__button"
-      (click)="updateServices()">
+    <button tuiButton type="button" appearance="primary" size="xs" class="tui-form__button" (click)="updateServices()">
       Обновить
     </button>
   </div>
   <div class="tui-form__buttons tui-form__buttons_align_end">
-    <button
-      class="tui-form__button"
-      tuiButton
-      size="s"
-      (click)="removeServiceClass()"
-      appearance="accent">
+    <button class="tui-form__button" tuiButton size="s" (click)="removeServiceClass()" appearance="accent">
       Удалить
     </button>
   </div>

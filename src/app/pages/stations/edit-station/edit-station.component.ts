@@ -1,16 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { StationService } from '../../../common/services/api/station.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  TuiContextWithImplicit,
-  TuiStringHandler,
-  TuiTime,
-} from '@taiga-ui/cdk';
+import { TuiContextWithImplicit, TuiStringHandler, TuiTime } from '@taiga-ui/cdk';
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { ClassService } from '../../../common/entities/class-service.entity';
@@ -42,6 +33,11 @@ export class EditStationComponent implements OnInit {
     private readonly alertService: TuiAlertService
   ) {}
   stationId: string = this.activatedRoute.snapshot.queryParams['id'];
+
+  listServices$ = this.servicesService.getAllClassServices();
+  serviceStringify(service: Service): string {
+    return service.name;
+  }
 
   /*
   station
@@ -91,30 +87,17 @@ export class EditStationComponent implements OnInit {
   classServices$ = this.servicesService.getAllClassServices();
   filterClassServices!: ClassService[];
   //@tuiPure
-  stringify(
-    classServices: ClassService[]
-  ): TuiStringHandler<TuiContextWithImplicit<string>> {
-    const map = new Map(
-      classServices.map(({ id, name }) => [id, name] as [string, string])
-    );
-    return ({ $implicit }: TuiContextWithImplicit<string>) =>
-      map.get($implicit) || '';
+  stringify(classServices: ClassService[]): TuiStringHandler<TuiContextWithImplicit<string>> {
+    const map = new Map(classServices.map(({ id, name }) => [id, name] as [string, string]));
+    return ({ $implicit }: TuiContextWithImplicit<string>) => map.get($implicit) || '';
   }
 
   /*
   station services
    */
-  readonly columnsServices = [
-    `action-1`,
-    `name`,
-    'duration',
-    'bonusPercentage',
-    'price',
-    'discount',
-    `action-2`,
-  ];
+  readonly columnsServices = [`action-1`, `name`, 'duration', 'bonusPercentage', 'price', 'discount', `action-2`];
   services: Service[] = [];
-  classServiceForStationId!: string;
+  classServiceForStation!: Service;
   duration!: number;
   bonusPercentage!: number;
   price!: number;
@@ -129,9 +112,7 @@ export class EditStationComponent implements OnInit {
         return service;
       });
       this.classServices$.subscribe(classServices => {
-        this.filterClassServices = classServices.filter(
-          s => !usedService.includes(s.id)
-        );
+        this.filterClassServices = classServices.filter(s => !usedService.includes(s.id));
       });
     });
   }
@@ -142,7 +123,7 @@ export class EditStationComponent implements OnInit {
     }
     this.stationService
       .addServiceOnStation({
-        idClassService: this.classServiceForStationId,
+        idClassService: this.classServiceForStation.id,
         stationId: this.stationId,
         bonusPercentage: this.bonusPercentage,
         price: this.price,
@@ -199,7 +180,7 @@ export class EditStationComponent implements OnInit {
   posts: Post[] = [];
   namePost!: string;
   indexPost: number = 0;
-  stationServiceIdForPost!: string;
+  stationServiceForPost!: Service;
 
   getPosts() {
     this.stationService.getPosts(this.stationId).subscribe(posts => {
@@ -237,7 +218,7 @@ export class EditStationComponent implements OnInit {
     this.stationService
       .addServicePost({
         postId: this.posts[this.indexPost].id,
-        serviceId: this.stationServiceIdForPost,
+        serviceId: this.stationServiceForPost.id,
       })
       .subscribe(data => {
         this.getPosts();
@@ -273,11 +254,9 @@ export class EditStationComponent implements OnInit {
     if (!confirm(`Вы уверены?`)) {
       return;
     }
-    this.stationService
-      .removePost(this.posts[this.indexPost].id)
-      .subscribe(() => {
-        this.getPosts();
-      });
+    this.stationService.removePost(this.posts[this.indexPost].id).subscribe(() => {
+      this.getPosts();
+    });
   }
 
   /******************************************************/
@@ -304,9 +283,7 @@ export class EditStationComponent implements OnInit {
 
   updateStation(): void {
     if (!this.formEditStation.valid) {
-      this.alertService
-        .open('Форма не валидна', { status: TuiNotification.Warning })
-        .subscribe();
+      this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }
 
@@ -314,8 +291,7 @@ export class EditStationComponent implements OnInit {
       return;
     }
 
-    const data: CreateStationDto = this.formEditStation
-      .value as unknown as CreateStationDto;
+    const data: CreateStationDto = this.formEditStation.value as unknown as CreateStationDto;
     if (!data.aroundClock) {
       // Без этого кринжа не работает =))))
       data.startWork = this.formatTime(data.startWork as unknown as TuiTime);
@@ -334,14 +310,10 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.alertService
-            .open('Обновил', { status: TuiNotification.Success })
-            .subscribe();
+          this.alertService.open('Обновил', { status: TuiNotification.Success }).subscribe();
         },
         () => {
-          this.alertService
-            .open('Ошибка сервера', { status: TuiNotification.Error })
-            .subscribe();
+          this.alertService.open('Ошибка сервера', { status: TuiNotification.Error }).subscribe();
         }
       );
   }

@@ -1,16 +1,9 @@
 <tui-island>
   <form [formGroup]="formEditStation">
-    <tui-input class="tui-form__row" formControlName="address">
-      Адрес
-    </tui-input>
-    <tui-input class="tui-form__row" formControlName="name">
-      Название
-    </tui-input>
+    <tui-input class="tui-form__row" formControlName="address"> Адрес </tui-input>
+    <tui-input class="tui-form__row" formControlName="name"> Название </tui-input>
     <div tuiGroup class="tui-form__row">
-      <tui-checkbox-block
-        contentAlign="right"
-        formControlName="aroundClock"
-        (change)="changeAroundClock()">
+      <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="changeAroundClock()">
         Круглосуточно
       </tui-checkbox-block>
       <tui-input-time
@@ -26,24 +19,12 @@
         Окончание работы
       </tui-input-time>
     </div>
-    <tui-text-area class="tui-form__row" formControlName="description"
-      >Описание</tui-text-area
-    >
+    <tui-text-area class="tui-form__row" formControlName="description">Описание</tui-text-area>
     <div class="flex-wrap tui-form__row">
-      <button
-        class="tui-form__button center"
-        tuiButton
-        size="s"
-        (click)="updateStation()"
-        appearance="primary">
+      <button class="tui-form__button center" tuiButton size="s" (click)="updateStation()" appearance="primary">
         Сохранить
       </button>
-      <button
-        class="tui-form__button right"
-        tuiButton
-        size="s"
-        (click)="removeStation()"
-        appearance="accent">
+      <button class="tui-form__button right" tuiButton size="s" (click)="removeStation()" appearance="accent">
         Удалить
       </button>
     </div>
@@ -52,11 +33,7 @@
   <tui-accordion-item class="tui-form__row">
     Редактор услуг
     <ng-template tuiAccordionItemContent>
-      <table
-        tuiTable
-        class="tui-form__row"
-        [style.width.%]="100"
-        [columns]="columnsServices">
+      <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columnsServices">
         <thead>
           <tr tuiThGroup>
             <th *tuiHead="'action-1'" tuiTh [sorter]="null"></th>
@@ -68,42 +45,28 @@
             <th *tuiHead="'action-2'" tuiTh [sorter]="null"></th>
           </tr>
         </thead>
-        <tbody
-          *tuiLet="services | tuiTableSort as servicesSort"
-          tuiTbody
-          [data]="servicesSort">
+        <tbody *tuiLet="services | tuiTableSort as servicesSort" tuiTbody [data]="servicesSort">
           <tr tuiTr>
             <td *tuiCell="'action-1'" tuiTd></td>
             <td *tuiCell="'name'" tuiTd>
-              <tui-select
+              <tui-combo-box
+                *tuiLet="listServices$ | async as listServices"
                 class="b-form"
-                [tuiTextfieldLabelOutside]="true"
-                [valueContent]="
-                  filterClassServices ? stringify(filterClassServices) : loading
-                "
-                [(ngModel)]="classServiceForStationId">
-                Услуга
-                <ng-template tuiDataList>
-                  <tui-data-list *ngIf="filterClassServices; else loading">
-                    <button
-                      *ngFor="let service of filterClassServices"
-                      tuiOption
-                      [value]="service.id">
-                      {{ service.name }}
-                    </button>
-                  </tui-data-list>
-                </ng-template>
-                <ng-template #loading>
-                  <tui-loader class="tui-space_vertical-3 loader"></tui-loader>
-                </ng-template>
-              </tui-select>
+                [(ngModel)]="classServiceForStation"
+                [stringify]="serviceStringify">
+                Поиск услуги
+                <input tuiTextfield placeholder="Поиск по названию" />
+                <tui-data-list-wrapper
+                  *tuiDataList
+                  [itemContent]="serviceStringify | tuiStringifyContent"
+                  [items]="listServices | tuiFilterByInputWith : serviceStringify"></tui-data-list-wrapper>
+              </tui-combo-box>
             </td>
             <td *tuiCell="'duration'" tuiTd>
               <tui-input-number [(ngModel)]="duration"></tui-input-number>
             </td>
             <td *tuiCell="'bonusPercentage'" tuiTd>
-              <tui-input-number
-                [(ngModel)]="bonusPercentage"></tui-input-number>
+              <tui-input-number [(ngModel)]="bonusPercentage"></tui-input-number>
             </td>
             <td *tuiCell="'price'" tuiTd>
               <tui-input-number [(ngModel)]="price"></tui-input-number>
@@ -121,9 +84,7 @@
                 (click)="addService()"></button>
             </td>
           </tr>
-          <tr
-            *ngFor="let service of services | tuiTableSort; let i = index"
-            tuiTr>
+          <tr *ngFor="let service of services | tuiTableSort; let i = index" tuiTr>
             <td *tuiCell="'action-1'" tuiTd>
               <button
                 tuiIconButton
@@ -137,19 +98,16 @@
               {{ service.name }}
             </td>
             <td *tuiCell="'duration'" tuiTd>
-              <tui-input-number
-                [(ngModel)]="service.duration"></tui-input-number>
+              <tui-input-number [(ngModel)]="service.duration"></tui-input-number>
             </td>
             <td *tuiCell="'bonusPercentage'" tuiTd>
-              <tui-input-number
-                [(ngModel)]="service.bonusPercentage"></tui-input-number>
+              <tui-input-number [(ngModel)]="service.bonusPercentage"></tui-input-number>
             </td>
             <td *tuiCell="'price'" tuiTd>
               <tui-input-number [(ngModel)]="service.price"></tui-input-number>
             </td>
             <td *tuiCell="'discount'" tuiTd>
-              <tui-input-number
-                [(ngModel)]="service.discount"></tui-input-number>
+              <tui-input-number [(ngModel)]="service.discount"></tui-input-number>
             </td>
             <td *tuiCell="'action-2'" tuiTd>
               <button
@@ -181,83 +139,42 @@
     Редактор постов
     <ng-template tuiAccordionItemContent>
       <div tuiGroup>
-        <tui-input [(ngModel)]="namePost">
-          Введите название нового поста
-        </tui-input>
-        <button
-          class="tui-form__button"
-          tuiButton
-          (click)="createPost()"
-          appearance="primary">
-          Создать пост
-        </button>
+        <tui-input [(ngModel)]="namePost"> Введите название нового поста </tui-input>
+        <button class="tui-form__button" tuiButton (click)="createPost()" appearance="primary">Создать пост</button>
       </div>
-      <div
-        class="content-post tui-form__row"
-        *ngIf="posts.length > 0; else nothing">
+      <div class="content-post tui-form__row" *ngIf="posts.length > 0; else nothing">
         <nav tuiTabs vertical="left" class="left">
-          <button
-            tuiTab
-            *ngFor="let post of posts; let i = index"
-            (click)="selectPost(i)">
+          <button tuiTab *ngFor="let post of posts; let i = index" (click)="selectPost(i)">
             {{ post.name }}
           </button>
         </nav>
         <div [style.width.%]="100">
           <div tuiGroup class="tui-form__row">
-            <tui-input [(ngModel)]="posts[indexPost].name">
-              Название поста
-            </tui-input>
-            <button
-              class="tui-form__button"
-              tuiButton
-              (click)="updateNamePost()"
-              appearance="primary">
+            <tui-input [(ngModel)]="posts[indexPost].name"> Название поста </tui-input>
+            <button class="tui-form__button" tuiButton (click)="updateNamePost()" appearance="primary">
               Сохранить
             </button>
           </div>
-          <table
-            tuiTable
-            class="tui-form__row"
-            [style.width.%]="100"
-            [columns]="columnsServicesOnPost">
+          <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columnsServicesOnPost">
             <thead>
               <tr tuiThGroup>
                 <th *tuiHead="'name'" tuiTh>Название</th>
                 <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
               </tr>
             </thead>
-            <tbody
-              *tuiLet="posts[indexPost].services as servicesSort"
-              tuiTbody
-              [data]="servicesSort">
+            <tbody *tuiLet="posts[indexPost].services as servicesSort" tuiTbody [data]="servicesSort">
               <tr tuiTr>
                 <td *tuiCell="'name'" tuiTd>
-                  <tui-select
-                    class="b-form"
-                    [tuiTextfieldLabelOutside]="true"
-                    [valueContent]="
-                      posts[indexPost].freeServices
-                        ? stringify(posts[indexPost].freeServices)
-                        : loading
-                    "
-                    [(ngModel)]="stationServiceIdForPost">
-                    Услуга
-                    <ng-template tuiDataList>
-                      <tui-data-list *ngIf="services; else loading">
-                        <button
-                          *ngFor="let service of posts[indexPost].freeServices"
-                          tuiOption
-                          [value]="service.id">
-                          {{ service.name }}
-                        </button>
-                      </tui-data-list>
-                    </ng-template>
-                    <ng-template #loading>
-                      <tui-loader
-                        class="tui-space_vertical-3 loader"></tui-loader>
-                    </ng-template>
-                  </tui-select>
+                  <tui-combo-box class="b-form" [(ngModel)]="stationServiceForPost" [stringify]="serviceStringify">
+                    Поиск услуги
+                    <input tuiTextfield placeholder="Поиск по названию" />
+                    <tui-data-list-wrapper
+                      *tuiDataList
+                      [itemContent]="serviceStringify | tuiStringifyContent"
+                      [items]="
+                        posts[indexPost].freeServices | tuiFilterByInputWith : serviceStringify
+                      "></tui-data-list-wrapper>
+                  </tui-combo-box>
                 </td>
                 <td *tuiCell="'actions'" tuiTd>
                   <button

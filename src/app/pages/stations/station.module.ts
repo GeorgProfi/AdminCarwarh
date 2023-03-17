@@ -1,18 +1,8 @@
 import { NgModule } from '@angular/core';
 import { StationComponent } from './station.component';
-import {
-  TuiReorderModule,
-  TuiTableModule,
-  TuiTablePaginationModule,
-} from '@taiga-ui/addon-table';
+import { TuiReorderModule, TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
-import {
-  AsyncPipe,
-  DatePipe,
-  KeyValuePipe,
-  NgForOf,
-  NgIf,
-} from '@angular/common';
+import { AsyncPipe, DatePipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiButtonModule,
   TuiDataListModule,
@@ -30,6 +20,7 @@ import {
   TuiAccordionModule,
   TuiArrowModule,
   TuiCheckboxBlockModule,
+  TuiComboBoxModule,
   TuiDataListDropdownManagerModule,
   TuiDataListWrapperModule,
   TuiFilterByInputPipeModule,
@@ -43,6 +34,7 @@ import {
   TuiPaginationModule,
   TuiSelectModule,
   TuiSliderModule,
+  TuiStringifyContentPipeModule,
   TuiTabsModule,
   TuiTagModule,
   TuiTextAreaModule,
@@ -102,13 +94,10 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     RouterModule,
     TuiTabsModule,
     TuiFilterByInputPipeModule,
+    TuiComboBoxModule,
+    TuiStringifyContentPipeModule,
   ],
-  declarations: [
-    StationComponent,
-    CreateStationComponent,
-    EditStationComponent,
-    TimePipe,
-  ],
+  declarations: [StationComponent, CreateStationComponent, EditStationComponent, TimePipe],
   exports: [StationComponent, TimePipe],
 })
 export class StationModule {}

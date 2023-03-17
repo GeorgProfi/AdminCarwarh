@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Service } from '../../../common/entities/service.entity';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { Client } from '../../../common/entities/client.entity';
 import { filter, startWith } from 'rxjs/operators';
@@ -59,11 +59,7 @@ export class EditReservationComponent implements OnInit {
   newClient: any;
 
   // Services:
-  listServices$ = this.servicesService.getAllClassServices().pipe(
-    map((data: Service[]) => {
-      return data.map((service: Service) => new Service(service));
-    })
-  );
+  listServices$ = this.servicesService.getAllClassServices();
   serviceStringify(service: Service): string {
     return service.name;
   }

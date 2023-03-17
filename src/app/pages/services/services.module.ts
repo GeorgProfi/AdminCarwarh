@@ -13,8 +13,10 @@ import {
 import {
   TuiAccordionModule,
   TuiCheckboxBlockModule,
+  TuiComboBoxModule,
   TuiDataListWrapperModule,
   TuiFieldErrorPipeModule,
+  TuiFilterByInputPipeModule,
   TuiInputModule,
   TuiInputNumberModule,
   TuiInputTimeModule,
@@ -22,13 +24,11 @@ import {
   TuiPaginationModule,
   TuiSelectModule,
   TuiSelectOptionModule,
+  TuiStringifyContentPipeModule,
   TuiTextAreaModule,
 } from '@taiga-ui/kit';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import {
-  TuiTableModule,
-  TuiTablePaginationModule,
-} from '@taiga-ui/addon-table';
+import { TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateServiceComponent } from './create-service/create-service.component';
@@ -68,12 +68,11 @@ import { RouterLink, RouterModule } from '@angular/router';
     TuiFieldErrorPipeModule,
     TuiLinkModule,
     TuiInputNumberModule,
+    TuiComboBoxModule,
+    TuiStringifyContentPipeModule,
+    TuiFilterByInputPipeModule,
   ],
-  declarations: [
-    ServicesComponent,
-    CreateServiceComponent,
-    EditServiceComponent,
-  ],
+  declarations: [ServicesComponent, CreateServiceComponent, EditServiceComponent],
   exports: [ServicesComponent],
 })
 export class ServicesModule {}

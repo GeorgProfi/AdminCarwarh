@@ -2,11 +2,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { StationService } from '../../../common/services/api/station.service';
-import {
-  TuiContextWithImplicit,
-  tuiPure,
-  TuiStringHandler,
-} from '@taiga-ui/cdk';
 import { Station } from '../../../common/entities/station.entity';
 
 @Component({
@@ -22,30 +17,11 @@ export class EditServiceComponent implements OnInit {
     private stationService: StationService
   ) {}
 
-  stations!: Station[];
-  stationId!: string;
-  @tuiPure
-  stringify(
-    stations: Station[]
-  ): TuiStringHandler<TuiContextWithImplicit<string>> {
-    const map = new Map(
-      stations.map(({ id, name }) => [id, name] as [string, string])
-    );
-    return ({ $implicit }: TuiContextWithImplicit<string>) =>
-      map.get($implicit) || '';
-  }
+  station!: Station;
 
   name!: string;
 
-  readonly columnsServices = [
-    `action-1`,
-    `station`,
-    'duration',
-    'bonusPercentage',
-    'price',
-    'discount',
-    `action-2`,
-  ];
+  readonly columnsServices = [`action-1`, `station`, 'duration', 'bonusPercentage', 'price', 'discount', `action-2`];
   services: any[] = [];
   duration!: number;
   bonusPercentage!: number;
@@ -59,7 +35,7 @@ export class EditServiceComponent implements OnInit {
     this.stationService
       .addServiceOnStation({
         idClassService: this.id,
-        stationId: this.stationId,
+        stationId: this.station.id,
         bonusPercentage: this.bonusPercentage,
         price: this.price,
         discount: this.discount,
@@ -119,23 +95,23 @@ export class EditServiceComponent implements OnInit {
     console.log(1);
   }
 
+  listStation$ = this.stationService.getALLStation();
+  stationStringify(station: Station): string {
+    return station.name;
+  }
+
   ngOnInit(): void {
     this.servicesService.getServiceById(this.id).subscribe(data => {
       this.name = data.name;
     });
-    this.stationService.getALLStation().subscribe(stations => {
-      this.stations = stations;
-    });
-    this.servicesService
-      .getServicesForClass(this.id)
-      .subscribe((data: any[]) => {
-        console.log(data);
-        data.map(data => {
-          data.stationName = data.station.name;
-          return data;
-        });
-        this.services = data;
+    this.servicesService.getServicesForClass(this.id).subscribe((data: any[]) => {
+      console.log(data);
+      data.map(data => {
+        data.stationName = data.station.name;
+        return data;
       });
+      this.services = data;
+    });
   }
 
   removeServiceClass() {

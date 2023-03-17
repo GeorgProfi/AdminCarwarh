@@ -1,35 +1,15 @@
 <div [style.margin.px]="40">
   <div tuiGroup class="group tui-row tui-space_top-5">
-    <button
-      tuiButton
-      type="button"
-      [appearance]="status === 0 ? 'primary' : 'outline'"
-      size="l"
-      (click)="setStatus(0)">
+    <button tuiButton type="button" [appearance]="status === 0 ? 'primary' : 'outline'" size="l" (click)="setStatus(0)">
       Ожидание клиента
     </button>
-    <button
-      tuiButton
-      type="button"
-      [appearance]="status === 1 ? 'primary' : 'outline'"
-      size="l"
-      (click)="setStatus(1)">
+    <button tuiButton type="button" [appearance]="status === 1 ? 'primary' : 'outline'" size="l" (click)="setStatus(1)">
       Клиент пришел
     </button>
-    <button
-      tuiButton
-      type="button"
-      [appearance]="status === 2 ? 'primary' : 'outline'"
-      size="l"
-      (click)="setStatus(2)">
+    <button tuiButton type="button" [appearance]="status === 2 ? 'primary' : 'outline'" size="l" (click)="setStatus(2)">
       Клиент не пришел
     </button>
-    <button
-      tuiButton
-      type="button"
-      [appearance]="status === 3 ? 'primary' : 'outline'"
-      size="l"
-      (click)="setStatus(3)">
+    <button tuiButton type="button" [appearance]="status === 3 ? 'primary' : 'outline'" size="l" (click)="setStatus(3)">
       Услуга оказана
     </button>
   </div>
@@ -67,17 +47,10 @@
   </tui-island>
 
   <tui-island class="tui-row">
-    <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">
-      Список услуг
-    </h3>
-    <p class="tui-island__paragraph">
-      Стоимость: <tui-money [value]="purchaseAmount"></tui-money>
-    </p>
+    <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">Список услуг</h3>
+    <p class="tui-island__paragraph">Стоимость: <tui-money [value]="purchaseAmount"></tui-money></p>
     <p class="tui-island__paragraph">Время: 2 ч. 30 мин. (9:30 - 12:00)</p>
-    <div
-      tuiGroup
-      class="tui-form__row"
-      *ngFor="let service of services; index as idx">
+    <div tuiGroup class="tui-form__row" *ngFor="let service of services; index as idx">
       <tui-combo-box
         *tuiLet="listServices$ | async as listServices"
         class="b-form"
@@ -88,9 +61,7 @@
         <tui-data-list-wrapper
           *tuiDataList
           [itemContent]="serviceStringify | tuiStringifyContent"
-          [items]="
-            listServices | tuiFilterByInputWith : serviceStringify
-          "></tui-data-list-wrapper>
+          [items]="listServices | tuiFilterByInputWith : serviceStringify"></tui-data-list-wrapper>
       </tui-combo-box>
       <button
         tuiIconButton
@@ -101,20 +72,12 @@
         icon="tuiIconCloseLarge"
         class="tui-group__auto-width-item"></button>
     </div>
-    <button
-      tuiButton
-      type="button"
-      appearance="flat"
-      size="m"
-      (click)="addService()"
-      class="tui-island__footer-button">
+    <button tuiButton type="button" appearance="flat" size="m" (click)="addService()" class="tui-island__footer-button">
       Добавить услугу
     </button>
   </tui-island>
 
   <div class="tui-form__buttons tui-form__buttons_align_center">
-    <button tuiButton type="button" (click)="save()" class="tui-form__button">
-      Сохранить
-    </button>
+    <button tuiButton type="button" (click)="save()" class="tui-form__button">Сохранить</button>
   </div>
 </div>
