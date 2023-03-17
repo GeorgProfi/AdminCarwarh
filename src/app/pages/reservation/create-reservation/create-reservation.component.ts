@@ -3,7 +3,7 @@ import { ReservationService } from '../../../common/services/api/reservation.ser
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, switchMap } from 'rxjs';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { filter, startWith } from 'rxjs/operators';
 import { Client } from '../../../common/entities/client.entity';
@@ -25,6 +25,8 @@ export class CreateReservationComponent {
     private clientsService: ClientsService,
     private stationService: StationService
   ) {}
+  stationId$ = new BehaviorSubject<string | undefined>(undefined);
+  servicesIds$ = new BehaviorSubject<string[] | undefined>(undefined);
 
   // Client
   searchClient$ = new BehaviorSubject<string | null>('');
@@ -42,11 +44,15 @@ export class CreateReservationComponent {
   client: any;
 
   // Services:
-  listServices$ = this.servicesService.getAllClassServices().pipe(
-    map((data: Service[]) => {
-      console.log(data);
-      return data.map((service: Service) => new Service(service));
-    })
+  listServices$ = combineLatest([this.stationId$]).pipe(
+    switchMap(query =>
+      this.servicesService.getAllClassServices(...query).pipe(
+        map((data: Service[]) => {
+          console.log(data);
+          return data.map((service: Service) => new Service(service));
+        })
+      )
+    )
   );
   serviceStringify(service: Service): string {
     return service.name;
@@ -63,10 +69,11 @@ export class CreateReservationComponent {
   }
 
   // Stations:
-  stations$ = this.stationService.getALLStation();
+  stations$ = combineLatest([this.servicesIds$]).pipe(switchMap(query => this.stationService.getALLStation(...query)));
   stationsStringify(station: Station): string {
     return station.name;
   }
+
   station!: Station;
 
   // Day:

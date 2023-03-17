@@ -12,15 +12,12 @@ import { Observable } from 'rxjs';
 export class ServicesService {
   constructor(private http: HttpClient) {}
 
-  getAllClassServices(): Observable<Service[]> {
+  getAllClassServices(stationId?: string): Observable<Service[]> {
     return this.http.get<Service[]>(`${environment.apiUrl}/services/all`);
   }
 
   getServicesList(data: GetServicesListDto): Observable<PaginateRes<Service>> {
-    return this.http.get<PaginateRes<Service>>(
-      `${environment.apiUrl}/services`,
-      { params: { ...data } }
-    );
+    return this.http.get<PaginateRes<Service>>(`${environment.apiUrl}/services`, { params: { ...data } });
   }
 
   createService(data: CreateServiceDto) {
@@ -32,9 +29,7 @@ export class ServicesService {
   }
 
   getServicesForClass(id: string) {
-    return this.http.get<any[]>(
-      `${environment.apiUrl}/services/get-services-for-class/${id}`
-    );
+    return this.http.get<any[]>(`${environment.apiUrl}/services/get-services-for-class/${id}`);
   }
 
   updateService(id: string, data: UpdateServiceDto) {
@@ -42,8 +37,6 @@ export class ServicesService {
   }
 
   removeServiceClass(id: string) {
-    return this.http.delete<void>(
-      `${environment.apiUrl}/services/delete/${id}`
-    );
+    return this.http.delete<void>(`${environment.apiUrl}/services/delete/${id}`);
   }
 }
