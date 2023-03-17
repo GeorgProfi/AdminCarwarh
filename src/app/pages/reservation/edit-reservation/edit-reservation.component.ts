@@ -29,7 +29,7 @@ export class EditReservationComponent implements OnInit {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: any) => {
       console.log(order);
       this.client = order.client;
-      this.services = order.service.map((service: any) => {
+      this.services = order.services.map((service: any) => {
         service.name = service.classServices.name;
         return service;
       });
@@ -84,11 +84,12 @@ export class EditReservationComponent implements OnInit {
   }
 
   save() {
+    const clientId = this.replaceClient ? this.newClient.id : undefined;
     this.reservationService
       .updateReservation({
         orderId: this.context.data.id,
         status: this.status,
-        clientId: this.newClient.id,
+        clientId,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
       })
       .subscribe(() => {
