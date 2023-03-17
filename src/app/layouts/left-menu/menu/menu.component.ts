@@ -37,7 +37,7 @@ export class MenuComponent {
       link: 'setting-profile',
     },
 
-    { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },
+    // { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },
   ];
 
   async logout() {
