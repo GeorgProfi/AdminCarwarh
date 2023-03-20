@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../auth/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiValidationError } from '@taiga-ui/cdk';
+import { RegistrationService } from '../../common/services/api/registration.service';
+import { TuiDialogService } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-register',
@@ -10,13 +11,17 @@ import { TuiValidationError } from '@taiga-ui/cdk';
   styleUrls: ['./register.component.less'],
 })
 export class RegisterComponent {
-  constructor(private route: Router, private authService: AuthService) {}
+  constructor(
+    private route: Router,
+    private registrationService: RegistrationService,
+    @Inject(TuiDialogService) private readonly dialogService: TuiDialogService
+  ) {}
 
   authForm = new FormGroup({
-    nameCarWash: new FormControl('TEST', Validators.required),
-    email: new FormControl('TEST@email.com', Validators.required),
-    password: new FormControl('1234', Validators.required),
-    passwordRepeat: new FormControl('1234', Validators.required),
+    nameCarWash: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+    passwordRepeat: new FormControl('', Validators.required),
   });
 
   enabledError = false;
@@ -32,17 +37,19 @@ export class RegisterComponent {
       return;
     }
 
-    this.authService
+    this.registrationService
       .register({
         password: data.password,
         email: data.email,
-        nameCarWash: data.nameCarWash,
+        name: data.nameCarWash,
       })
       .subscribe({
-        next: data => {
-          this.route.navigateByUrl('');
+        next: () => {
+          this.dialogService.open(`Письмо с подтверждением отправлено на почту ${data.email}`).subscribe();
+          this.authForm.reset();
         },
         error: error => {
+          console.log(error);
           this.enabledError = true;
         },
       });

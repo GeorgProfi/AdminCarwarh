@@ -13,26 +13,16 @@
 
   <div class="tui-form__row tui-form__row_multi-fields">
     <div class="tui-form__multi-field">
-      <tui-input-password formControlName="password">
-        Пароль
-      </tui-input-password>
+      <tui-input-password formControlName="password"> Пароль </tui-input-password>
     </div>
     <div class="tui-form__multi-field">
-      <tui-input-password formControlName="passwordRepeat">
-        Повтор пароля
-      </tui-input-password>
+      <tui-input-password formControlName="passwordRepeat"> Повтор пароля </tui-input-password>
     </div>
   </div>
 
   <tui-error [error]="computedError"></tui-error>
 
   <div class="tui-form__buttons">
-    <button
-      tuiButton
-      class="tui-form__button"
-      type="submit"
-      appearance="primary">
-      Зарегестрироваться
-    </button>
+    <button tuiButton class="tui-form__button" type="submit" appearance="primary">Зарегестрироваться</button>
   </div>
 </form>
