@@ -1,4 +1,4 @@
-import { Pagination } from '../../../common/dto/pagination.dto';
+import { Pagination } from '../pagination.dto';
 
 export interface GetServicesListDto extends Pagination {
   stationId?: string;

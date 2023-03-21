@@ -8,7 +8,7 @@ import { ClassService } from '../../../common/entities/class-service.entity';
 import { DateTime } from 'luxon';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
-import { CreateStationDto } from '../dto/create-station.dto';
+import { CreateStationDto } from '../../../common/dto/station/create-station.dto';
 
 interface Post {
   id: string;

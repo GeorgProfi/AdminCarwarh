@@ -6,7 +6,6 @@ import { RegisterComponent } from './auth-page/register/register.component';
 import { ClientsComponent } from './pages/clients/clients.component';
 import { StationComponent } from './pages/stations/station.component';
 import { NotificationComponent } from './pages/marketing/notification/notification.component';
-import { DebugComponent } from './pages/debug/debug.component';
 import { AuthPageComponent } from './auth-page/auth-page.component';
 import { ReservationComponent } from './pages/reservation/reservation.component';
 import { Error404Component } from './pages/error-404/error-404.component';
@@ -42,10 +41,7 @@ const routes: Routes = [
         component: EditClientComponent,
         title: 'Редактор клиента',
         data: {
-          breadcrumbs: [
-            { title: 'Клиенты', url: 'clients' },
-            { title: 'Редактор' },
-          ],
+          breadcrumbs: [{ title: 'Клиенты', url: 'clients' }, { title: 'Редактор' }],
         },
       },
       {
@@ -58,10 +54,7 @@ const routes: Routes = [
         component: EditStationComponent,
         title: 'Редактор станции',
         data: {
-          breadcrumbs: [
-            { title: 'Станции', url: 'stations' },
-            { title: 'Редактор' },
-          ],
+          breadcrumbs: [{ title: 'Станции', url: 'stations' }, { title: 'Редактор' }],
         },
       },
       {
@@ -74,10 +67,7 @@ const routes: Routes = [
         component: EditServiceComponent,
         title: 'Редактор услуги',
         data: {
-          breadcrumbs: [
-            { title: 'Услуги', url: 'services' },
-            { title: 'Редактор' },
-          ],
+          breadcrumbs: [{ title: 'Услуги', url: 'services' }, { title: 'Редактор' }],
         },
       },
       {
@@ -139,8 +129,6 @@ const routes: Routes = [
         component: SettingProfileComponent,
         title: 'Настрки профиля',
       },
-
-      { path: 'debug', component: DebugComponent },
     ],
     canActivate: [AuthGuard],
   },

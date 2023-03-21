@@ -34,14 +34,18 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     const query = this.route.parseUrl(this.route.url).queryParams;
-    console.log(query);
-    const email = query['reg_email'];
-    if (email) {
+    let email: string = '';
+    if (query['reg_email']) {
       this.dialogService.open(`Почта успешно подтверждена!`).subscribe();
-      this.authForm.patchValue({
-        email,
-      });
+      email = query['reg_email'];
+    } else if (query['refresh_pass_email']) {
+      this.dialogService.open(`Пароль успешно обновлен!`).subscribe();
+      email = query['refresh_pass_email'];
+    } else if (query['change_email_email']) {
+      this.dialogService.open(`Почта успешно обновлена!`).subscribe();
+      email = query['change_email_email'];
     }
+    this.authForm.patchValue({ email });
   }
 
   authForm = new FormGroup({

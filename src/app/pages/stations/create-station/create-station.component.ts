@@ -1,14 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Inject,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StationService } from '../../../common/services/api/station.service';
 import { TuiTime } from '@taiga-ui/cdk';
-import { CreateStationDto } from '../dto/create-station.dto';
+import { CreateStationDto } from '../../../common/dto/station/create-station.dto';
 import { DateTime } from 'luxon';
 import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
 
@@ -71,14 +65,11 @@ export class CreateStationComponent {
 
   onSubmit(): void {
     if (!this.formCreateStation.valid) {
-      this.alertService
-        .open('Форма не валидна', { status: TuiNotification.Warning })
-        .subscribe();
+      this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }
 
-    const data: CreateStationDto = this.formCreateStation
-      .value as unknown as CreateStationDto;
+    const data: CreateStationDto = this.formCreateStation.value as unknown as CreateStationDto;
     if (!data.aroundClock) {
       // Без этого кринжа не работает =))))
       data.startWork = this.formatTime(data.startWork as unknown as TuiTime);
@@ -91,14 +82,10 @@ export class CreateStationComponent {
         this.formCreateStation.controls.endWork.enable();
         this.formCreateStation.reset();
         this.createEvent.emit();
-        this.alertService
-          .open('Создал', { status: TuiNotification.Success })
-          .subscribe();
+        this.alertService.open('Создал', { status: TuiNotification.Success }).subscribe();
       },
       error => {
-        this.alertService
-          .open('Ошибка сервера', { status: TuiNotification.Error })
-          .subscribe();
+        this.alertService.open('Ошибка сервера', { status: TuiNotification.Error }).subscribe();
       }
     );
   }

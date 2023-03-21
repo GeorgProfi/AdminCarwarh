@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CreateNotificationDto } from '../dto/create-notification.dto';
+import { CreateNotificationDto } from '../../../../common/dto/notification/create-notification.dto';
 import { NotificationService } from '../../../../common/services/api/notification.service';
 
 @Component({
@@ -18,8 +18,7 @@ export class CreateNotificationComponent {
   });
 
   onSubmit() {
-    const data: CreateNotificationDto = this.formCreateNotification
-      .value as CreateNotificationDto;
+    const data: CreateNotificationDto = this.formCreateNotification.value as CreateNotificationDto;
     this.notificationService.createNotification(data).subscribe(data => {
       this.formCreateNotification.reset();
     });

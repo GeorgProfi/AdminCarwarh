@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { GetServicesListDto } from '../../../pages/services/dto/get-services-list.dto';
+import { GetServicesListDto } from '../../dto/services/get-services-list.dto';
 import { PaginateRes } from '../../dto/paginate-response.dto';
 import { Service } from '../../entities/service.entity';
-import { CreateServiceDto } from '../../../pages/services/dto/create-service.dto';
-import { UpdateServiceDto } from '../../../pages/services/dto/update-service.dto';
+import { CreateServiceDto } from '../../dto/services/create-service.dto';
+import { UpdateServiceDto } from '../../dto/services/update-service.dto';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
