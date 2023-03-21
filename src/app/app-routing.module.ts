@@ -122,12 +122,12 @@ const routes: Routes = [
       {
         path: 'setting-company',
         component: SettingCompanyComponent,
-        title: 'Настрки компании',
+        title: 'Настройки компании',
       },
       {
         path: 'setting-profile',
         component: SettingProfileComponent,
-        title: 'Настрки профиля',
+        title: 'Настройки профиля',
       },
     ],
     canActivate: [AuthGuard],

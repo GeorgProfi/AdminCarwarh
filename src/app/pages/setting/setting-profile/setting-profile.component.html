@@ -1,34 +1,24 @@
 <h3 class="tui-form__header">Смена email</h3>
-<tui-input formControlName="email">
+<tui-input [(ngModel)]="email">
   Email
   <input tuiTextfield type="email" />
 </tui-input>
 <div class="tui-form__buttons">
-  <button tuiButton class="tui-form__button" appearance="primary">
-    Подтвердить
-  </button>
+  <button tuiButton class="tui-form__button" appearance="primary" (click)="changeEmail()">Подтвердить</button>
 </div>
 
 <h3 class="tui-form__header">Смена пароля</h3>
 <div class="tui-form__row">
-  <tui-input-password [(ngModel)]="password">
-    Старый пароль
-  </tui-input-password>
+  <tui-input-password [(ngModel)]="oldPassword"> Старый пароль </tui-input-password>
 </div>
 <div class="tui-form__row tui-form__row_multi-fields">
   <div class="tui-form__multi-field">
-    <tui-input-password [(ngModel)]="password">
-      Новый пароль
-    </tui-input-password>
+    <tui-input-password [(ngModel)]="newPassword"> Новый пароль </tui-input-password>
   </div>
   <div class="tui-form__multi-field">
-    <tui-input-password [(ngModel)]="repeatPassword">
-      Повтор нового пароля
-    </tui-input-password>
+    <tui-input-password [(ngModel)]="repeatPassword"> Повтор нового пароля </tui-input-password>
   </div>
 </div>
 <div class="tui-form__buttons">
-  <button tuiButton class="tui-form__button" appearance="primary">
-    Сохранить
-  </button>
+  <button tuiButton class="tui-form__button" appearance="primary" (click)="changePassword()">Сохранить</button>
 </div>
