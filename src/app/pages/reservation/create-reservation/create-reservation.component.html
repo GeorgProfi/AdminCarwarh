@@ -19,28 +19,20 @@
             [items]="clients$ | async"></tui-data-list-wrapper>
         </tui-combo-box>
 
-        <h3
-          class="tui-form__header tui-form__header_margin-top_none tui-form__row">
-          Список услуг
-        </h3>
-        <div
-          tuiGroup
-          class="tui-form__row"
-          *ngFor="let service of services; index as idx">
+        <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">Список услуг</h3>
+        <div tuiGroup class="tui-form__row" *ngFor="let service of services; index as idx">
           <tui-combo-box
             *tuiLet="listServices$ | async as listServices"
             class="b-form"
             [(ngModel)]="services[idx]"
             [stringify]="serviceStringify"
-            (ngModelChange)="searchTimes()">
+            (ngModelChange)="changeServices()">
             Поиск услуги
             <input tuiTextfield placeholder="Поиск по названию" />
             <tui-data-list-wrapper
               *tuiDataList
               [itemContent]="serviceStringify | tuiStringifyContent"
-              [items]="
-                listServices | tuiFilterByInputWith : serviceStringify
-              "></tui-data-list-wrapper>
+              [items]="listServices | tuiFilterByInputWith : serviceStringify"></tui-data-list-wrapper>
           </tui-combo-box>
           <button
             tuiIconButton
@@ -51,12 +43,7 @@
             icon="tuiIconCloseLarge"
             class="tui-group__auto-width-item"></button>
         </div>
-        <button
-          tuiButton
-          type="button"
-          icon="tuiIconPlusLarge"
-          (click)="addService()"
-          class="tui-form__row">
+        <button tuiButton type="button" icon="tuiIconPlusLarge" (click)="addService()" class="tui-form__row">
           Добавить услугу
         </button>
       </div>
@@ -66,39 +53,24 @@
           class="b-form tui-form__row"
           [stringify]="stationsStringify"
           [(ngModel)]="station"
-          (ngModelChange)="searchTimes()">
+          (ngModelChange)="changeStation()">
           Поиск станции
           <input tuiTextfield placeholder="Поиск по названию" />
           <tui-data-list-wrapper
             *tuiDataList
             [itemContent]="stationsStringify | tuiStringifyContent"
-            [items]="
-              stations | tuiFilterByInputWith : stationsStringify
-            "></tui-data-list-wrapper>
+            [items]="stations | tuiFilterByInputWith : stationsStringify"></tui-data-list-wrapper>
         </tui-combo-box>
-        <tui-input-date
-          class="tui-form__row"
-          [(ngModel)]="day"
-          (ngModelChange)="searchTimes()">
+        <tui-input-date class="tui-form__row" [(ngModel)]="day" (ngModelChange)="searchTimes()">
           Choose a date
         </tui-input-date>
-        <tui-input-time
-          *ngIf="times"
-          class="tui-form__row"
-          [items]="times"
-          [(ngModel)]="time">
+        <tui-input-time *ngIf="times" class="tui-form__row" [items]="times" [(ngModel)]="time">
           Input time
         </tui-input-time>
       </div>
     </div>
     <div class="tui-form__buttons tui-form__buttons_align_end">
-      <button
-        class="tui-form__button"
-        tuiButton
-        (click)="createOrder()"
-        appearance="primary">
-        Создать
-      </button>
+      <button class="tui-form__button" tuiButton (click)="createOrder()" appearance="primary">Создать</button>
     </div>
   </ng-template>
 </tui-accordion-item>

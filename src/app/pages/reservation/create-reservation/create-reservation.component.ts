@@ -63,8 +63,12 @@ export class CreateReservationComponent {
     this.services.push({ name: '' } as Service);
   }
   removeService(idx: number) {
-    this.times = null;
     this.services.splice(idx, 1);
+    this.servicesIds$.next(this.services.filter(s => s.id).map(s => s.id));
+    this.searchTimes();
+  }
+  changeServices() {
+    this.servicesIds$.next(this.services.filter(s => s.id).map(s => s.id));
     this.searchTimes();
   }
 
@@ -76,12 +80,17 @@ export class CreateReservationComponent {
 
   station!: Station;
 
+  changeStation() {
+    this.stationId$.next(this.station.id);
+    this.searchTimes();
+  }
+
   // Day:
   day = new TuiDay(2023, 1, 28);
 
   // Time:
   searchTimes() {
-    console.log(this.services.filter(service => service.id).length);
+    this.times = null;
     if (!this.station || this.services.filter(service => service.id).length < 1) {
       return;
     }
@@ -99,8 +108,8 @@ export class CreateReservationComponent {
           })
         )
       )
-      .subscribe(times => {
-        this.times = times;
+      .subscribe(data => {
+        this.times = data;
       });
   }
   time!: TuiTime;

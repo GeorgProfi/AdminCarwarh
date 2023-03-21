@@ -13,6 +13,13 @@ export class ServicesService {
   constructor(private http: HttpClient) {}
 
   getAllClassServices(stationId?: string): Observable<Service[]> {
+    if (stationId) {
+      return this.http.get<Service[]>(`${environment.apiUrl}/services/all`, {
+        params: {
+          stationId,
+        },
+      });
+    }
     return this.http.get<Service[]>(`${environment.apiUrl}/services/all`);
   }
 
