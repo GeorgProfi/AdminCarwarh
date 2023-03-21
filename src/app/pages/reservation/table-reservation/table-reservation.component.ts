@@ -30,7 +30,6 @@ export class TableReservationComponent {
 
   // Dialog edit order:
   openEditOrder(order: any): void {
-    console.log(order);
     const dialogEditOrder = this.dialogService.open<any>(
       new PolymorpheusComponent(EditReservationComponent, this.injector),
       {
@@ -42,8 +41,7 @@ export class TableReservationComponent {
     );
     dialogEditOrder.subscribe({
       next: data => {
-        console.info(`Dialog emitted data`);
-        console.log(data);
+        this.stationId$.next(this.stationId$.value);
       },
       complete: () => {
         console.info('Dialog closed');
@@ -57,6 +55,12 @@ export class TableReservationComponent {
   stationId$ = new BehaviorSubject('00000000-0000-0000-0000-000000000000');
   stations$ = this.stationService.getALLStation();
   stationId!: string;
+
+  colorStatus = ['red', 'yellow', 'green', 'blue'];
+
+  setColorWithStatus(status: number): string {
+    return this.colorStatus[status];
+  }
 
   // Station:
   stationsStringify(station: Station): string {
