@@ -9,14 +9,11 @@ import { NotificationService } from '../../../../common/services/api/notificatio
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditNotificationComponent implements OnInit {
-  constructor(
-    private router: ActivatedRoute,
-    private notificationService: NotificationService
-  ) {}
+  constructor(private router: ActivatedRoute, private notificationService: NotificationService) {}
 
   notificationForm = new FormGroup({
     title: new FormControl(``, Validators.required),
-    text: new FormControl(''),
+    content: new FormControl(''),
   });
 
   id: string = this.router.snapshot.params['id'];
@@ -35,7 +32,7 @@ export class EditNotificationComponent implements OnInit {
     this.notificationService.getNotification(this.id).subscribe(data => {
       this.notificationForm.patchValue({
         title: data.title,
-        text: data.title,
+        content: data.content,
       });
     });
   }

@@ -4,6 +4,7 @@ import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'r
 import { TuiFileLike } from '@taiga-ui/kit';
 import { FilesService } from '../../../common/services/api/files.service';
 import { CompanyService } from '../../../common/services/api/company.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-setting-company',
@@ -15,11 +16,16 @@ export class SettingCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.companyService.getDataCompany().subscribe((data: any) => {
+      console.log(data);
+      if (data.logo) {
+        this.logoUrl = environment.imageUrl + '/' + data.logo.fileName;
+      }
       this.description = data.description;
     });
   }
 
   description = '';
+  logoUrl: string | null = null;
 
   saveData() {
     this.companyService

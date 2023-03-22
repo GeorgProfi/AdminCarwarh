@@ -1,5 +1,5 @@
 <tui-island>
-  <form [formGroup]="notificationForm">
+  <form [formGroup]="newsForm">
     <div class="tui-form__row">
       <tui-input formControlName="title">
         Заголовок
@@ -9,12 +9,7 @@
     <div class="tui-form__row">
       <tui-text-area formControlName="text">Контент</tui-text-area>
     </div>
-    {{ urlImage }}
-    <div *tuiLet="urlImage$ | async as urlImage" class="tui-form__row">
-      <div *ngIf="urlImage">
-        <img [ngSrc]="urlImage" width="400" height="200" priority />
-      </div>
-    </div>
+    <img class="tui-form__row" *ngIf="urlImage" [src]="urlImage" width="500" height="600" />
     <div class="tui-form__row">
       <tui-input-files
         *ngIf="!control.value"
@@ -23,10 +18,7 @@
         (reject)="onReject($event)"></tui-input-files>
 
       <tui-files class="tui-space_top-1">
-        <tui-file
-          *ngIf="loadedFiles$ | async as file"
-          [file]="file"
-          (removed)="removeFile()"></tui-file>
+        <tui-file *ngIf="loadedFiles$ | async as file" [file]="file" (removed)="removeFile()"></tui-file>
 
         <tui-file
           *ngIf="rejectedFiles$ | async as file"
@@ -34,20 +26,11 @@
           [file]="file"
           (removed)="clearRejected()"></tui-file>
 
-        <tui-file
-          *ngIf="loadingFiles$ | async as file"
-          state="loading"
-          [file]="file"></tui-file>
+        <tui-file *ngIf="loadingFiles$ | async as file" state="loading" [file]="file"></tui-file>
       </tui-files>
     </div>
     <div class="tui-form__buttons">
-      <button
-        class="tui-form__button"
-        tuiButton
-        appearance="primary"
-        (click)="save()">
-        Сохранить
-      </button>
+      <button class="tui-form__button" tuiButton appearance="primary" (click)="save()">Сохранить</button>
     </div>
   </form>
 </tui-island>

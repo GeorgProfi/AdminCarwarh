@@ -1,9 +1,7 @@
 <section class="nav-panel">
   <div class="header-menu">
-    <h3 class="tui-space_left-5">Приветствую, "имя автомойки"!</h3>
-    <h3 class="tui-space_left-5">
-      Статус: <span [style.color]="'green'">Активирован</span>
-    </h3>
+    <h3 class="tui-space_left-5">Компания: {{ nameCompany }}</h3>
+    <h3 class="tui-space_left-5">Статус: <span [style.color]="'green'">Активирован</span></h3>
   </div>
   <tui-scrollbar>
     <!--    <nav tuiTabs vertical="left">-->
@@ -20,11 +18,7 @@
     <!--    </nav>-->
 
     <tui-accordion [rounded]="false">
-      <tui-accordion-item
-        *ngFor="let item of menu"
-        [borders]="null"
-        [routerLink]="item.link"
-        [showArrow]="false">
+      <tui-accordion-item *ngFor="let item of menu" [borders]="null" [routerLink]="item.link" [showArrow]="false">
         <div routerLinkActive="active">
           <tui-svg [src]="item.icon" class="tui-space_right-2"></tui-svg>
           <a tuiLink>{{ item.name }}</a>
@@ -40,8 +34,6 @@
     </tui-accordion>
   </tui-scrollbar>
   <div class="foot-menu">
-    <tui-accordion-item [borders]="null" [showArrow]="false" (click)="logout()">
-      Выход
-    </tui-accordion-item>
+    <tui-accordion-item [borders]="null" [showArrow]="false" (click)="logout()"> Выход </tui-accordion-item>
   </div>
 </section>

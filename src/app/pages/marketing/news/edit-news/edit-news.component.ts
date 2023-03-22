@@ -2,19 +2,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
-import {
-  BehaviorSubject,
-  catchError,
-  finalize,
-  map,
-  Observable,
-  of,
-  Subject,
-  switchMap,
-} from 'rxjs';
+import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
 import { TuiFileLike } from '@taiga-ui/kit';
-import { environment } from '../../../../../environments/environment';
 import { FilesService } from '../../../../common/services/api/files.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-edit-news',
@@ -22,13 +13,9 @@ import { FilesService } from '../../../../common/services/api/files.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditNewsComponent implements OnInit {
-  constructor(
-    private router: ActivatedRoute,
-    private newsService: NewsService,
-    private filesService: FilesService
-  ) {}
+  constructor(private router: ActivatedRoute, private newsService: NewsService, private filesService: FilesService) {}
 
-  notificationForm = new FormGroup({
+  newsForm = new FormGroup({
     title: new FormControl(``, Validators.required),
     text: new FormControl('', Validators.required),
   });
@@ -36,15 +23,13 @@ export class EditNewsComponent implements OnInit {
 
   id: string = this.router.snapshot.params['id'];
   urlImage!: string;
-  urlImage$ = new BehaviorSubject('');
 
   ngOnInit(): void {
     this.newsService.getNews(this.id).subscribe(data => {
-      console.log(data?.image.fileName);
-      this.urlImage$.next(environment.imageUrl + '/' + data?.image.fileName);
-      //this.urlImage = data?.image.fileName;
-      this.imageId = data?.image.id;
-      this.notificationForm.patchValue({
+      if (data.image) {
+        this.urlImage = environment.imageUrl + '/' + data.image.fileName;
+      }
+      this.newsForm.patchValue({
         title: data.title,
         text: data.text,
       });
@@ -52,8 +37,8 @@ export class EditNewsComponent implements OnInit {
   }
 
   save() {
-    const data = this.notificationForm.value as any;
-    this.newsService.updateNews({ ...data, id: this.id }).subscribe(() => {
+    const data = this.newsForm.value as any;
+    this.newsService.updateNews({ ...data, imageId: this.imageId, id: this.id }).subscribe(() => {
       console.log('ok');
     });
   }
@@ -63,9 +48,7 @@ export class EditNewsComponent implements OnInit {
 
   readonly rejectedFiles$ = new Subject<TuiFileLike | null>();
   readonly loadingFiles$ = new Subject<TuiFileLike | null>();
-  readonly loadedFiles$ = this.control.valueChanges.pipe(
-    switchMap(file => (file ? this.makeRequest(file) : of(null)))
-  );
+  readonly loadedFiles$ = this.control.valueChanges.pipe(switchMap(file => (file ? this.makeRequest(file) : of(null))));
 
   onReject(file: TuiFileLike | readonly TuiFileLike[]): void {
     this.rejectedFiles$.next(file as TuiFileLike);

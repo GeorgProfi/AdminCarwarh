@@ -4,6 +4,7 @@
 </div>
 
 <h3 class="tui-form__header">Логотип</h3>
+<img *ngIf="logoUrl" [src]="logoUrl" width="500" height="600" />
 <div class="tui-form__row">
   <tui-input-files
     *ngIf="!file.value"
