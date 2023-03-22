@@ -1,10 +1,6 @@
 <app-create-station (createEvent)="refreshData()"></app-create-station>
 
-<div
-  tuiGroup
-  class="tui-form__row tui-space_bottom-5"
-  [adaptive]="true"
-  [collapsed]="true">
+<div tuiGroup class="tui-form__row tui-space_bottom-5" [adaptive]="true" [collapsed]="true">
   <tui-input
     class="input"
     tuiTextfieldSize="m"
@@ -40,17 +36,14 @@
         <th tuiTh *tuiHead="'schedule'" tuiSortable>Расписание</th>
       </tr>
     </thead>
-    <tbody
-      tuiTbody
-      *tuiLet="data | tuiTableSort as sortedData"
-      [data]="sortedData">
+    <tbody tuiTbody *tuiLet="data | tuiTableSort as sortedData" [data]="sortedData">
       <tr tuiTr *ngFor="let item of sortedData">
         <td *tuiCell="'action'" tuiTd>
           <button
             tuiIconButton
             appearance="flat"
             size="s"
-            [icon]="item.visible ? 'tuiIconCheck' : 'tuiIconClose'"
+            [icon]="item.visible ? 'tuiIconEye' : 'tuiIconEyeOff'"
             shape="rounded"
             (click)="setVisibleStation(item.id, item.visible)"></button>
         </td>
@@ -63,11 +56,7 @@
           {{ item.address }}
         </td>
         <td tuiTd *tuiCell="'schedule'">
-          {{
-            item.aroundClock
-              ? 'Круглосуточно'
-              : (item.startWork | time) + ' - ' + (item.endWork | time)
-          }}
+          {{ item.aroundClock ? 'Круглосуточно' : (item.startWork | time) + ' - ' + (item.endWork | time) }}
         </td>
       </tr>
     </tbody>
