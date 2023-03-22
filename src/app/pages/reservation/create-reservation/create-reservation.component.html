@@ -20,6 +20,8 @@
         </tui-combo-box>
 
         <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">Список услуг</h3>
+        <p class="tui-island__paragraph" *ngIf="station">Стоимость: <tui-money [value]="purchaseAmount"></tui-money></p>
+        <p class="tui-island__paragraph" *ngIf="station">Время: {{ durationAmount }} мин.</p>
         <div tuiGroup class="tui-form__row" *ngFor="let service of services; index as idx">
           <tui-combo-box
             *tuiLet="listServices$ | async as listServices"

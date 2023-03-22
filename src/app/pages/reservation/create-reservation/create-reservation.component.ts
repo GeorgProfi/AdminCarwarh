@@ -39,23 +39,42 @@ export class CreateReservationComponent {
     return (event.target as HTMLInputElement)?.value || null;
   }
   clientStringify(client: Client): string {
-    return (client.name?.length ? client.name : 'Не указано') + ` (${client.phone})` + ` (${client.email})`;
+    const name = client.name?.length ? client.name : 'Не указано';
+    const phone = client.phone;
+    const email = client.email?.length ? client.email : '';
+    return `${name} (${phone}) (${email})`;
   }
   client: any;
 
   // Services:
+  purchaseAmount: number = 0;
+  durationAmount: number = 0;
   listServices$ = combineLatest([this.stationId$]).pipe(
     switchMap(query =>
       this.servicesService.getAllClassServices(...query).pipe(
         map((data: Service[]) => {
-          console.log(data);
-          return data.map((service: Service) => new Service(service));
+          if (!query[0]) {
+            return data;
+          }
+
+          for (const service of this.services) {
+            const stationService = data.find(s => s.id === service.id);
+            service.price = stationService!.price;
+            service.duration = stationService!.duration;
+          }
+          this.purchaseAmount = this.services.reduce((a, s) => a + s.price, 0);
+          this.durationAmount = this.services.reduce((a, s) => a + s.duration, 0);
+
+          return data;
         })
       )
     )
   );
   serviceStringify(service: Service): string {
-    return service.name;
+    if (!service.price) {
+      return service.name;
+    }
+    return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
 
   services: Service[] = [{ name: '' } as Service];
@@ -94,6 +113,8 @@ export class CreateReservationComponent {
     if (!this.station || this.services.filter(service => service.id).length < 1) {
       return;
     }
+    this.purchaseAmount = this.services.reduce((a, s) => a + s.price, 0);
+    this.durationAmount = this.services.reduce((a, s) => a + s.duration, 0);
     this.reservationService
       .searchFreeTimes({
         day: this.day.toLocalNativeDate(),
