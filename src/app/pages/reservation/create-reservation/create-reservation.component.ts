@@ -146,7 +146,7 @@ export class CreateReservationComponent {
       .createReservation({
         date: DateTime.fromObject({
           day: this.day.day,
-          month: this.day.month,
+          month: this.day.month + 1,
           year: this.day.year,
           hour: this.time.hours,
           minute: this.time.minutes,
