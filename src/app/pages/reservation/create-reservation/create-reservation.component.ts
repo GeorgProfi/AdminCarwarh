@@ -57,13 +57,16 @@ export class CreateReservationComponent {
             return data;
           }
 
+          this.purchaseAmount = 0;
+          this.durationAmount = 0;
           for (const service of this.services) {
             const stationService = data.find(s => s.id === service.id);
-            service.price = stationService!.price;
-            service.duration = stationService!.duration;
+            if (!stationService) continue;
+            service.price = stationService.price;
+            service.duration = stationService.duration;
+            this.purchaseAmount += service.price;
+            this.durationAmount += service.duration;
           }
-          this.purchaseAmount = this.services.reduce((a, s) => a + s.price, 0);
-          this.durationAmount = this.services.reduce((a, s) => a + s.duration, 0);
 
           return data;
         })
@@ -105,7 +108,7 @@ export class CreateReservationComponent {
   }
 
   // Day:
-  day = new TuiDay(2023, 1, 28);
+  day = TuiDay.currentLocal();
 
   // Time:
   searchTimes() {

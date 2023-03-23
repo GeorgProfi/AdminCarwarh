@@ -51,13 +51,16 @@ export class TableReservationComponent {
 
   // Data:
 
-  day$ = new BehaviorSubject(new TuiDay(2022, 0, 15));
+  day$ = new BehaviorSubject(TuiDay.currentLocal());
   stationId$ = new BehaviorSubject('00000000-0000-0000-0000-000000000000');
   stations$ = this.stationService.getALLStation();
   stationId!: string;
 
-  colorStatus = ['red', 'yellow', 'green', 'blue'];
-
+  // 0 - ожидание
+  // 1 - Пришел
+  // 2 - Не пришел
+  // 3 - завершен
+  colorStatus = ['#ffff99', '#99ffcc', '#ff6666', '#9494b8'];
   setColorWithStatus(status: number): string {
     return this.colorStatus[status];
   }

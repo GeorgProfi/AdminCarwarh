@@ -23,6 +23,7 @@ import {
   TuiPaginationModule,
   TuiSelectModule,
   TuiStringifyContentPipeModule,
+  TuiTagModule,
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
@@ -66,13 +67,9 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     StationModule,
     TuiDialogModule,
     TuiMoneyModule,
+    TuiTagModule,
   ],
-  declarations: [
-    ReservationComponent,
-    CreateReservationComponent,
-    TableReservationComponent,
-    EditReservationComponent,
-  ],
+  declarations: [ReservationComponent, CreateReservationComponent, TableReservationComponent, EditReservationComponent],
   exports: [ReservationComponent],
 })
 export class ReservationModule {}

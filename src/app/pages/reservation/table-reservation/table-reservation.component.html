@@ -63,6 +63,13 @@
             [style.background-color]="setColorWithStatus(order.status)"
             class="order"
             (click)="openEditOrder(order)">
+            <tui-tag
+              *ngIf="order.ownerCreator"
+              status="primary"
+              class="tag tui-island__category"
+              size="s"
+              [hoverable]="true"
+              value="В админке"></tui-tag>
             <p class="tui-island__category">{{ order.startWork | time }} - {{ order.endWork | time }}</p>
             <p *ngIf="order.duration > 1" class="tui-island__category">Клиент: {{ order.client.name }}</p>
           </tui-island>
