@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CreateNotificationDto } from '../../../../common/dto/notification/create-notification.dto';
 import { NotificationService } from '../../../../common/services/api/notification.service';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
+import { TUI_PROMPT } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-create-notification',
@@ -10,17 +12,39 @@ import { NotificationService } from '../../../../common/services/api/notificatio
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateNotificationComponent {
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
+  ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
   formCreateNotification = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
     text: new FormControl('', { nonNullable: true }),
     send: new FormControl(false, { nonNullable: true }),
   });
 
-  onSubmit() {
+  async onSubmit() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     const data: CreateNotificationDto = this.formCreateNotification.value as CreateNotificationDto;
-    this.notificationService.createNotification(data).subscribe(data => {
-      this.formCreateNotification.reset();
-    });
+    this.notificationService.createNotification(data).subscribe(
+      data => {
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        this.formCreateNotification.reset();
+      },
+      () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 }

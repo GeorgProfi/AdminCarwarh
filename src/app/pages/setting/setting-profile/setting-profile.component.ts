@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { AccountService } from '../../../common/services/api/account.service';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
+import { TUI_PROMPT } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-setting-profile',
@@ -7,13 +9,29 @@ import { AccountService } from '../../../common/services/api/account.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingProfileComponent {
-  constructor(private accountService: AccountService) {}
+  constructor(
+    private accountService: AccountService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
+  ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
   email = '';
   oldPassword = '';
   newPassword = '';
   repeatPassword = '';
 
-  changeEmail() {
+  async changeEmail() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     if (!this.email.length) {
       console.log('fuck');
       return;
@@ -24,15 +42,19 @@ export class SettingProfileComponent {
       })
       .subscribe(
         () => {
-          console.log('ok');
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
-          console.error(error);
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
         }
       );
   }
 
-  changePassword() {
+  async changePassword() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     if (this.newPassword !== this.repeatPassword) {
       console.log('fuck');
       return;
@@ -44,10 +66,10 @@ export class SettingProfileComponent {
       })
       .subscribe(
         () => {
-          console.log('ok');
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
-          console.error(error);
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
         }
       );
   }

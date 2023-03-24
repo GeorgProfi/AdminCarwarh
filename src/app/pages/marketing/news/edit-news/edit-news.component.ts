@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
 import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
-import { TuiFileLike } from '@taiga-ui/kit';
+import { TUI_PROMPT, TuiFileLike } from '@taiga-ui/kit';
 import { FilesService } from '../../../../common/services/api/files.service';
 import { environment } from '../../../../../environments/environment';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-edit-news',
@@ -13,7 +14,21 @@ import { environment } from '../../../../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditNewsComponent implements OnInit {
-  constructor(private router: ActivatedRoute, private newsService: NewsService, private filesService: FilesService) {}
+  constructor(
+    private router: ActivatedRoute,
+    private newsService: NewsService,
+    private filesService: FilesService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
+  ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   newsForm = new FormGroup({
     title: new FormControl(``, Validators.required),
@@ -36,11 +51,20 @@ export class EditNewsComponent implements OnInit {
     });
   }
 
-  save() {
+  async save() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     const data = this.newsForm.value as any;
-    this.newsService.updateNews({ ...data, imageId: this.imageId, id: this.id }).subscribe(() => {
-      console.log('ok');
-    });
+    this.newsService.updateNews({ ...data, imageId: this.imageId, id: this.id }).subscribe(
+      () => {
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 
   // file:

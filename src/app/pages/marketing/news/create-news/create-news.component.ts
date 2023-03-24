@@ -1,22 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
-import {
-  catchError,
-  finalize,
-  map,
-  Observable,
-  of,
-  Subject,
-  switchMap,
-} from 'rxjs';
-import { TuiFileLike } from '@taiga-ui/kit';
+import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
+import { TUI_PROMPT, TuiFileLike } from '@taiga-ui/kit';
 import { FilesService } from '../../../../common/services/api/files.service';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-create-news',
@@ -26,8 +14,18 @@ import { FilesService } from '../../../../common/services/api/files.service';
 export class CreateNewsComponent {
   constructor(
     private newsService: NewsService,
-    private filesService: FilesService
+    private filesService: FilesService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
   ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   @Output() createEvent = new EventEmitter();
 
@@ -36,15 +34,23 @@ export class CreateNewsComponent {
     text: new FormControl(),
   });
   imageId?: string;
-  onSubmit() {
+  async onSubmit() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     const data = this.formCreateNotification.value as any;
-    this.newsService
-      .createNews({ ...data, imageId: this.imageId })
-      .subscribe(data => {
+    this.newsService.createNews({ ...data, imageId: this.imageId }).subscribe(
+      data => {
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         this.formCreateNotification.reset();
         this.file.reset();
         this.createEvent.emit();
-      });
+      },
+      () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 
   // file:
@@ -52,9 +58,7 @@ export class CreateNewsComponent {
 
   readonly rejectedFiles$ = new Subject<TuiFileLike | null>();
   readonly loadingFiles$ = new Subject<TuiFileLike | null>();
-  readonly loadedFiles$ = this.file.valueChanges.pipe(
-    switchMap(file => (file ? this.makeRequest(file) : of(null)))
-  );
+  readonly loadedFiles$ = this.file.valueChanges.pipe(switchMap(file => (file ? this.makeRequest(file) : of(null))));
 
   onReject(file: TuiFileLike | readonly TuiFileLike[]): void {
     this.rejectedFiles$.next(file as TuiFileLike);

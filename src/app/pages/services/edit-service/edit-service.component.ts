@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { StationService } from '../../../common/services/api/station.service';
 import { Station } from '../../../common/entities/station.entity';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
+import { TUI_PROMPT } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-edit-service',
@@ -14,8 +16,18 @@ export class EditServiceComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private servicesService: ServicesService,
-    private stationService: StationService
+    private stationService: StationService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
   ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   station!: Station;
 
@@ -28,8 +40,9 @@ export class EditServiceComponent implements OnInit {
   price!: number;
   discount!: number;
 
-  addService() {
-    if (!confirm(`Вы уверены?`)) {
+  async addService() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
     this.stationService
@@ -41,36 +54,47 @@ export class EditServiceComponent implements OnInit {
         discount: this.discount,
         duration: this.duration,
       })
-      .subscribe(data => {
-        this.services.push({
-          id: data.id,
-          stationName: data.station.name,
-          bonusPercentage: this.bonusPercentage,
-          price: this.price,
-          discount: this.discount,
-          duration: this.duration,
-        });
-      });
+      .subscribe(
+        data => {
+          this.services.push({
+            id: data.id,
+            stationName: data.station.name,
+            bonusPercentage: this.bonusPercentage,
+            price: this.price,
+            discount: this.discount,
+            duration: this.duration,
+          });
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        () => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
 
-  removeService(stationId: string, serviceId: string) {
-    if (!confirm(`Вы уверены?`)) {
+  async removeService(stationId: string, serviceId: string) {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
+
     this.stationService
       .removeService({
         stationId,
         serviceId,
       })
-      .subscribe(() => {
-        //this.services.splice(index, 1);
-      });
+      .subscribe(
+        () => {
+          //this.services.splice(index, 1);
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
 
   setVisibleService(index: number) {
-    if (!confirm(`Вы уверены?`)) {
-      return;
-    }
     const service = this.services[index];
     this.stationService
       .setVisibleService({
@@ -82,16 +106,28 @@ export class EditServiceComponent implements OnInit {
       });
   }
 
-  updateServices() {
-    if (!confirm(`Вы уверены?`)) {
+  async updateServices() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
-    this.stationService.updateServices(this.services).subscribe();
+    this.stationService.updateServices(this.services).subscribe(
+      () => {
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 
   id: string = this.activatedRoute.snapshot.params['id'];
 
-  updateService() {
+  async updateService() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     console.log(1);
   }
 
@@ -114,9 +150,19 @@ export class EditServiceComponent implements OnInit {
     });
   }
 
-  removeServiceClass() {
-    this.servicesService.removeServiceClass(this.id).subscribe(async () => {
-      await this.router.navigateByUrl('services');
-    });
+  async removeServiceClass() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
+    this.servicesService.removeServiceClass(this.id).subscribe(
+      async () => {
+        await this.router.navigateByUrl('services');
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 }

@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientsService } from '../../../common/services/api/clients.service';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
+import { TUI_PROMPT } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-edit-client',
@@ -11,8 +13,18 @@ import { ClientsService } from '../../../common/services/api/clients.service';
 export class EditClientComponent implements OnInit {
   constructor(
     private router: ActivatedRoute,
-    private clientsService: ClientsService
+    private clientsService: ClientsService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
   ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   id: string = this.router.snapshot.queryParams['id'];
   name!: string;
@@ -20,11 +32,11 @@ export class EditClientComponent implements OnInit {
   email!: string;
   bonuses!: number;
 
-  saveData() {
-    if (!confirm(`Вы уверены?`)) {
+  async saveData() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
-    console.log(this.id);
     this.clientsService
       .saveDataClient({
         clientId: this.id,
@@ -33,7 +45,14 @@ export class EditClientComponent implements OnInit {
         email: this.email,
         bonuses: this.bonuses,
       })
-      .subscribe();
+      .subscribe(
+        () => {
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        () => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
 
   ngOnInit(): void {

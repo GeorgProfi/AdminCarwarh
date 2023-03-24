@@ -7,8 +7,9 @@ import { ServicesService } from '../../../common/services/api/services.service';
 import { ClassService } from '../../../common/entities/class-service.entity';
 import { DateTime } from 'luxon';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { CreateStationDto } from '../../../common/dto/station/create-station.dto';
+import { TUI_PROMPT } from '@taiga-ui/kit';
 
 interface Post {
   id: string;
@@ -30,8 +31,18 @@ export class EditStationComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     @Inject(TuiAlertService)
-    private readonly alertService: TuiAlertService
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
   ) {}
+
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
+
   stationId: string = this.activatedRoute.snapshot.queryParams['id'];
 
   listServices$ = this.servicesService.getAllClassServices();
@@ -72,7 +83,6 @@ export class EditStationComponent implements OnInit {
 
   getStation() {
     this.stationService.getStationById(this.stationId).subscribe(station => {
-      console.log(station);
       this.formEditStation.patchValue({
         name: station.name,
         address: station.address,
@@ -117,8 +127,9 @@ export class EditStationComponent implements OnInit {
     });
   }
 
-  addService() {
-    if (!confirm(`Вы уверены?`)) {
+  async addService() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
     this.stationService
@@ -130,13 +141,20 @@ export class EditStationComponent implements OnInit {
         discount: this.discount,
         duration: this.duration,
       })
-      .subscribe(data => {
-        this.getServices();
-      });
+      .subscribe(
+        data => {
+          this.getServices();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
 
-  removeServiceForStation(serviceId: string) {
-    if (!confirm(`Вы уверены?`)) {
+  async removeServiceForStation(serviceId: string) {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
     this.stationService
@@ -144,24 +162,34 @@ export class EditStationComponent implements OnInit {
         stationId: this.stationId,
         serviceId: serviceId,
       })
-      .subscribe(() => {
-        this.getServices();
-      });
+      .subscribe(
+        () => {
+          this.getServices();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
 
-  updateServices() {
-    if (!confirm(`Вы уверены?`)) {
+  async updateServices() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
-    this.stationService.updateServices(this.services).subscribe(() => {
-      this.getServices();
-    });
+    this.stationService.updateServices(this.services).subscribe(
+      () => {
+        this.getServices();
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 
   setVisibleService(index: number) {
-    if (!confirm(`Вы уверены?`)) {
-      return;
-    }
     const service = this.services[index];
     this.stationService
       .setVisibleService({
@@ -195,8 +223,9 @@ export class EditStationComponent implements OnInit {
     });
   }
 
-  createPost() {
-    if (!confirm(`Вы уверены?`)) {
+  async createPost() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
     this.stationService
@@ -204,15 +233,22 @@ export class EditStationComponent implements OnInit {
         stationId: this.stationId,
         name: this.namePost,
       })
-      .subscribe(data => {
-        this.getPosts();
-      });
+      .subscribe(
+        data => {
+          this.getPosts();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
   selectPost(index: number) {
     this.indexPost = index;
   }
-  addServicePost() {
-    if (!confirm(`Вы уверены?`)) {
+  async addServicePost() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
     this.stationService
@@ -220,9 +256,15 @@ export class EditStationComponent implements OnInit {
         postId: this.posts[this.indexPost].id,
         serviceId: this.stationServiceForPost.id,
       })
-      .subscribe(data => {
-        this.getPosts();
-      });
+      .subscribe(
+        data => {
+          this.getPosts();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
   removeServicePost(serviceId: string) {
     if (!confirm(`Вы уверены?`)) {
@@ -233,12 +275,19 @@ export class EditStationComponent implements OnInit {
         postId: this.posts[this.indexPost].id,
         serviceId: serviceId,
       })
-      .subscribe(() => {
-        this.getPosts();
-      });
+      .subscribe(
+        () => {
+          this.getPosts();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
-  updateNamePost() {
-    if (!confirm(`Вы уверены?`)) {
+  async updateNamePost() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
     this.stationService
@@ -250,13 +299,20 @@ export class EditStationComponent implements OnInit {
         this.getPosts();
       });
   }
-  removePost() {
-    if (!confirm(`Вы уверены?`)) {
+  async removePost() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
-    this.stationService.removePost(this.posts[this.indexPost].id).subscribe(() => {
-      this.getPosts();
-    });
+    this.stationService.removePost(this.posts[this.indexPost].id).subscribe(
+      () => {
+        this.getPosts();
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 
   /******************************************************/
@@ -281,13 +337,14 @@ export class EditStationComponent implements OnInit {
     return DateTime.local(2022, 1, 1, time.hours, time.minutes).toJSDate();
   }
 
-  updateStation(): void {
+  async updateStation() {
     if (!this.formEditStation.valid) {
       this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }
 
-    if (!confirm(`Вы уверены?`)) {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
 
@@ -310,20 +367,27 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.alertService.open('Обновил', { status: TuiNotification.Success }).subscribe();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         () => {
-          this.alertService.open('Ошибка сервера', { status: TuiNotification.Error }).subscribe();
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
         }
       );
   }
 
-  removeStation() {
-    if (!confirm(`Вы уверены?`)) {
+  async removeStation() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
-    this.stationService.removeStation(this.stationId).subscribe(async () => {
-      await this.router.navigateByUrl('stations');
-    });
+    this.stationService.removeStation(this.stationId).subscribe(
+      async () => {
+        await this.router.navigateByUrl('stations');
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
   }
 }

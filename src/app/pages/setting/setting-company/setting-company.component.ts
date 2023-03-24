@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
-import { TuiFileLike } from '@taiga-ui/kit';
+import { TUI_PROMPT, TuiFileLike } from '@taiga-ui/kit';
 import { FilesService } from '../../../common/services/api/files.service';
 import { CompanyService } from '../../../common/services/api/company.service';
 import { environment } from '../../../../environments/environment';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-setting-company',
@@ -12,7 +13,20 @@ import { environment } from '../../../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingCompanyComponent implements OnInit {
-  constructor(private filesService: FilesService, private companyService: CompanyService) {}
+  constructor(
+    private filesService: FilesService,
+    private companyService: CompanyService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
+  ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   ngOnInit() {
     this.companyService.getDataCompany().subscribe((data: any) => {
@@ -27,7 +41,11 @@ export class SettingCompanyComponent implements OnInit {
   description = '';
   logoUrl: string | null = null;
 
-  saveData() {
+  async saveData() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     this.companyService
       .updateDataCompany({
         description: this.description,
@@ -35,10 +53,10 @@ export class SettingCompanyComponent implements OnInit {
       })
       .subscribe(
         () => {
-          console.log('ok');
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
-          console.error(error);
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
         }
       );
   }

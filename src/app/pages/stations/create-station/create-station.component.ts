@@ -4,7 +4,8 @@ import { StationService } from '../../../common/services/api/station.service';
 import { TuiTime } from '@taiga-ui/cdk';
 import { CreateStationDto } from '../../../common/dto/station/create-station.dto';
 import { DateTime } from 'luxon';
-import { TuiAlertService, TuiNotification } from '@taiga-ui/core';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
+import { TUI_PROMPT } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-create-station',
@@ -16,8 +17,16 @@ export class CreateStationComponent {
   constructor(
     private stationService: StationService,
     @Inject(TuiAlertService)
-    private readonly alertService: TuiAlertService
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
   ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   @Output() createEvent = new EventEmitter();
 
@@ -63,9 +72,14 @@ export class CreateStationComponent {
     return DateTime.local(2022, 1, 1, time.hours, time.minutes).toJSDate();
   }
 
-  onSubmit(): void {
+  async onSubmit() {
     if (!this.formCreateStation.valid) {
       this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
+
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
 
@@ -82,10 +96,10 @@ export class CreateStationComponent {
         this.formCreateStation.controls.endWork.enable();
         this.formCreateStation.reset();
         this.createEvent.emit();
-        this.alertService.open('Создал', { status: TuiNotification.Success }).subscribe();
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },
       error => {
-        this.alertService.open('Ошибка сервера', { status: TuiNotification.Error }).subscribe();
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
       }
     );
   }

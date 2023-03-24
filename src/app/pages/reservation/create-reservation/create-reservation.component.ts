@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
@@ -9,8 +9,9 @@ import { filter, startWith } from 'rxjs/operators';
 import { Client } from '../../../common/entities/client.entity';
 import { StationService } from '../../../common/services/api/station.service';
 import { Station } from '../../../common/entities/station.entity';
-import { tuiCreateTimePeriods } from '@taiga-ui/kit';
+import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { DateTime } from 'luxon';
+import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-create-reservation',
@@ -23,8 +24,18 @@ export class CreateReservationComponent {
     private reservationService: ReservationService,
     private servicesService: ServicesService,
     private clientsService: ClientsService,
-    private stationService: StationService
+    private stationService: StationService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
   ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
   stationId$ = new BehaviorSubject<string | undefined>(undefined);
   servicesIds$ = new BehaviorSubject<string[] | undefined>(undefined);
 
@@ -141,7 +152,11 @@ export class CreateReservationComponent {
   timesTest = tuiCreateTimePeriods();
 
   // Create order:
-  createOrder() {
+  async createOrder() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     this.reservationService
       .createReservation({
         date: DateTime.fromObject({
@@ -155,8 +170,13 @@ export class CreateReservationComponent {
         stationId: this.station.id,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
       })
-      .subscribe(() => {
-        console.log('OPA');
-      });
+      .subscribe(
+        () => {
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
 }

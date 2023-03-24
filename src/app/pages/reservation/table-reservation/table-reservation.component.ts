@@ -9,6 +9,7 @@ import { StationService } from '../../../common/services/api/station.service';
 import { filter, map, share, startWith, switchMap } from 'rxjs/operators';
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { EditReservationComponent } from '../edit-reservation/edit-reservation.component';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-table-reservation',
@@ -84,8 +85,17 @@ export class TableReservationComponent {
     filter(tuiIsPresent),
     map((data: any) => {
       console.log(data);
-      const startWork = new Date(data.station.startWork);
-      const endWork = new Date(data.station.endWork);
+      let startWork!: Date;
+      let endWork!: Date;
+      console.log(data.station.aroundClock);
+      if (data.aroundClock) {
+        startWork = DateTime.local().set({ hour: 0, minute: 0 }).toJSDate();
+        endWork = DateTime.local().set({ hour: 23, minute: 59 }).toJSDate();
+      } else {
+        startWork = DateTime.fromISO(data.station.startWork).toJSDate();
+        endWork = DateTime.fromISO(data.station.endWork).toJSDate();
+      }
+      console.log(data.aroundClock);
       this.times = data.station.aroundClock
         ? tuiCreateTimePeriods()
         : tuiCreateTimePeriods(startWork.getHours(), endWork.getHours());

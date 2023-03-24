@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
+import { TuiAlertService, TuiDialogContext, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Service } from '../../../common/entities/service.entity';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
@@ -8,6 +8,7 @@ import { Client } from '../../../common/entities/client.entity';
 import { filter, startWith } from 'rxjs/operators';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { ReservationService } from '../../../common/services/api/reservation.service';
+import { TUI_PROMPT } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -22,8 +23,16 @@ export class EditReservationComponent implements OnInit {
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<any, any>,
     private clientsService: ClientsService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService
   ) {}
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   ngOnInit(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: any) => {
@@ -79,7 +88,11 @@ export class EditReservationComponent implements OnInit {
     this.status = status;
   }
 
-  save() {
+  async save() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
     const clientId = this.replaceClient ? this.newClient.id : undefined;
     this.reservationService
       .updateReservation({
@@ -88,9 +101,15 @@ export class EditReservationComponent implements OnInit {
         clientId,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
       })
-      .subscribe(() => {
-        this.context.completeWith({});
-      });
+      .subscribe(
+        () => {
+          this.context.completeWith({});
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
   }
 
   exit() {
