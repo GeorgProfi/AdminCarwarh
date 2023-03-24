@@ -36,20 +36,23 @@ export class EditReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: any) => {
-      console.log(order);
+      console.log(order.stationId);
+      this.listServices$ = this.servicesService.getAllClassServices(order.stationId);
       this.client = order.client;
       this.services = order.services.map((service: any) => {
         service.name = service.classServices.name;
+        this.purchaseAmount += service.price;
+        this.durationAmount += service.duration;
         return service;
       });
       this.status = order.status;
-      this.purchaseAmount = order.purchaseAmount;
-      console.log(this.services);
+      //this.purchaseAmount = order.purchaseAmount;
     });
   }
 
   client!: any;
-  purchaseAmount!: number;
+  purchaseAmount = 0;
+  durationAmount = 0;
 
   // Client
   replaceClient: boolean = false;
@@ -70,14 +73,23 @@ export class EditReservationComponent implements OnInit {
   // Services:
   listServices$ = this.servicesService.getAllClassServices();
   serviceStringify(service: Service): string {
-    return service.name;
+    if (!service.price) {
+      return service.name;
+    }
+    return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
 
   services!: Service[];
   addService() {
     this.services.push({ name: '' } as Service);
   }
+  changeServices(idx: number) {
+    this.purchaseAmount += this.services[idx].price;
+    this.durationAmount += this.services[idx].duration;
+  }
   removeService(idx: number) {
+    this.purchaseAmount -= this.services[idx].price;
+    this.durationAmount -= this.services[idx].duration;
     this.services.splice(idx, 1);
   }
 

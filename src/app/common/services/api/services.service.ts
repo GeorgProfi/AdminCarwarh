@@ -24,6 +24,7 @@ export class ServicesService {
   }
 
   getServicesList(data: GetServicesListDto): Observable<PaginateRes<Service>> {
+    console.log(data);
     return this.http.get<PaginateRes<Service>>(`${environment.apiUrl}/services`, { params: { ...data } });
   }
 
