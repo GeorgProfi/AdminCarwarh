@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { StationService } from '../../../common/services/api/station.service';
@@ -20,7 +20,8 @@ export class EditServiceComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -137,16 +138,19 @@ export class EditServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.servicesService.getServiceById(this.id).subscribe(data => {
-      this.name = data.name;
-    });
-    this.servicesService.getServicesForClass(this.id).subscribe((data: any[]) => {
-      console.log(data);
-      data.map(data => {
-        data.stationName = data.station.name;
-        return data;
+    this.activatedRoute.params.subscribe(({ id }) => {
+      this.servicesService.getServiceById(id).subscribe(data => {
+        this.name = data.name;
+        this.cdr.detectChanges();
       });
-      this.services = data;
+      this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
+        data.map(data => {
+          data.stationName = data.station.name;
+          return data;
+        });
+        this.services = data;
+        this.cdr.detectChanges();
+      });
     });
   }
 
@@ -155,6 +159,7 @@ export class EditServiceComponent implements OnInit {
     if (!p) {
       return;
     }
+
     this.servicesService.removeServiceClass(this.id).subscribe(
       async () => {
         await this.router.navigateByUrl('services');

@@ -8,22 +8,11 @@
     <tui-input [(ngModel)]="email"> email </tui-input>
   </div>
 
-  <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">
-    Карта клиента
-  </h3>
-  <tui-input-number
-    class="tui-form__row"
-    [(ngModel)]="bonuses"
-    [postfix]="'RUB' | tuiCurrency">
+  <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">Карта клиента</h3>
+  <tui-input-number class="tui-form__row" [(ngModel)]="bonuses" [postfix]="'RUB' | tuiCurrency">
     Число бонусов
   </tui-input-number>
 </tui-island>
 <div class="tui-form__buttons">
-  <button
-    class="tui-form__button"
-    tuiButton
-    appearance="primary"
-    (click)="saveData()">
-    Сохранить
-  </button>
+  <button class="tui-form__button" tuiButton appearance="primary" (click)="saveData()">Сохранить</button>
 </div>

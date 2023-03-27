@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../../common/services/api/notification.service';
@@ -17,7 +17,8 @@ export class EditNotificationComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
@@ -69,6 +70,7 @@ export class EditNotificationComponent implements OnInit {
         title: data.title,
         content: data.content,
       });
+      this.cdr.detectChanges();
     });
   }
 }

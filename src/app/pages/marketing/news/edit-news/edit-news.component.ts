@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
@@ -21,7 +21,8 @@ export class EditNewsComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -48,6 +49,7 @@ export class EditNewsComponent implements OnInit {
         title: data.title,
         text: data.text,
       });
+      this.cdr.detectChanges();
     });
   }
 

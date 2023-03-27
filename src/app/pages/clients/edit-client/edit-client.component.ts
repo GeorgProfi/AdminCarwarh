@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
@@ -7,7 +7,6 @@ import { TUI_PROMPT } from '@taiga-ui/kit';
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
-  styleUrls: ['./edit-client.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditClientComponent implements OnInit {
@@ -17,7 +16,8 @@ export class EditClientComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -26,11 +26,10 @@ export class EditClientComponent implements OnInit {
     dismissible: false,
   });
 
-  id: string = this.router.snapshot.queryParams['id'];
-  name!: string;
-  phone!: string;
-  email!: string;
-  bonuses!: number;
+  name = '';
+  phone = '';
+  email = '';
+  bonuses = 0;
 
   async saveData() {
     const p = await this.prompt.toPromise();
@@ -55,13 +54,18 @@ export class EditClientComponent implements OnInit {
       );
   }
 
-  ngOnInit(): void {
-    this.clientsService.getClientAndCard(this.id).subscribe((data: any) => {
-      this.name = data.name;
-      this.phone = data.phone;
-      this.email = data.email;
-      this.bonuses = data.card.bonuses;
-      console.log(data);
+  id!: string;
+
+  ngOnInit() {
+    this.router.queryParams.subscribe(({ id }) => {
+      this.id = id;
+      this.clientsService.getClientAndCard(id).subscribe((data: any) => {
+        this.name = data.name;
+        this.phone = data.phone;
+        this.email = data.email;
+        this.bonuses = data.card.bonuses;
+        this.cdr.detectChanges();
+      });
     });
   }
 }

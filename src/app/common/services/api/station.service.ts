@@ -78,10 +78,7 @@ export class StationService {
   }
 
   renamePost(data: { postId: string; name: string }) {
-    return this.http.put<any>(
-      `${environment.apiUrl}/station/post/rename`,
-      data
-    );
+    return this.http.put<any>(`${environment.apiUrl}/station/post/rename`, data);
   }
 
   removePost(id: string) {
@@ -114,19 +111,13 @@ export class StationService {
   }
 
   addServicePost(data: { postId: string; serviceId: string }) {
-    return this.http.post<any>(
-      `${environment.apiUrl}/station/service-on-post`,
-      data
-    );
+    return this.http.post<any>(`${environment.apiUrl}/station/service-on-post`, data);
   }
 
   removeServicePost(data: { postId: string; serviceId: string }) {
-    return this.http.delete<any>(
-      `${environment.apiUrl}/station/service-on-post`,
-      {
-        params: data,
-      }
-    );
+    return this.http.delete<any>(`${environment.apiUrl}/station/service-on-post`, {
+      params: data,
+    });
   }
 
   removeStation(id: string) {

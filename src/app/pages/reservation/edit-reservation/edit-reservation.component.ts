@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { TuiAlertService, TuiDialogContext, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Service } from '../../../common/entities/service.entity';
@@ -25,7 +25,8 @@ export class EditReservationComponent implements OnInit {
     private clientsService: ClientsService,
     private reservationService: ReservationService,
     @Inject(TuiAlertService)
-    private readonly alertService: TuiAlertService
+    private readonly alertService: TuiAlertService,
+    private cdr: ChangeDetectorRef
   ) {}
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -36,7 +37,6 @@ export class EditReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: any) => {
-      console.log(order.stationId);
       this.listServices$ = this.servicesService.getAllClassServices(order.stationId);
       this.client = order.client;
       this.services = order.services.map((service: any) => {
@@ -47,6 +47,7 @@ export class EditReservationComponent implements OnInit {
       });
       this.status = order.status;
       //this.purchaseAmount = order.purchaseAmount;
+      this.cdr.detectChanges();
     });
   }
 

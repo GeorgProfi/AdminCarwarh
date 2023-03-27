@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { StationService } from '../../../common/services/api/station.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TuiContextWithImplicit, TuiStringHandler, TuiTime } from '@taiga-ui/cdk';
@@ -33,7 +33,8 @@ export class EditStationComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
@@ -91,6 +92,7 @@ export class EditStationComponent implements OnInit {
         startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
         endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
       });
+      this.cdr.detectChanges();
     });
   }
 
@@ -123,6 +125,7 @@ export class EditStationComponent implements OnInit {
       });
       this.classServices$.subscribe(classServices => {
         this.filterClassServices = classServices.filter(s => !usedService.includes(s.id));
+        this.cdr.detectChanges();
       });
     });
   }
@@ -220,6 +223,7 @@ export class EditStationComponent implements OnInit {
         });
         return post;
       });
+      this.cdr.detectChanges();
     });
   }
 

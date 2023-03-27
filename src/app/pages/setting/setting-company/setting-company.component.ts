@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
 import { TUI_PROMPT, TuiFileLike } from '@taiga-ui/kit';
@@ -19,7 +19,8 @@ export class SettingCompanyComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -30,11 +31,11 @@ export class SettingCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.companyService.getDataCompany().subscribe((data: any) => {
-      console.log(data);
       if (data.logo) {
         this.logoUrl = environment.imageUrl + '/' + data.logo.fileName;
       }
       this.description = data.description;
+      this.cdr.detectChanges();
     });
   }
 
