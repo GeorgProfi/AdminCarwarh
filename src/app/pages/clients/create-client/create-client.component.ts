@@ -39,6 +39,7 @@ export class CreateClientComponent {
     name: new FormControl(``, {
       nonNullable: true,
     }),
+    check: new FormControl(false, { nonNullable: true }),
   });
 
   async onSubmit() {
@@ -47,19 +48,32 @@ export class CreateClientComponent {
       return;
     }
     const data: any = this.form.value;
-    this.clientsService.requestRegistrationClient(data).subscribe({
-      next: () => {
-        this.expandedCode = true;
-      },
-      error: error => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        console.error(error);
-      },
-    });
+    if (data.check) {
+      this.clientsService.requestRegistrationClient(data).subscribe({
+        next: () => {
+          this.expandedCode = true;
+        },
+        error: error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+          console.error(error);
+        },
+      });
+    } else {
+      this.clientsService.createClient(data).subscribe(
+        () => {
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+          this.form.reset();
+          this.createEvent.emit();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+          console.error(error);
+        }
+      );
+    }
   }
 
   loader: boolean = false;
-
   expandedCode = false;
   code = new FormControl('', Validators.required);
   onAcceptCode() {
@@ -71,6 +85,7 @@ export class CreateClientComponent {
         this.loader = false;
         this.expandedCode = false;
         this.code.reset();
+        this.createEvent.emit();
       },
       () => {
         this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();

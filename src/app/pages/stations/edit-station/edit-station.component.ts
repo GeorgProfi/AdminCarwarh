@@ -10,6 +10,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { CreateStationDto } from '../../../common/dto/station/create-station.dto';
 import { TUI_PROMPT } from '@taiga-ui/kit';
+import { tap } from 'rxjs';
 
 interface Post {
   id: string;
@@ -82,20 +83,6 @@ export class EditStationComponent implements OnInit {
     description: new FormControl(``, { nonNullable: true }),
   });
 
-  getStation() {
-    this.stationService.getStationById(this.stationId).subscribe(station => {
-      this.formEditStation.patchValue({
-        name: station.name,
-        address: station.address,
-        aroundClock: station.aroundClock,
-        description: station.description,
-        startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
-        endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
-      });
-      this.cdr.detectChanges();
-    });
-  }
-
   classServices$ = this.servicesService.getAllClassServices();
   filterClassServices!: ClassService[];
   //@tuiPure
@@ -116,18 +103,20 @@ export class EditStationComponent implements OnInit {
   discount!: number;
 
   getServices() {
-    this.stationService.getServices(this.stationId).subscribe(services => {
-      const usedService: string[] = [];
-      this.services = services.map((service: any) => {
-        usedService.push(service.classServices.id);
-        service.name = service.classServices.name;
-        return service;
-      });
-      this.classServices$.subscribe(classServices => {
-        this.filterClassServices = classServices.filter(s => !usedService.includes(s.id));
-        this.cdr.detectChanges();
-      });
-    });
+    return this.stationService.getServices(this.stationId).pipe(
+      tap(services => {
+        const usedService: string[] = [];
+        this.services = services.map((service: any) => {
+          usedService.push(service.classServices.id);
+          service.name = service.classServices.name;
+          return service;
+        });
+        this.classServices$.subscribe(classServices => {
+          this.filterClassServices = classServices.filter(s => !usedService.includes(s.id));
+          this.cdr.detectChanges();
+        });
+      })
+    );
   }
 
   async addService() {
@@ -146,7 +135,7 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(
         data => {
-          this.getServices();
+          this.getServices().subscribe();
           this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
@@ -167,7 +156,7 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.getServices();
+          this.getServices().subscribe();
           this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
@@ -183,7 +172,7 @@ export class EditStationComponent implements OnInit {
     }
     this.stationService.updateServices(this.services).subscribe(
       () => {
-        this.getServices();
+        this.getServices().subscribe();
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },
       error => {
@@ -199,9 +188,14 @@ export class EditStationComponent implements OnInit {
         serviceId: service.id,
         visible: !service.visible,
       })
-      .subscribe(() => {
-        this.getServices();
-      });
+      .subscribe(
+        () => {
+          this.getServices().subscribe();
+        },
+        () => {
+          this.dialogService.open('Услуга не подключена ни к одному посту', { label: 'Ошибка', size: 's' }).subscribe();
+        }
+      );
   }
 
   /*
@@ -214,17 +208,19 @@ export class EditStationComponent implements OnInit {
   stationServiceForPost!: Service;
 
   getPosts() {
-    this.stationService.getPosts(this.stationId).subscribe(posts => {
-      // Пиздец
-      this.posts = posts.map((post: Post) => {
-        post.freeServices = this.services.filter(s => {
-          for (const ps of post.services) if (ps.id === s.id) return false;
-          return true;
+    return this.stationService.getPosts(this.stationId).pipe(
+      tap(posts => {
+        // Пиздец
+        this.posts = posts.map((post: Post) => {
+          post.freeServices = this.services.filter(s => {
+            for (const ps of post.services) if (ps.id === s.id) return false;
+            return true;
+          });
+          return post;
         });
-        return post;
-      });
-      this.cdr.detectChanges();
-    });
+        this.cdr.detectChanges();
+      })
+    );
   }
 
   async createPost() {
@@ -239,7 +235,7 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(
         data => {
-          this.getPosts();
+          this.getPosts().subscribe();
           this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
@@ -262,7 +258,7 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(
         data => {
-          this.getPosts();
+          this.getPosts().subscribe();
           this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
@@ -281,7 +277,7 @@ export class EditStationComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.getPosts();
+          this.getPosts().subscribe();
           this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
         error => {
@@ -300,7 +296,7 @@ export class EditStationComponent implements OnInit {
         name: this.posts[this.indexPost].name,
       })
       .subscribe(() => {
-        this.getPosts();
+        this.getPosts().subscribe();
       });
   }
   async removePost() {
@@ -310,7 +306,7 @@ export class EditStationComponent implements OnInit {
     }
     this.stationService.removePost(this.posts[this.indexPost].id).subscribe(
       () => {
-        this.getPosts();
+        this.getPosts().subscribe();
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },
       error => {
@@ -322,9 +318,20 @@ export class EditStationComponent implements OnInit {
   /******************************************************/
 
   ngOnInit() {
-    this.getStation();
-    this.getServices();
-    this.getPosts();
+    this.stationService.getStationById(this.stationId).subscribe(station => {
+      this.formEditStation.patchValue({
+        name: station.name,
+        address: station.address,
+        aroundClock: station.aroundClock,
+        description: station.description,
+        startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
+        endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
+      });
+      this.cdr.detectChanges();
+    });
+    this.getServices().subscribe(() => {
+      this.getPosts().subscribe();
+    });
   }
 
   changeAroundClock() {

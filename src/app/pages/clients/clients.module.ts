@@ -15,6 +15,7 @@ import {
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
+  TuiCheckboxBlockModule,
   TuiDataListWrapperModule,
   TuiFieldErrorPipeModule,
   TuiInputModule,
@@ -26,10 +27,7 @@ import {
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
-import {
-  TuiTableModule,
-  TuiTablePaginationModule,
-} from '@taiga-ui/addon-table';
+import { TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -68,6 +66,7 @@ import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
     TuiScrollbarModule,
     ScrollingModule,
     TuiCurrencyPipeModule,
+    TuiCheckboxBlockModule,
   ],
   declarations: [ClientsComponent, CreateClientComponent, EditClientComponent],
   exports: [ClientsComponent],

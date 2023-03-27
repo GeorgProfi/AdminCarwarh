@@ -1,24 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Injector,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { ClientsService } from '../../common/services/api/clients.service';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  Observable,
-} from 'rxjs';
-import {
-  debounceTime,
-  filter,
-  map,
-  share,
-  startWith,
-  switchMap,
-} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable } from 'rxjs';
+import { debounceTime, filter, map, share, startWith, switchMap } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
 import { Client } from '../../common/entities/client.entity';
 import { TuiDialogService } from '@taiga-ui/core';
@@ -39,14 +22,7 @@ export class ClientsComponent {
   ) {}
 
   sizes = [10, 20, 5];
-  columns: string[] = [
-    'name',
-    'phone',
-    'email',
-    'bonuses',
-    'numberOfVisits',
-    'dateOfRegistration',
-  ];
+  columns: string[] = ['name', 'phone', 'email', 'bonuses', 'numberOfVisits', 'dateOfRegistration'];
 
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);
@@ -78,13 +54,7 @@ export class ClientsComponent {
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
 
-  private getData(
-    page: number,
-    pageSize: number,
-    search: string,
-    sorter: string,
-    direction: -1 | 1
-  ) {
+  private getData(page: number, pageSize: number, search: string, sorter: string, direction: -1 | 1) {
     return this.clientsService
       .getClientsList({
         page,
@@ -104,5 +74,7 @@ export class ClientsComponent {
       );
   }
 
-  updateData() {}
+  refreshData() {
+    this.size$.next(this.size$.value);
+  }
 }

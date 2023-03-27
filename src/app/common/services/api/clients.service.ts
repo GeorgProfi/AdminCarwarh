@@ -17,23 +17,23 @@ export class ClientsService {
   }
 
   getClientsList(data: Pagination) {
-    return this.http.get<PaginateRes<Client>>(
-      `${environment.apiUrl}/client/list`,
-      { params: { ...data } }
-    );
+    return this.http.get<PaginateRes<Client>>(`${environment.apiUrl}/client/list`, { params: { ...data } });
+  }
+
+  createClient(data: { phone: string; name?: string }) {
+    return this.http.post<Client>(`${environment.apiUrl}/client/create`, {
+      phone: data.phone,
+      name: data.name,
+    });
   }
 
   requestRegistrationClient(data: { phone: string; name?: string }) {
-    console.log(data);
     const deviceId = localStorage.getItem('device_id');
-    return this.http.post<Client>(
-      `${environment.apiUrl}/auth/client/request/with-company`,
-      {
-        phone: data.phone,
-        nameClient: data.name,
-        deviceId,
-      }
-    );
+    return this.http.post<Client>(`${environment.apiUrl}/auth/client/request/with-company`, {
+      phone: data.phone,
+      name: data.name,
+      deviceId,
+    });
   }
 
   codeRegistrationClient(code: string) {
@@ -45,18 +45,10 @@ export class ClientsService {
   }
 
   getClientAndCard(idClient: string) {
-    return this.http.get<Client>(
-      `${environment.apiUrl}/client/get-full/${idClient}`
-    );
+    return this.http.get<Client>(`${environment.apiUrl}/client/get-full/${idClient}`);
   }
 
-  saveDataClient(data: {
-    clientId: string;
-    name?: string;
-    phone?: string;
-    email?: string;
-    bonuses?: number;
-  }) {
+  saveDataClient(data: { clientId: string; name?: string; phone?: string; email?: string; bonuses?: number }) {
     return this.http.put(`${environment.apiUrl}/client/update`, data);
   }
 }

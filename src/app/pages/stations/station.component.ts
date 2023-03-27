@@ -1,26 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Injector,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { StationService } from '../../common/services/api/station.service';
 import { TuiDialogService } from '@taiga-ui/core';
 import { Station } from '../../common/entities/station.entity';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  Observable,
-} from 'rxjs';
-import {
-  debounceTime,
-  filter,
-  map,
-  share,
-  startWith,
-  switchMap,
-} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable } from 'rxjs';
+import { debounceTime, filter, map, share, startWith, switchMap } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
 
 type Key = 'name';
@@ -73,13 +56,7 @@ export class StationComponent {
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
 
-  private getData(
-    page: number,
-    pageSize: number,
-    search: string,
-    sorter: string,
-    direction: -1 | 1
-  ) {
+  private getData(page: number, pageSize: number, search: string, sorter: string, direction: -1 | 1) {
     return this.stationService.getStationList({
       page,
       pageSize,
@@ -95,10 +72,13 @@ export class StationComponent {
   }
 
   setVisibleStation(stationId: string, visible: boolean) {
-    this.stationService
-      .setVisibleStation({ stationId, visible: !visible })
-      .subscribe(() => {
+    this.stationService.setVisibleStation({ stationId, visible: !visible }).subscribe(
+      () => {
         this.refreshData();
-      });
+      },
+      () => {
+        this.dialogService.open('Ни одна услуга не подключена', { label: 'Ошибка', size: 's' }).subscribe();
+      }
+    );
   }
 }

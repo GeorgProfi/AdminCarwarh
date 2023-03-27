@@ -11,30 +11,20 @@
           </tui-input-phone>
           <tui-input formControlName="name"> Имя </tui-input>
         </div>
-        <div class="tui-form__buttons tui-form__buttons_align_center">
-          <button
-            tuiButton
-            class="tui-form__button"
-            (click)="onSubmit()"
-            appearance="primary">
-            Зарегистрировать
-          </button>
+        <div class="flex-wrap tui-form__row">
+          <button class="tui-form__button center" tuiButton (click)="onSubmit()" appearance="primary">Создать</button>
+          <tui-checkbox-block contentAlign="right" class="right" formControlName="check">
+            Запросить подтверждение по SMS
+          </tui-checkbox-block>
         </div>
       </form>
     </tui-expand>
 
     <tui-expand [expanded]="expandedCode">
       <div tuiGroup class="tui-form__row">
-        <tui-input-number [formControl]="code">
-          Код подтверждения
-        </tui-input-number>
+        <tui-input-number [formControl]="code"> Код подтверждения </tui-input-number>
 
-        <button
-          tuiButton
-          [showLoader]="loader"
-          class="tui-form__button"
-          appearance="primary"
-          (click)="onAcceptCode()">
+        <button tuiButton [showLoader]="loader" class="tui-form__button" appearance="primary" (click)="onAcceptCode()">
           Отправить
         </button>
       </div>
