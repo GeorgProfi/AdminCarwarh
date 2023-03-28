@@ -1,0 +1,17 @@
+<div tuiGroup class="tui-form__row tui-space_bottom-5" [adaptive]="true" [collapsed]="true">
+  <tui-combo-box
+    *tuiLet="stations$ | async as stations"
+    class="b-form tui-form__row"
+    [stringify]="stationsStringify"
+    [(ngModel)]="station"
+    (ngModelChange)="selectStation($event)">
+    Поиск станции
+    <input tuiTextfield placeholder="Поиск по названию" />
+    <tui-data-list-wrapper
+      *tuiDataList
+      [itemContent]="stationsStringify | tuiStringifyContent"
+      [items]="stations | tuiFilterByInputWith : stationsStringify"></tui-data-list-wrapper>
+  </tui-combo-box>
+  <tui-input-date [ngModel]="day$ | async" (ngModelChange)="day$.next($event)"> Choose a date </tui-input-date>
+</div>
+<full-calendar [options]="calendarOptions" [events]="events$ | async"></full-calendar>

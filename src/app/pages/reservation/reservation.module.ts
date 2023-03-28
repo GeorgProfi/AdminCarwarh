@@ -34,6 +34,8 @@ import { TableReservationComponent } from './table-reservation/table-reservation
 import { StationModule } from '../stations/station.module';
 import { EditReservationComponent } from './edit-reservation/edit-reservation.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
+import { TableOrderComponent } from './table-order/table-order.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   imports: [
@@ -68,8 +70,15 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
     TuiDialogModule,
     TuiMoneyModule,
     TuiTagModule,
+    FullCalendarModule,
   ],
-  declarations: [ReservationComponent, CreateReservationComponent, TableReservationComponent, EditReservationComponent],
+  declarations: [
+    ReservationComponent,
+    CreateReservationComponent,
+    TableReservationComponent,
+    EditReservationComponent,
+    TableOrderComponent,
+  ],
   exports: [ReservationComponent],
 })
 export class ReservationModule {}
