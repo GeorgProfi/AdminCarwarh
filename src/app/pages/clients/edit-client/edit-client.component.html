@@ -1,17 +1,19 @@
 <tui-island>
-  <tui-input class="tui-form__row" [(ngModel)]="name"> Имя </tui-input>
-  <div tuiGroup class="tui-form__row">
-    <tui-input-phone [(ngModel)]="phone">
-      Телефон
-      <input tuiTextfield autocomplete="tel" />
-    </tui-input-phone>
-    <tui-input [(ngModel)]="email"> email </tui-input>
-  </div>
+  <form [formGroup]="form">
+    <tui-input class="tui-form__row" formControlName="name"> Имя </tui-input>
+    <div tuiGroup class="tui-form__row">
+      <tui-input-phone formControlName="phone">
+        Телефон
+        <input tuiTextfield autocomplete="tel" />
+      </tui-input-phone>
+      <tui-input formControlName="email"> email </tui-input>
+    </div>
 
-  <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">Карта клиента</h3>
-  <tui-input-number class="tui-form__row" [(ngModel)]="bonuses" [postfix]="'RUB' | tuiCurrency">
-    Число бонусов
-  </tui-input-number>
+    <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">Карта клиента</h3>
+    <tui-input-number class="tui-form__row" formControlName="bonuses" [postfix]="'RUB' | tuiCurrency">
+      Число бонусов
+    </tui-input-number>
+  </form>
 </tui-island>
 <div class="tui-form__buttons">
   <button class="tui-form__button" tuiButton appearance="primary" (click)="saveData()">Сохранить</button>

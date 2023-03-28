@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-client',
@@ -16,8 +17,7 @@ export class EditClientComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService,
-    private cdr: ChangeDetectorRef
+    private readonly dialogService: TuiDialogService //private cdr: ChangeDetectorRef
   ) {}
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -26,23 +26,28 @@ export class EditClientComponent implements OnInit {
     dismissible: false,
   });
 
-  name = '';
-  phone = '';
-  email = '';
-  bonuses = 0;
+  form = new FormGroup({
+    name: new FormControl(''),
+    phone: new FormControl('', [Validators.required]),
+    email: new FormControl('', Validators.email),
+    bonuses: new FormControl(0, Validators.min(0)),
+  });
 
   async saveData() {
+    if (this.form.valid) {
+      this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
+
+    const data: any = this.form.value;
     this.clientsService
       .saveDataClient({
         clientId: this.id,
-        name: this.name,
-        phone: this.phone,
-        email: this.email,
-        bonuses: this.bonuses,
+        ...data,
       })
       .subscribe(
         () => {
@@ -60,11 +65,13 @@ export class EditClientComponent implements OnInit {
     this.router.queryParams.subscribe(({ id }) => {
       this.id = id;
       this.clientsService.getClientAndCard(id).subscribe((data: any) => {
-        this.name = data.name;
-        this.phone = data.phone;
-        this.email = data.email;
-        this.bonuses = data.card.bonuses;
-        this.cdr.detectChanges();
+        this.form.patchValue({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          bonuses: data.card.bonuses,
+        });
+        //this.cdr.detectChanges();
       });
     });
   }

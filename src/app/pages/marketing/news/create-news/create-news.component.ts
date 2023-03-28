@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
 import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
 import { TUI_PROMPT, TuiFileLike } from '@taiga-ui/kit';
@@ -29,21 +29,26 @@ export class CreateNewsComponent {
 
   @Output() createEvent = new EventEmitter();
 
-  formCreateNotification = new FormGroup({
-    title: new FormControl(),
-    text: new FormControl(),
+  formCreateNews = new FormGroup({
+    title: new FormControl('', Validators.required),
+    text: new FormControl('', Validators.required),
   });
   imageId?: string;
   async onSubmit() {
+    if (this.formCreateNews.valid) {
+      this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
-    const data = this.formCreateNotification.value as any;
+
+    const data = this.formCreateNews.value as any;
     this.newsService.createNews({ ...data, imageId: this.imageId }).subscribe(
       data => {
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        this.formCreateNotification.reset();
+        this.formCreateNews.reset();
         this.file.reset();
         this.createEvent.emit();
       },

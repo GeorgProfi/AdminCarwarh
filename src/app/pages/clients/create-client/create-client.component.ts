@@ -36,17 +36,22 @@ export class CreateClientComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    name: new FormControl(``, {
+    name: new FormControl('', {
       nonNullable: true,
     }),
     check: new FormControl(false, { nonNullable: true }),
   });
 
   async onSubmit() {
+    if (!this.form.valid) {
+      this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
+
     const data: any = this.form.value;
     if (data.check) {
       this.clientsService.requestRegistrationClient(data).subscribe({
@@ -75,8 +80,13 @@ export class CreateClientComponent {
 
   loader: boolean = false;
   expandedCode = false;
-  code = new FormControl('', Validators.required);
+  code = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4)]);
   onAcceptCode() {
+    if (!this.code.valid) {
+      this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
+
     this.loader = true;
     const code: string = this.code.value as string;
     this.clientsService.codeRegistrationClient(code).subscribe(

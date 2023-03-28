@@ -54,10 +54,15 @@ export class EditNewsComponent implements OnInit {
   }
 
   async save() {
+    if (this.newsForm.valid) {
+      this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
+
     const data = this.newsForm.value as any;
     this.newsService.updateNews({ ...data, imageId: this.imageId, id: this.id }).subscribe(
       () => {

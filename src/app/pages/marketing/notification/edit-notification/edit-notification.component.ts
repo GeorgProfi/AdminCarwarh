@@ -29,7 +29,7 @@ export class EditNotificationComponent implements OnInit {
   });
   notificationForm = new FormGroup({
     title: new FormControl(``, Validators.required),
-    content: new FormControl(''),
+    content: new FormControl('', Validators.required),
   });
 
   id: string = this.router.snapshot.params['id'];
@@ -54,6 +54,7 @@ export class EditNotificationComponent implements OnInit {
     if (!p) {
       return;
     }
+
     this.notificationService.pushNotification(this.id).subscribe(
       () => {
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();

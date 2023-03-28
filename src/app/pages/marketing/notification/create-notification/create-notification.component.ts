@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CreateNotificationDto } from '../../../../common/dto/notification/create-notification.dto';
 import { NotificationService } from '../../../../common/services/api/notification.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
@@ -26,16 +26,21 @@ export class CreateNotificationComponent {
     dismissible: false,
   });
   formCreateNotification = new FormGroup({
-    title: new FormControl('', { nonNullable: true }),
-    text: new FormControl('', { nonNullable: true }),
+    title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    text: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     send: new FormControl(false, { nonNullable: true }),
   });
 
   async onSubmit() {
+    if (this.formCreateNotification.valid) {
+      this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
+
     const data: CreateNotificationDto = this.formCreateNotification.value as CreateNotificationDto;
     this.notificationService.createNotification(data).subscribe(
       data => {
