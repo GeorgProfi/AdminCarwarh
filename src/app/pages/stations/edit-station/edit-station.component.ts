@@ -306,6 +306,9 @@ export class EditStationComponent implements OnInit {
     }
     this.stationService.removePost(this.posts[this.indexPost].id).subscribe(
       () => {
+        if (this.indexPost > 0) {
+          this.indexPost -= 1;
+        }
         this.getPosts().subscribe();
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },

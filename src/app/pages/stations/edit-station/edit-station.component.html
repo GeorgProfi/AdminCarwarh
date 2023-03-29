@@ -143,7 +143,7 @@
         <button class="tui-form__button" tuiButton (click)="createPost()" appearance="primary">Создать пост</button>
       </div>
       <div class="content-post tui-form__row" *ngIf="posts.length > 0; else nothing">
-        <nav tuiTabs vertical="left" class="left">
+        <nav tuiTabs [(activeItemIndex)]="indexPost" vertical="left" class="left">
           <button tuiTab *ngFor="let post of posts; let i = index" (click)="selectPost(i)">
             {{ post.name }}
           </button>
