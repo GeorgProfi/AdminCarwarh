@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../../../common/services/api/notification.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
@@ -12,7 +12,8 @@ import { TUI_PROMPT } from '@taiga-ui/kit';
 })
 export class EditNotificationComponent implements OnInit {
   constructor(
-    private router: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private notificationService: NotificationService,
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
@@ -32,7 +33,7 @@ export class EditNotificationComponent implements OnInit {
     content: new FormControl('', Validators.required),
   });
 
-  id: string = this.router.snapshot.params['id'];
+  id: string = this.activatedRoute.snapshot.params['id'];
 
   async removeNotification() {
     const p = await this.prompt.toPromise();
@@ -40,7 +41,8 @@ export class EditNotificationComponent implements OnInit {
       return;
     }
     this.notificationService.removeNotification(this.id).subscribe(
-      () => {
+      async () => {
+        await this.router.navigateByUrl('marketing');
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },
       () => {
@@ -56,6 +58,26 @@ export class EditNotificationComponent implements OnInit {
     }
 
     this.notificationService.pushNotification(this.id).subscribe(
+      () => {
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
+  }
+
+  async save() {
+    if (!this.notificationForm.valid) {
+      this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
+      return;
+    }
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
+    const data = this.notificationForm.value as any;
+    this.notificationService.updateNotification(this.id, data).subscribe(
       () => {
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },

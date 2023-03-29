@@ -1,12 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  map,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, switchMap } from 'rxjs';
 import { debounceTime, filter, share, startWith } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
 import { Notification } from '../../../common/entities/notification.entity';
@@ -56,13 +49,12 @@ export class NotificationComponent {
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
 
-  private getData(
-    page: number,
-    pageSize: number,
-    search: string,
-    sorter: string,
-    direction: -1 | 1
-  ) {
+  refreshData() {
+    // TODO: Я хз как по нормальному обновить данные ¯\_(ツ)_/¯
+    this.size$.next(this.size$.value);
+  }
+
+  private getData(page: number, pageSize: number, search: string, sorter: string, direction: -1 | 1) {
     return this.notificationService
       .getNotificationList({
         page,

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CreateNotificationDto } from '../../../../common/dto/notification/create-notification.dto';
 import { NotificationService } from '../../../../common/services/api/notification.service';
@@ -25,14 +25,15 @@ export class CreateNotificationComponent {
     closeable: false,
     dismissible: false,
   });
+  @Output() createEvent = new EventEmitter();
   formCreateNotification = new FormGroup({
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    text: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    content: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     send: new FormControl(false, { nonNullable: true }),
   });
 
   async onSubmit() {
-    if (this.formCreateNotification.valid) {
+    if (!this.formCreateNotification.valid) {
       this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }
@@ -46,6 +47,7 @@ export class CreateNotificationComponent {
       data => {
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         this.formCreateNotification.reset();
+        this.createEvent.emit();
       },
       () => {
         this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();

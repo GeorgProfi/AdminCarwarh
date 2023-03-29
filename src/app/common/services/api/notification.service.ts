@@ -32,4 +32,8 @@ export class NotificationService {
   removeNotification(idNotification: string) {
     return this.http.delete<Notification>(`${environment.apiUrl}/notification/${idNotification}`);
   }
+
+  updateNotification(id: string, data: { title?: string; content?: string }) {
+    return this.http.put<Notification>(`${environment.apiUrl}/notification/${id}`, data);
+  }
 }

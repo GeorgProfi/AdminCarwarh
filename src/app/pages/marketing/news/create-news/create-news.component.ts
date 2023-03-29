@@ -35,7 +35,7 @@ export class CreateNewsComponent {
   });
   imageId?: string;
   async onSubmit() {
-    if (this.formCreateNews.valid) {
+    if (!this.formCreateNews.valid) {
       this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }

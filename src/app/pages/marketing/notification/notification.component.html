@@ -1,10 +1,6 @@
-<app-create-notification></app-create-notification>
+<app-create-notification (createEvent)="refreshData()"></app-create-notification>
 
-<div
-  tuiGroup
-  class="tui-form__row tui-space_bottom-5"
-  [adaptive]="true"
-  [collapsed]="true">
+<div tuiGroup class="tui-form__row tui-space_bottom-5" [adaptive]="true" [collapsed]="true">
   <tui-input
     class="input"
     tuiTextfieldSize="m"
@@ -37,10 +33,7 @@
         <th tuiTh *tuiHead="'title'" tuiSortable>Название</th>
       </tr>
     </thead>
-    <tbody
-      tuiTbody
-      *tuiLet="data | tuiTableSort as sortedData"
-      [data]="sortedData">
+    <tbody tuiTbody *tuiLet="data | tuiTableSort as sortedData" [data]="sortedData">
       <tr tuiTr *ngFor="let item of sortedData">
         <td tuiTd *tuiCell="'title'">
           <a tuiLink [routerLink]="['/notification/edit', item.id]">

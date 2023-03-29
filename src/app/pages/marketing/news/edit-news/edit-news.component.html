@@ -29,8 +29,9 @@
         <tui-file *ngIf="loadingFiles$ | async as file" state="loading" [file]="file"></tui-file>
       </tui-files>
     </div>
-    <div class="tui-form__buttons">
-      <button class="tui-form__button" tuiButton appearance="primary" (click)="save()">Сохранить</button>
+    <div class="flex-wrap tui-form__row">
+      <button class="tui-form__button left" tuiButton appearance="primary" (click)="save()">Сохранить</button>
+      <button class="tui-form__button right" tuiButton appearance="accent" (click)="remove()">Удалить</button>
     </div>
   </form>
 </tui-island>

@@ -11,8 +11,10 @@
     </div>
   </tui-island>
   <div class="flex-wrap tui-form__row">
-    <button class="tui-form__button left" tuiButton appearance="primary">Сохранить</button>
-    <button class="tui-form__button left" tuiButton appearance="primary">Отправить всем</button>
-    <button class="tui-form__button right" tuiButton appearance="accent">Удалить</button>
+    <button class="tui-form__button left" tuiButton appearance="primary" (click)="save()">Сохранить</button>
+    <button class="tui-form__button left" tuiButton appearance="primary" (click)="pushNotification()">
+      Отправить всем
+    </button>
+    <button class="tui-form__button right" tuiButton appearance="accent" (click)="removeNotification()">Удалить</button>
   </div>
 </form>

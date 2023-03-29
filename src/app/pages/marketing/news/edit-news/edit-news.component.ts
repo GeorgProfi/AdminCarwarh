@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NewsService } from '../../../../common/services/api/news.service';
 import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
@@ -15,7 +15,8 @@ import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/co
 })
 export class EditNewsComponent implements OnInit {
   constructor(
-    private router: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private newsService: NewsService,
     private filesService: FilesService,
     @Inject(TuiAlertService)
@@ -37,7 +38,7 @@ export class EditNewsComponent implements OnInit {
   });
   imageId?: string;
 
-  id: string = this.router.snapshot.params['id'];
+  id: string = this.activatedRoute.snapshot.params['id'];
   urlImage!: string;
 
   ngOnInit(): void {
@@ -53,8 +54,24 @@ export class EditNewsComponent implements OnInit {
     });
   }
 
+  async remove() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
+    this.newsService.removeNews(this.id).subscribe(
+      async () => {
+        await this.router.navigateByUrl('marketing');
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
+  }
+
   async save() {
-    if (this.newsForm.valid) {
+    if (!this.newsForm.valid) {
       this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }
