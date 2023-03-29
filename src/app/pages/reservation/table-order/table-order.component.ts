@@ -9,6 +9,8 @@ import { DateTime } from 'luxon';
 import { TuiDay } from '@taiga-ui/cdk';
 import { Station } from '../../../common/entities/station.entity';
 import { FullCalendarComponent } from '@fullcalendar/angular';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
+import { EditReservationComponent } from '../edit-reservation/edit-reservation.component';
 
 @Component({
   selector: 'app-table-order',
@@ -28,155 +30,120 @@ export class TableOrderComponent implements OnInit {
     private readonly injector: Injector
   ) {}
 
-  day$ = new BehaviorSubject(TuiDay.currentLocal());
-  stationId$ = new BehaviorSubject('00000000-0000-0000-0000-000000000000');
-  stations$ = this.stationService.getALLStation();
-  stationId!: string;
+  openEditOrder(order: any): void {
+    const dialogEditOrder = this.dialogService.open<any>(
+      new PolymorpheusComponent(EditReservationComponent, this.injector),
+      {
+        data: order,
+        dismissible: true,
+        label: 'Детали записи',
+        size: 'auto',
+      }
+    );
+    dialogEditOrder.subscribe({
+      next: data => {
+        this.change();
+      },
+      complete: () => {
+        console.info('Dialog closed');
+      },
+    });
+  }
 
+  stations$ = this.stationService.getALLStation();
   stationsStringify(station: Station): string {
     return station.name;
   }
   station!: Station;
-  startWorkStation!: number;
+  day: TuiDay = TuiDay.currentLocal();
 
-  selectStation(station: Station) {
-    this.stationId$.next(station.id);
+  change() {
+    console.log(this.day);
+    this.getOrders(this.day.toLocalNativeDate(), this.station.id);
   }
 
-  ///
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   calendarOptions: CalendarOptions = {
-    //initialView: 'timeGridWeek',
+    customButtons: {
+      date: {
+        text: 'Дата',
+      },
+      post: {
+        text: 'Посты',
+      },
+    },
     initialView: 'timeGridFourDay',
     height: 'auto',
     views: {
       timeGridFourDay: {
         type: 'timeGrid',
-        duration: { days: 4, hour: 4 },
-        slotMinTime: '08:00:00',
-        slotMaxTime: '20:00:00',
-        allDayText: '____',
-        //dayHeaderContent: 'пост 1',
-        //dayHeaders: false,
+        //duration: { days: 4, hour: 4 },
         allDaySlot: false,
       },
     },
     headerToolbar: {
-      start: 'prev,next',
+      start: undefined,
       end: undefined,
     },
     plugins: [timeGridPlugin],
-    nowIndicator: true,
+    //nowIndicator: true,
     now: '2023-03-26',
     locale: 'ru',
-    events: [
-      {
-        title: 'Пост 1',
-        start: '2023-03-26',
-      },
-      {
-        title: 'Пост 2',
-        start: '2023-03-27',
-      },
-      {
-        title: 'Пост 3',
-        start: '2023-03-28',
-      },
-      {
-        title: 'Пост 4',
-        start: '2023-03-29',
-        editable: false,
-      },
-      {
-        title: 'Пост 5',
-        start: '2023-03-30',
-      },
-      {
-        title: 'Пост 6',
-        start: '2023-03-31',
-      },
-      {
-        title: 'Пост 7',
-        start: '2023-04-01',
-      },
-      {
-        title: 'Вася',
-        start: '2023-03-27T07:00:00.000Z',
-        end: '2023-03-27T10:00:00.000Z',
-        backgroundColor: '#ffff99',
-        textColor: 'black',
-      },
-      {
-        title: 'Петя',
-        start: '2023-03-28T09:00:00.000Z',
-        end: '2023-03-28T12:00:00.000Z',
-        backgroundColor: '#99ffcc',
-        textColor: 'black',
-        editable: true,
-        interactive: true,
-      },
-      {
-        title: 'Неизвестно',
-        start: '2023-03-26T04:00:00.000Z',
-        end: '2023-03-26T6:00:00.000Z',
-        backgroundColor: '#ff6666',
-        textColor: 'black',
-      },
-    ],
+    eventClick: e => {
+      this.openEditOrder({ id: e.event.id });
+    },
   };
 
-  // toolbar
-  // day$ = new BehaviorSubject(TuiDay.currentLocal());
-  // stationId$ = new BehaviorSubject('00000000-0000-0000-0000-000000000000');
-  // stations$ = this.stationService.getALLStation();
-  // stationId!: string;
-  //
-  // stationsStringify(station: Station): string {
-  //   return station.name;
-  // }
-  // station!: Station;
-  // startWorkStation!: number;
-  //
-  // selectStation(station: Station) {
-  //   this.stationId$.next(station.id);
-  // }
+  indexPost = 0;
+
+  pageDown() {
+    this.calendarComponent.getApi().prev();
+    this.indexPost -= 1;
+  }
+
+  pageUp() {
+    this.calendarComponent.getApi().next();
+    this.indexPost += 1;
+  }
 
   // orders
   colorStatus = ['#ffff99', '#99ffcc', '#ff6666', '#9494b8'];
   events$ = new BehaviorSubject<EventInput[]>([]);
-  getOrders() {
+  posts: any[] = [];
+  getOrders(day: Date, stationId: string) {
+    console.log(day);
     this.reservationService
       .getReservationStation({
-        day: DateTime.fromISO('2023-02-23').toJSDate(),
-        stationId: '00000000-0000-0000-0000-000000000000',
+        day,
+        stationId,
       })
       .subscribe((station: any) => {
-        console.log(station);
         const orders = [];
         const startDate = DateTime.fromISO('2023-03-26');
         let postIndex = 0;
-        let length = station.posts.length;
-        if (length > 5) {
-          length = 5;
-          this.calendarOptions.headerToolbar = {
-            start: 'prev,next',
-            end: undefined,
+        let length = station.posts.length > 5 ? 5 : station.posts.length;
+        if (station.aroundClock) {
+          this.calendarOptions.views = {
+            timeGridFourDay: {
+              type: 'timeGrid',
+              dayCount: length,
+              allDaySlot: false,
+            },
           };
         } else {
-          this.calendarOptions.headerToolbar = {
-            start: undefined,
-            end: undefined,
+          this.calendarOptions.views = {
+            timeGridFourDay: {
+              type: 'timeGrid',
+              dayCount: length,
+              slotMinTime: DateTime.fromISO(station.startWork).toISOTime(),
+              slotMaxTime: DateTime.fromISO(station.endWork).toISOTime(),
+              allDaySlot: false,
+            },
           };
         }
-        this.calendarOptions.views = {
-          timeGridFourDay: {
-            type: 'timeGrid',
-            duration: { days: length },
-            slotMinTime: DateTime.fromISO(station.startWork).toISOTime(),
-            slotMaxTime: DateTime.fromISO(station.endWork).toISOTime(),
-            allDaySlot: false,
-          },
-        };
+
+        this.posts = station.posts;
+
         this.calendarOptions.dayHeaderContent = args => {
           return station.posts[args.dow].name;
         };
@@ -190,6 +157,7 @@ export class TableOrderComponent implements OnInit {
               end: startDate.plus({ day: postIndex, hour: ew.getHours(), minute: ew.getMinutes() }).toISO(),
               backgroundColor: this.colorStatus[order.status],
               textColor: 'black',
+              id: order.id,
             });
           }
           postIndex += 1;
@@ -198,6 +166,6 @@ export class TableOrderComponent implements OnInit {
       });
   }
   ngOnInit(): void {
-    this.getOrders();
+    this.getOrders(this.day.toLocalNativeDate(), '00000000-0000-0000-0000-000000000000');
   }
 }
