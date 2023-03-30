@@ -48,7 +48,7 @@ export class EditStationComponent implements OnInit {
   stationId: string = this.activatedRoute.snapshot.queryParams['id'];
 
   listServices$ = this.servicesService.getAllClassServices();
-  serviceStringify(service: Service): string {
+  serviceStringify(service: ClassService | Service): string {
     return service.name;
   }
 
@@ -61,10 +61,6 @@ export class EditStationComponent implements OnInit {
       validators: Validators.required,
     }),
     name: new FormControl(``, {
-      nonNullable: true,
-      validators: Validators.required,
-    }),
-    postCount: new FormControl(3, {
       nonNullable: true,
       validators: Validators.required,
     }),

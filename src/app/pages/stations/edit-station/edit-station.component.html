@@ -1,8 +1,14 @@
 <tui-island>
   <form [formGroup]="formEditStation">
-    <tui-input class="tui-form__row" formControlName="address"> Адрес </tui-input>
-    <tui-input class="tui-form__row" formControlName="name"> Название </tui-input>
-    <div tuiGroup class="tui-form__row">
+    <div class="tui-form__row">
+      <tui-input formControlName="address"> Адрес </tui-input>
+      <tui-error formControlName="address" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+    <div class="tui-form__row">
+      <tui-input formControlName="name"> Название </tui-input>
+      <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+    <div tuiGroup class="group tui-form__row">
       <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="changeAroundClock()">
         Круглосуточно
       </tui-checkbox-block>
@@ -19,7 +25,9 @@
         Окончание работы
       </tui-input-time>
     </div>
-    <tui-text-area class="tui-form__row" formControlName="description">Описание</tui-text-area>
+    <div class="tui-form__row">
+      <tui-text-area formControlName="description">Описание</tui-text-area>
+    </div>
     <div class="flex-wrap tui-form__row">
       <button class="tui-form__button center" tuiButton size="s" (click)="updateStation()" appearance="primary">
         Сохранить

@@ -27,14 +27,15 @@ export class EditClientComponent implements OnInit {
   });
 
   form = new FormGroup({
-    name: new FormControl(''),
-    phone: new FormControl('', [Validators.required]),
-    email: new FormControl('', Validators.email),
-    bonuses: new FormControl(0, Validators.min(0)),
+    name: new FormControl('', { nonNullable: true }),
+    phone: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(12)] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.email] }),
+    bonuses: new FormControl(0, { nonNullable: true, validators: Validators.min(0) }),
   });
 
   async saveData() {
-    if (this.form.valid) {
+    this.form.markAllAsTouched();
+    if (!this.form.valid) {
       this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }

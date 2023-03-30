@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { AccountService } from '../../../common/services/api/account.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-setting-profile',
@@ -22,23 +23,24 @@ export class SettingProfileComponent {
     closeable: false,
     dismissible: false,
   });
-  email = '';
+  emailControl = new FormControl('', { nonNullable: true });
   oldPassword = '';
   newPassword = '';
   repeatPassword = '';
 
   async changeEmail() {
+    if (!this.emailControl.valid) {
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
-    if (!this.email.length) {
-      console.log('fuck');
-      return;
-    }
+
+    const email = this.emailControl.value;
     this.accountService
       .changeEmail({
-        newEmail: this.email,
+        newEmail: email,
       })
       .subscribe(
         () => {

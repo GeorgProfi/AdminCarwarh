@@ -3,13 +3,18 @@
   <ng-template tuiAccordionItemContent>
     <tui-expand [expanded]="!expandedCode">
       <form [formGroup]="form">
-        <div tuiGroup class="tui-form__row">
-          <tui-input-phone formControlName="phone">
-            Телефон
-            <span class="tui-required"></span>
-            <input tuiTextfield autocomplete="tel" />
-          </tui-input-phone>
-          <tui-input formControlName="name"> Имя </tui-input>
+        <div tuiGroup class="group">
+          <div>
+            <tui-input-phone formControlName="phone" class="tui-group__inherit-item">
+              Телефон
+              <span class="tui-required"></span>
+              <input tuiTextfield autocomplete="tel" />
+            </tui-input-phone>
+            <tui-error formControlName="phone" [error]="[] | tuiFieldError | async"></tui-error>
+          </div>
+          <div>
+            <tui-input formControlName="name" class="tui-group__inherit-item"> Имя </tui-input>
+          </div>
         </div>
         <div class="flex-wrap tui-form__row">
           <button class="tui-form__button center" tuiButton (click)="onSubmit()" appearance="primary">Создать</button>
@@ -21,13 +26,22 @@
     </tui-expand>
 
     <tui-expand [expanded]="expandedCode">
-      <div tuiGroup class="tui-form__row">
-        <tui-input-number [formControl]="code"> Код подтверждения </tui-input-number>
-
-        <button tuiButton [showLoader]="loader" class="tui-form__button" appearance="primary" (click)="onAcceptCode()">
-          Отправить
-        </button>
+      <div tuiGroup class="group">
+        <div>
+          <tui-input-number [formControl]="code" class="tui-group__inherit-item"> Код подтверждения </tui-input-number>
+        </div>
+        <div>
+          <button
+            tuiButton
+            [showLoader]="loader"
+            class="tui-form__button tui-group__inherit-item"
+            appearance="primary"
+            (click)="onAcceptCode()">
+            Отправить
+          </button>
+        </div>
       </div>
+      <tui-error [formControl]="code" [error]="[] | tuiFieldError | async"></tui-error>
     </tui-expand>
   </ng-template>
 </tui-accordion-item>

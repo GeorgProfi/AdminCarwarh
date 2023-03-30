@@ -1,15 +1,14 @@
 <tui-accordion-item>
   Создание услуги
   <ng-template tuiAccordionItemContent>
-    <div tuiGroup class="tui-form__row">
-      <tui-input class="tui-form__row" [(ngModel)]="name"> Название </tui-input>
-      <button
-        tuiButton
-        class="tui-form__button"
-        (click)="onSubmit()"
-        appearance="primary">
-        Создать
-      </button>
-    </div>
+    <form [formGroup]="form">
+      <div tuiGroup class="tui-form__row">
+        <div class="tui-form__row">
+          <tui-input formControlName="name"> Название </tui-input>
+          <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
+        </div>
+        <button tuiButton class="tui-form__button" (click)="onSubmit()" appearance="primary">Создать</button>
+      </div>
+    </form>
   </ng-template>
 </tui-accordion-item>

@@ -12,6 +12,7 @@ import { Station } from '../../../common/entities/station.entity';
 import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { DateTime } from 'luxon';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
+import { ClassService } from '../../../common/entities/class-service.entity';
 
 @Component({
   selector: 'app-create-reservation',
@@ -62,8 +63,8 @@ export class CreateReservationComponent {
   durationAmount: number = 0;
   listServices$ = combineLatest([this.stationId$]).pipe(
     switchMap(query =>
-      this.servicesService.getAllClassServices(...query).pipe(
-        map((data: Service[]) => {
+      this.servicesService.getAllClassServices().pipe(
+        map((data: ClassService[]) => {
           if (!query[0]) {
             return data;
           }
@@ -73,8 +74,8 @@ export class CreateReservationComponent {
           for (const service of this.services) {
             const stationService = data.find(s => s.id === service.id);
             if (!stationService) continue;
-            service.price = stationService.price;
-            service.duration = stationService.duration;
+            //service.price = stationService.price;
+            //service.duration = stationService.duration;
             this.purchaseAmount += service.price;
             this.durationAmount += service.duration;
           }
@@ -84,11 +85,12 @@ export class CreateReservationComponent {
       )
     )
   );
-  serviceStringify(service: Service): string {
-    if (!service.price) {
-      return service.name;
-    }
-    return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
+  serviceStringify(service: ClassService | Service): string {
+    return service.name;
+    // if (!service.price) {
+    //   return service.name;
+    // }
+    // return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
 
   services: Service[] = [{ name: '' } as Service];

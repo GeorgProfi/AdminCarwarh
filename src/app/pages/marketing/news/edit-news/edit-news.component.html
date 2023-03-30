@@ -5,9 +5,11 @@
         Заголовок
         <span class="tui-required"></span>
       </tui-input>
+      <tui-error formControlName="title" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <div class="tui-form__row">
       <tui-text-area formControlName="text">Контент</tui-text-area>
+      <tui-error formControlName="text" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <img class="tui-form__row" *ngIf="urlImage" [src]="urlImage" width="500" height="600" />
     <div class="tui-form__row">

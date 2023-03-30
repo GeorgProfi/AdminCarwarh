@@ -9,6 +9,7 @@ import { filter, startWith } from 'rxjs/operators';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { TUI_PROMPT } from '@taiga-ui/kit';
+import { ClassService } from '../../../common/entities/class-service.entity';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -37,7 +38,7 @@ export class EditReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: any) => {
-      this.listServices$ = this.servicesService.getAllClassServices(order.stationId);
+      this.listServices$ = this.servicesService.getAllClassServices();
       this.client = order.client;
       this.services = order.services.map((service: any) => {
         service.name = service.classServices.name;
@@ -73,11 +74,12 @@ export class EditReservationComponent implements OnInit {
 
   // Services:
   listServices$ = this.servicesService.getAllClassServices();
-  serviceStringify(service: Service): string {
-    if (!service.price) {
-      return service.name;
-    }
-    return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
+  serviceStringify(service: Service | ClassService): string {
+    return service.name;
+    // if (!service.price) {
+    //   return service.name;
+    // }
+    // return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
 
   services!: Service[];

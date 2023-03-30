@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { catchError, finalize, map, Observable, of, Subject, switchMap } from 'rxjs';
 import { TUI_PROMPT, TuiFileLike } from '@taiga-ui/kit';
 import { FilesService } from '../../../common/services/api/files.service';
@@ -34,12 +34,17 @@ export class SettingCompanyComponent implements OnInit {
       if (data.logo) {
         this.logoUrl = environment.imageUrl + '/' + data.logo.fileName;
       }
-      this.description = data.description;
+      this.form.patchValue({
+        description: data.description,
+      });
       this.cdr.detectChanges();
     });
   }
 
-  description = '';
+  form = new FormGroup({
+    description: new FormControl(''),
+  });
+
   logoUrl: string | null = null;
 
   async saveData() {
@@ -47,9 +52,11 @@ export class SettingCompanyComponent implements OnInit {
     if (!p) {
       return;
     }
+
+    const data: any = this.form.value;
     this.companyService
       .updateDataCompany({
-        description: this.description,
+        description: data.description,
         logoImageId: this.imageId,
       })
       .subscribe(

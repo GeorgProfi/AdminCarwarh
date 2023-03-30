@@ -4,9 +4,11 @@
     <form [formGroup]="formCreateNews">
       <div class="tui-form__row">
         <tui-input formControlName="title"> Заголовок </tui-input>
+        <tui-error formControlName="title" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
       <div class="tui-form__row">
         <tui-text-area formControlName="text">Контент</tui-text-area>
+        <tui-error formControlName="text" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
       <div class="tui-form__row">
         <tui-input-files

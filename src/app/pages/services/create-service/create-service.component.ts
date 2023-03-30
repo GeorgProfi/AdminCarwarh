@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Output } from
 import { ServicesService } from '../../../common/services/api/services.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-create-service',
@@ -25,14 +26,19 @@ export class CreateServiceComponent {
     dismissible: false,
   });
   @Output() createEvent = new EventEmitter();
-
-  name = '';
+  readonly form = new FormGroup({
+    name: new FormControl('', { nonNullable: true }),
+  });
   async onSubmit() {
+    if (!this.form.valid) {
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
-    this.servicesService.createService({ name: this.name }).subscribe(
+    const data: any = this.form.value;
+    this.servicesService.createService({ name: data.name }).subscribe(
       () => {
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },

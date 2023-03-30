@@ -2,44 +2,52 @@
   Создание станции
   <ng-template tuiAccordionItemContent>
     <form [formGroup]="formCreateStation">
-      <tui-input class="tui-form__row" formControlName="address">
-        Адрес
-      </tui-input>
-      <div tuiGroup class="tui-form__row">
-        <tui-input formControlName="name"> Название </tui-input>
-        <tui-input formControlName="postCount"> Число постов </tui-input>
+      <div class="tui-form__row">
+        <tui-input formControlName="address"> Адрес </tui-input>
+        <tui-error formControlName="address" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
-      <div tuiGroup class="tui-form__row">
+      <div tuiGroup class="group tui-form__row">
+        <div>
+          <tui-input formControlName="name"> Название </tui-input>
+          <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
+        </div>
+        <div>
+          <tui-input formControlName="postCount"> Число постов </tui-input>
+          <tui-error formControlName="postCount" [error]="[] | tuiFieldError | async"></tui-error>
+        </div>
+      </div>
+      <div tuiGroup class="group tui-form__row">
         <tui-checkbox-block
+          class="tui-group__inherit-item"
           contentAlign="right"
           formControlName="aroundClock"
           (change)="changeAroundClock()">
           Круглосуточно
         </tui-checkbox-block>
-        <tui-input-time
-          *ngIf="!formCreateStation.get('aroundClock')?.value"
-          tuiUnfinishedValidator
-          formControlName="startWork">
-          Начало работы
-        </tui-input-time>
-        <tui-input-time
-          *ngIf="!formCreateStation.get('aroundClock')?.value"
-          tuiUnfinishedValidator
-          formControlName="endWork">
-          Окончание работы
-        </tui-input-time>
+        <div>
+          <tui-input-time
+            class="tui-group__inherit-item"
+            *ngIf="!formCreateStation.get('aroundClock')?.value"
+            tuiUnfinishedValidator
+            formControlName="startWork">
+            Начало работы
+          </tui-input-time>
+        </div>
+        <div>
+          <tui-input-time
+            class="tui-group__inherit-item"
+            *ngIf="!formCreateStation.get('aroundClock')?.value"
+            tuiUnfinishedValidator
+            formControlName="endWork">
+            Окончание работы
+          </tui-input-time>
+        </div>
       </div>
       <div class="tui-form__row">
         <tui-text-area formControlName="description">Описание</tui-text-area>
       </div>
       <div class="tui-form__buttons tui-form__buttons_align_center">
-        <button
-          class="tui-form__button"
-          tuiButton
-          (click)="onSubmit()"
-          appearance="primary">
-          Создать
-        </button>
+        <button class="tui-form__button" tuiButton (click)="onSubmit()" appearance="primary">Создать</button>
       </div>
     </form>
   </ng-template>

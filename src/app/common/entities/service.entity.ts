@@ -1,8 +1,4 @@
 export class Service {
-  constructor(props?: Partial<Service>) {
-    Object.assign(this, props);
-  }
-
   id!: string;
   stationId!: string;
   name!: string;

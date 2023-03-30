@@ -4,9 +4,11 @@
     <form [formGroup]="formCreateNotification">
       <div class="tui-form__row">
         <tui-input formControlName="title"> Заголовок </tui-input>
+        <tui-error formControlName="title" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
       <div class="tui-form__row">
         <tui-text-area formControlName="content">Контент</tui-text-area>
+        <tui-error formControlName="content" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
       <div class="flex-wrap tui-form__row">
         <button class="tui-form__button center" tuiButton (click)="onSubmit()" appearance="primary">Создать</button>

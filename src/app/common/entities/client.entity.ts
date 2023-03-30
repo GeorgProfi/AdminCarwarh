@@ -1,11 +1,6 @@
-export class Client {
-  constructor(props?: Partial<Client>) {
-    Object.assign(this, props);
-  }
-  toString() {
-    return `${this.name?.length ? this.name : 'Не указано'} (${this.phone})`;
-  }
+import { Card } from './card.entity';
 
+export class Client {
   id!: string;
   carWashId!: string;
   name!: string;
@@ -13,9 +8,8 @@ export class Client {
   phone!: string;
   dateOfRegistration!: Date;
   email!: string;
+  card!: Card;
   cardId!: string;
   enablePush!: boolean;
   enableSms!: boolean;
-
-  stringify = (item: { name: string }): string => `${item.name}`;
 }

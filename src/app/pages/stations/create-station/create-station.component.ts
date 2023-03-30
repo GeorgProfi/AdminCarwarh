@@ -41,7 +41,7 @@ export class CreateStationComponent {
     }),
     postCount: new FormControl(3, {
       nonNullable: true,
-      validators: Validators.required,
+      validators: [Validators.required, Validators.max(30)],
     }),
     aroundClock: new FormControl<boolean>(false, {
       nonNullable: true,
@@ -73,6 +73,7 @@ export class CreateStationComponent {
   }
 
   async onSubmit() {
+    this.formCreateStation.markAllAsTouched();
     if (!this.formCreateStation.valid) {
       this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;

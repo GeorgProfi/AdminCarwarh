@@ -1,18 +1,27 @@
 <tui-island>
   <form [formGroup]="form">
-    <tui-input class="tui-form__row" formControlName="name"> Имя </tui-input>
-    <div tuiGroup class="tui-form__row">
-      <tui-input-phone formControlName="phone">
-        Телефон
-        <input tuiTextfield autocomplete="tel" />
-      </tui-input-phone>
-      <tui-input formControlName="email"> email </tui-input>
+    <div class="tui-form__row">
+      <tui-input formControlName="name"> Имя </tui-input>
+    </div>
+    <div tuiGroup class="group tui-form__row">
+      <div>
+        <tui-input-phone formControlName="phone">
+          Телефон
+          <input tuiTextfield autocomplete="tel" />
+        </tui-input-phone>
+        <tui-error formControlName="phone" [error]="[] | tuiFieldError | async"></tui-error>
+      </div>
+      <div>
+        <tui-input formControlName="email"> email </tui-input>
+        <tui-error formControlName="email" [error]="[] | tuiFieldError | async"></tui-error>
+      </div>
     </div>
 
     <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">Карта клиента</h3>
-    <tui-input-number class="tui-form__row" formControlName="bonuses" [postfix]="'RUB' | tuiCurrency">
-      Число бонусов
-    </tui-input-number>
+    <div class="tui-form__row">
+      <tui-input-number formControlName="bonuses" [postfix]="'RUB' | tuiCurrency"> Число бонусов </tui-input-number>
+      <tui-error formControlName="bonuses" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
   </form>
 </tui-island>
 <div class="tui-form__buttons">

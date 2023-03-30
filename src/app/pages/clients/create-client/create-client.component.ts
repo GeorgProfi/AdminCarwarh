@@ -38,11 +38,13 @@ export class CreateClientComponent {
     }),
     name: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     check: new FormControl(false, { nonNullable: true }),
   });
 
   async onSubmit() {
+    this.form.markAllAsTouched();
     if (!this.form.valid) {
       this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;

@@ -7,21 +7,17 @@ import { Service } from '../../entities/service.entity';
 import { CreateServiceDto } from '../../dto/services/create-service.dto';
 import { UpdateServiceDto } from '../../dto/services/update-service.dto';
 import { Observable } from 'rxjs';
+import { ClassService } from '../../entities/class-service.entity';
 
 @Injectable({ providedIn: 'root' })
 export class ServicesService {
   constructor(private http: HttpClient) {}
 
-  getAllClassServices(stationId?: string): Observable<Service[]> {
-    if (stationId) {
-      return this.http.get<Service[]>(`${environment.apiUrl}/services/all`, {
-        params: {
-          stationId,
-        },
-      });
-    }
-    return this.http.get<Service[]>(`${environment.apiUrl}/services/all`);
+  getAllClassServices(): Observable<ClassService[]> {
+    return this.http.get<ClassService[]>(`${environment.apiUrl}/services/class/all`);
   }
+
+  getAllServices(stationId: string) {}
 
   getServicesList(data: GetServicesListDto): Observable<PaginateRes<Service>> {
     console.log(data);

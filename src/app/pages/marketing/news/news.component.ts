@@ -1,14 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  map,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, switchMap } from 'rxjs';
 import { debounceTime, filter, share, startWith } from 'rxjs/operators';
-import { Notification } from '../../../common/entities/notification.entity';
+import { NotificationTemplate } from '../../../common/entities/notification-template.entity';
 import { tuiIsPresent } from '@taiga-ui/cdk';
 import { NewsService } from '../../../common/services/api/news.service';
 
@@ -42,7 +35,7 @@ export class NewsComponent {
     switchMap(query => this.getData(...query).pipe(startWith(null))),
     share()
   );
-  readonly data$: Observable<readonly Notification[]> = this.request$.pipe(
+  readonly data$: Observable<readonly NotificationTemplate[]> = this.request$.pipe(
     filter(tuiIsPresent),
     map(data => data.rows.filter(tuiIsPresent)),
     startWith([])
@@ -59,13 +52,7 @@ export class NewsComponent {
     this.size$.next(this.size$.value);
   }
 
-  private getData(
-    page: number,
-    pageSize: number,
-    search: string,
-    sorter: string,
-    direction: -1 | 1
-  ) {
+  private getData(page: number, pageSize: number, search: string, sorter: string, direction: -1 | 1) {
     return this.newsService
       .getNewsList({
         page,

@@ -58,7 +58,8 @@ export class TableOrderComponent implements OnInit {
   day: TuiDay = TuiDay.currentLocal();
 
   change() {
-    console.log(this.day);
+    this.indexPost = 0;
+    this.calendarComponent.getApi().today();
     this.getOrders(this.day.toLocalNativeDate(), this.station.id);
   }
 

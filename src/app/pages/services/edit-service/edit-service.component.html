@@ -1,6 +1,9 @@
 <tui-island>
-  <div tuiGroup class="tui-form__row">
-    <tui-input [(ngModel)]="name"> Название </tui-input>
+  <div tuiGroup class="group tui-form__row">
+    <div>
+      <tui-input [(ngModel)]="name"> Название </tui-input>
+      <tui-error formControlName="title" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
     <button tuiButton class="tui-form__button" (click)="updateService()" appearance="primary">Обновить</button>
   </div>
   <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columnsServices">
