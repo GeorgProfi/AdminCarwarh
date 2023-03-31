@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { StationService } from '../../../common/services/api/station.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TuiContextWithImplicit, TuiStringHandler, TuiTime } from '@taiga-ui/cdk';
@@ -23,7 +23,7 @@ interface Post {
   selector: 'app-edit-station',
   templateUrl: './edit-station.component.html',
   styleUrls: ['./edit-station.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditStationComponent implements OnInit {
   constructor(
@@ -92,11 +92,20 @@ export class EditStationComponent implements OnInit {
    */
   readonly columnsServices = [`action-1`, `name`, 'duration', 'bonusPercentage', 'price', 'discount', `action-2`];
   services: Service[] = [];
-  classServiceForStation!: Service;
-  duration!: number;
-  bonusPercentage!: number;
-  price!: number;
-  discount!: number;
+  formAddService = new FormGroup({
+    classService: new FormControl(null, { validators: [Validators.required] }),
+    duration: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    bonusPercentage: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(0), Validators.max(100)],
+    }),
+    price: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    discount: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(0), Validators.max(100)],
+    }),
+  });
+  //controlsServices = new FormArray<FormGroup<any>>([]);
 
   getServices() {
     return this.stationService.getServices(this.stationId).pipe(
@@ -116,18 +125,24 @@ export class EditStationComponent implements OnInit {
   }
 
   async addService() {
+    this.formAddService.markAllAsTouched();
+    if (!this.formAddService.valid) {
+      this.cdr.detectChanges();
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
+    const data: any = this.formAddService.value;
     this.stationService
       .addServiceOnStation({
-        idClassService: this.classServiceForStation.id,
+        idClassService: 'data.classService.id',
         stationId: this.stationId,
-        bonusPercentage: this.bonusPercentage,
-        price: this.price,
-        discount: this.discount,
-        duration: this.duration,
+        bonusPercentage: data.bonusPercentage,
+        price: data.price,
+        discount: data.discount,
+        duration: data.duration,
       })
       .subscribe(
         data => {

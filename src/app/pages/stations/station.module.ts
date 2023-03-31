@@ -44,7 +44,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateStationComponent } from './create-station/create-station.component';
 import { EditStationComponent } from './edit-station/edit-station.component';
-import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
+import { TuiCurrencyPipeModule, TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { RouterLink, RouterModule } from '@angular/router';
 import { TimePipe } from '../../common/pipes/time.pipe';
 
@@ -100,6 +100,7 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     TuiStringifyContentPipeModule,
     TuiErrorModule,
     TuiFieldErrorPipeModule,
+    TuiCurrencyPipeModule,
   ],
   declarations: [StationComponent, CreateStationComponent, EditStationComponent, TimePipe],
   exports: [StationComponent, TimePipe],
