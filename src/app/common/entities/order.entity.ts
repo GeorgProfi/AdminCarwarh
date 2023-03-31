@@ -2,6 +2,7 @@ import { EStatusOrder } from '../enums/status-order.enum';
 import { Service } from './service.entity';
 import { Post } from './post.entity';
 import { Station } from './station.entity';
+import { Client } from './client.entity';
 
 export class Order {
   id!: string;
@@ -14,6 +15,7 @@ export class Order {
 
   services!: Service[];
 
+  client!: Client;
   clientId!: string;
 
   createdAt!: Date;

@@ -27,7 +27,7 @@ export class ReservationService {
   }
 
   getOrder(id: string) {
-    return this.http.get(`${environment.apiUrl}/reservation/get/${id}`);
+    return this.http.get<Order>(`${environment.apiUrl}/reservation/get/${id}`);
   }
 
   updateReservation(data: { orderId: string; clientId?: string; servicesIds?: string[]; status?: number }) {

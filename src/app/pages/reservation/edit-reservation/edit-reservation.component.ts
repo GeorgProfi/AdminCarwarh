@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit }
 import { TuiAlertService, TuiDialogContext, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Service } from '../../../common/entities/service.entity';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { Client } from '../../../common/entities/client.entity';
 import { filter, startWith } from 'rxjs/operators';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { TUI_PROMPT } from '@taiga-ui/kit';
-import { ClassService } from '../../../common/entities/class-service.entity';
+import { Order } from '../../../common/entities/order.entity';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -36,9 +36,11 @@ export class EditReservationComponent implements OnInit {
     dismissible: false,
   });
 
+  stationId$ = new BehaviorSubject<string>('00000000-0000-0000-0000-000000000000');
   ngOnInit(): void {
-    this.reservationService.getOrder(this.context.data.id).subscribe((order: any) => {
-      this.listServices$ = this.servicesService.getAllClassServices();
+    this.reservationService.getOrder(this.context.data.id).subscribe((order: Order) => {
+      //this.listServices$ = this.servicesService.getAllClassServices();
+      this.stationId$.next(order.stationId);
       this.client = order.client;
       this.services = order.services.map((service: any) => {
         service.name = service.classServices.name;
@@ -73,13 +75,37 @@ export class EditReservationComponent implements OnInit {
   newClient: any;
 
   // Services:
-  listServices$ = this.servicesService.getAllClassServices();
-  serviceStringify(service: Service | ClassService): string {
-    return service.name;
-    // if (!service.price) {
-    //   return service.name;
-    // }
-    // return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
+  listServices$: Observable<Service[]> = this.stationId$.pipe(
+    switchMap(stationId =>
+      this.servicesService.getAllStationServices(stationId).pipe(
+        map((services: Service[]) => {
+          this.purchaseAmount = 0;
+          this.durationAmount = 0;
+          // Преобразовываю к интерфейсу IMergeServices, так удобней
+          services = services.map(s => ({
+            ...s,
+            id: s.classServices.id,
+            name: s.classServices.name,
+          }));
+          for (const service of this.services) {
+            const stationService = services.find(s => s.id === service.id);
+            if (!stationService) continue;
+            service.price = stationService.price;
+            service.duration = stationService.duration;
+            this.purchaseAmount += service.price;
+            this.durationAmount += service.duration;
+          }
+          return services;
+        })
+      )
+    )
+  );
+
+  serviceStringify(service: Service): string {
+    if (!service.price) {
+      return service.name;
+    }
+    return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
 
   services!: Service[];

@@ -12,7 +12,7 @@ import { Station } from '../../../common/entities/station.entity';
 import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { DateTime } from 'luxon';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
-import { ClassService } from '../../../common/entities/class-service.entity';
+import { IMergeServices } from '../../../common/interfaces/merge-services.interface';
 
 @Component({
   selector: 'app-create-reservation',
@@ -61,41 +61,45 @@ export class CreateReservationComponent {
   // Services:
   purchaseAmount: number = 0;
   durationAmount: number = 0;
-  listServices$ = combineLatest([this.stationId$]).pipe(
-    switchMap(query =>
-      this.servicesService.getAllClassServices().pipe(
-        map((data: ClassService[]) => {
-          if (!query[0]) {
-            return data;
-          }
 
+  listServices$: Observable<IMergeServices[]> = this.stationId$.pipe(
+    switchMap(stationId => {
+      if (stationId === undefined) {
+        return this.servicesService.getAllClassServices();
+      }
+      return this.servicesService.getAllStationServices(stationId).pipe(
+        map((services: Service[]) => {
           this.purchaseAmount = 0;
           this.durationAmount = 0;
+          // Преобразовываю к интерфейсу IMergeServices, так удобней
+          services = services.map(s => ({
+            ...s,
+            id: s.classServices.id,
+            name: s.classServices.name,
+          }));
           for (const service of this.services) {
-            const stationService = data.find(s => s.id === service.id);
+            const stationService = services.find(s => s.id === service.id);
             if (!stationService) continue;
-            //service.price = stationService.price;
-            //service.duration = stationService.duration;
+            service.price = stationService.price;
+            service.duration = stationService.duration;
             this.purchaseAmount += service.price;
             this.durationAmount += service.duration;
           }
-
-          return data;
+          return services;
         })
-      )
-    )
+      );
+    })
   );
-  serviceStringify(service: ClassService | Service): string {
-    return service.name;
-    // if (!service.price) {
-    //   return service.name;
-    // }
-    // return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
+  serviceStringify(service: IMergeServices): string {
+    if (!service.price) {
+      return service.name;
+    }
+    return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
 
-  services: Service[] = [{ name: '' } as Service];
+  services: IMergeServices[] = [{ name: '' } as IMergeServices];
   addService() {
-    this.services.push({ name: '' } as Service);
+    this.services.push({ name: '' } as IMergeServices);
   }
   removeService(idx: number) {
     this.services.splice(idx, 1);
@@ -129,8 +133,8 @@ export class CreateReservationComponent {
     if (!this.station || this.services.filter(service => service.id).length < 1) {
       return;
     }
-    this.purchaseAmount = this.services.reduce((a, s) => a + s.price, 0);
-    this.durationAmount = this.services.reduce((a, s) => a + s.duration, 0);
+    // this.purchaseAmount = this.services.reduce((a, s) => a + s.price, 0);
+    // this.durationAmount = this.services.reduce((a, s) => a + s.duration, 0);
     this.reservationService
       .searchFreeTimes({
         day: this.day.toLocalNativeDate(),

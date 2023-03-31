@@ -17,7 +17,9 @@ export class ServicesService {
     return this.http.get<ClassService[]>(`${environment.apiUrl}/services/class/all`);
   }
 
-  getAllServices(stationId: string) {}
+  getAllStationServices(stationId: string) {
+    return this.http.get<Service[]>(`${environment.apiUrl}/services/on-station/all/${stationId}`);
+  }
 
   getServicesList(data: GetServicesListDto): Observable<PaginateRes<Service>> {
     console.log(data);
