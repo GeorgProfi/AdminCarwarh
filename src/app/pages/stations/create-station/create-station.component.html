@@ -11,10 +11,6 @@
           <tui-input formControlName="name"> Название </tui-input>
           <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
         </div>
-        <div>
-          <tui-input formControlName="postCount"> Число постов </tui-input>
-          <tui-error formControlName="postCount" [error]="[] | tuiFieldError | async"></tui-error>
-        </div>
       </div>
       <div tuiGroup class="group tui-form__row">
         <tui-checkbox-block

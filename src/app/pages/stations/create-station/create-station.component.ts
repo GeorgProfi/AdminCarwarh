@@ -39,10 +39,6 @@ export class CreateStationComponent {
       nonNullable: true,
       validators: Validators.required,
     }),
-    postCount: new FormControl(3, {
-      nonNullable: true,
-      validators: [Validators.required, Validators.max(30)],
-    }),
     aroundClock: new FormControl<boolean>(false, {
       nonNullable: true,
       validators: Validators.required,

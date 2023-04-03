@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
   password = '';
 
   enabledError = false;
-  error = new TuiValidationError(`Неверно логин или пароль`);
+  error = new TuiValidationError(`Неверно введен логин или пароль`);
 
   get computedError(): TuiValidationError | null {
     return this.enabledError ? this.error : null;

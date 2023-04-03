@@ -45,7 +45,6 @@ export class StationService {
   createStation(data: {
     address: string;
     name: string;
-    postCount: number;
     startWork: Date;
     endWork: Date;
     description?: string;

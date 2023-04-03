@@ -1,7 +1,7 @@
 <form [formGroup]="form">
   <h3 class="tui-form__header">Описание</h3>
   <div class="tui-form__row">
-    <tui-text-area formControlName="description">Type a text</tui-text-area>
+    <tui-text-area formControlName="description"></tui-text-area>
     <tui-error formControlName="description" [error]="[] | tuiFieldError | async"></tui-error>
   </div>
 
