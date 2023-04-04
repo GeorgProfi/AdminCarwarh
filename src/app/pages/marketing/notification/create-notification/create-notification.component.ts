@@ -33,6 +33,7 @@ export class CreateNotificationComponent {
   });
 
   async onSubmit() {
+    this.formCreateNotification.markAllAsTouched();
     if (!this.formCreateNotification.valid) {
       this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;

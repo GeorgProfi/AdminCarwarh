@@ -4,7 +4,7 @@
     Электронная почта
     <input tuiTextfield type="email" />
   </tui-input>
-  <tui-error formControlName="emailControl" [error]="[] | tuiFieldError | async"></tui-error>
+  <tui-error [formControl]="emailControl" [error]="[] | tuiFieldError | async"></tui-error>
 </div>
 <div class="tui-form__buttons">
   <button tuiButton class="tui-form__button" appearance="primary" (click)="changeEmail()">Подтвердить</button>
@@ -13,7 +13,6 @@
 <h3 class="tui-form__header">Смена пароля</h3>
 <div class="tui-form__row">
   <tui-input-password [(ngModel)]="oldPassword"> Старый пароль </tui-input-password>
-  <tui-error formControlName="title" [error]="[] | tuiFieldError | async"></tui-error>
 </div>
 <div class="tui-form__row tui-form__row_multi-fields">
   <div class="tui-form__multi-field">
@@ -23,7 +22,7 @@
     <tui-input-password [(ngModel)]="repeatPassword"> Повтор нового пароля </tui-input-password>
   </div>
 </div>
-<tui-error formControlName="title" [error]="[] | tuiFieldError | async"></tui-error>
+<tui-error [error]="passwordError"></tui-error>
 <div class="tui-form__buttons">
   <button tuiButton class="tui-form__button" appearance="primary" (click)="changePassword()">Сохранить</button>
 </div>

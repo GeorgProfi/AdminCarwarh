@@ -63,7 +63,12 @@
             [itemContent]="stationsStringify | tuiStringifyContent"
             [items]="stations | tuiFilterByInputWith : stationsStringify"></tui-data-list-wrapper>
         </tui-combo-box>
-        <tui-input-date class="tui-form__row" [(ngModel)]="day" (ngModelChange)="searchTimes()">
+        <tui-input-date
+          class="tui-form__row"
+          [(ngModel)]="day"
+          (ngModelChange)="searchTimes()"
+          [min]="minDay"
+          [max]="maxDay">
           Choose a date
         </tui-input-date>
         <tui-input-time *ngIf="times" class="tui-form__row" [items]="times" [(ngModel)]="time">

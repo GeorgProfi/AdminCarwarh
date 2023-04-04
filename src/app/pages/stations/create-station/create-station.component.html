@@ -13,31 +13,21 @@
         </div>
       </div>
       <div tuiGroup class="group tui-form__row">
-        <tui-checkbox-block
-          class="tui-group__inherit-item"
-          contentAlign="right"
-          formControlName="aroundClock"
-          (change)="changeAroundClock()">
+        <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="changeAroundClock()">
           Круглосуточно
         </tui-checkbox-block>
-        <div>
-          <tui-input-time
-            class="tui-group__inherit-item"
-            *ngIf="!formCreateStation.get('aroundClock')?.value"
-            tuiUnfinishedValidator
-            formControlName="startWork">
-            Начало работы
-          </tui-input-time>
-        </div>
-        <div>
-          <tui-input-time
-            class="tui-group__inherit-item"
-            *ngIf="!formCreateStation.get('aroundClock')?.value"
-            tuiUnfinishedValidator
-            formControlName="endWork">
-            Окончание работы
-          </tui-input-time>
-        </div>
+        <tui-input-time
+          *ngIf="!formCreateStation.get('aroundClock')?.value"
+          tuiUnfinishedValidator
+          formControlName="startWork">
+          Начало работы
+        </tui-input-time>
+        <tui-input-time
+          *ngIf="!formCreateStation.get('aroundClock')?.value"
+          tuiUnfinishedValidator
+          formControlName="endWork">
+          Окончание работы
+        </tui-input-time>
       </div>
       <div class="tui-form__row">
         <tui-text-area formControlName="description">Описание</tui-text-area>

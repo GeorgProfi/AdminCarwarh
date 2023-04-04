@@ -146,8 +146,11 @@
   <tui-accordion-item class="tui-form__row">
     Редактор постов
     <ng-template tuiAccordionItemContent>
-      <div tuiGroup>
-        <tui-input [(ngModel)]="namePost"> Введите название нового поста </tui-input>
+      <div tuiGroup class="group tui-form__row">
+        <div>
+          <tui-input [formControl]="namePost"> Введите название нового поста </tui-input>
+          <tui-error [formControl]="namePost" [error]="[] | tuiFieldError | async"></tui-error>
+        </div>
         <button class="tui-form__button" tuiButton (click)="createPost()" appearance="primary">Создать пост</button>
       </div>
       <div class="content-post tui-form__row" *ngIf="posts.length > 0; else nothing">

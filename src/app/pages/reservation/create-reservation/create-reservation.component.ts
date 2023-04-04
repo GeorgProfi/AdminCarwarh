@@ -125,6 +125,8 @@ export class CreateReservationComponent {
   }
 
   // Day:
+  minDay: TuiDay = TuiDay.currentLocal();
+  maxDay: TuiDay = TuiDay.currentLocal().append({ month: 6 });
   day = TuiDay.currentLocal();
 
   // Time:

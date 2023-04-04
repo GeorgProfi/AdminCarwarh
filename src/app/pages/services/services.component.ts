@@ -1,19 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ServicesService } from '../../common/services/api/services.service';
-import {
-  BehaviorSubject,
-  combineLatest,
-  distinctUntilChanged,
-  Observable,
-} from 'rxjs';
-import {
-  debounceTime,
-  filter,
-  map,
-  share,
-  startWith,
-  switchMap,
-} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable } from 'rxjs';
+import { debounceTime, filter, map, share, startWith, switchMap } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
 import { Service } from '../../common/entities/service.entity';
 
@@ -62,13 +50,7 @@ export class ServicesComponent {
   );
   readonly loading$ = this.request$.pipe(map(value => !value));
 
-  private getData(
-    page: number,
-    pageSize: number,
-    search: string,
-    sorter: string,
-    direction: -1 | 1
-  ) {
+  private getData(page: number, pageSize: number, search: string, sorter: string, direction: -1 | 1) {
     return this.servicesService.getServicesList({
       page,
       pageSize,
@@ -79,6 +61,6 @@ export class ServicesComponent {
   }
 
   updateData() {
-    console.log('updateData');
+    this.size$.next(this.size$.value);
   }
 }

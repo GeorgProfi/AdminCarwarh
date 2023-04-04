@@ -34,6 +34,7 @@ import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateServiceComponent } from './create-service/create-service.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
 import { RouterLink, RouterModule } from '@angular/router';
+import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
 
 @NgModule({
   imports: [
@@ -71,6 +72,7 @@ import { RouterLink, RouterModule } from '@angular/router';
     TuiComboBoxModule,
     TuiStringifyContentPipeModule,
     TuiFilterByInputPipeModule,
+    TuiCurrencyPipeModule,
   ],
   declarations: [ServicesComponent, CreateServiceComponent, EditServiceComponent],
   exports: [ServicesComponent],

@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { AccountService } from '../../../common/services/api/account.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
+import { TuiValidationError } from '@taiga-ui/cdk';
 
 @Component({
   selector: 'app-setting-profile',
@@ -23,12 +24,21 @@ export class SettingProfileComponent {
     closeable: false,
     dismissible: false,
   });
-  emailControl = new FormControl('', { nonNullable: true });
+  emailControl = new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] });
   oldPassword = '';
   newPassword = '';
   repeatPassword = '';
 
+  repeatPassErr = new TuiValidationError('Пароли не совпадают!');
+  get passwordError() {
+    if (this.newPassword !== this.repeatPassword) {
+      return this.repeatPassErr;
+    }
+    return null;
+  }
+
   async changeEmail() {
+    this.emailControl.markAllAsTouched();
     if (!this.emailControl.valid) {
       return;
     }
@@ -53,12 +63,11 @@ export class SettingProfileComponent {
   }
 
   async changePassword() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
+    if (this.newPassword !== this.repeatPassword) {
       return;
     }
-    if (this.newPassword !== this.repeatPassword) {
-      console.log('fuck');
+    const p = await this.prompt.toPromise();
+    if (!p) {
       return;
     }
     this.accountService

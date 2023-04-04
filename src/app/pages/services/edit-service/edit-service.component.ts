@@ -5,6 +5,7 @@ import { StationService } from '../../../common/services/api/station.service';
 import { Station } from '../../../common/entities/station.entity';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-service',
@@ -32,14 +33,17 @@ export class EditServiceComponent implements OnInit {
 
   station!: Station;
 
-  name!: string;
+  readonly formEdit = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    description: new FormControl(``, { nonNullable: true }),
+  });
 
   readonly columnsServices = [`action-1`, `station`, 'duration', 'bonusPercentage', 'price', 'discount', `action-2`];
   services: any[] = [];
-  duration!: number;
-  bonusPercentage!: number;
-  price!: number;
-  discount!: number;
+  duration: number = 0;
+  bonusPercentage: number = 0;
+  price: number = 0;
+  discount: number = 0;
 
   async addService() {
     const p = await this.prompt.toPromise();
@@ -125,6 +129,10 @@ export class EditServiceComponent implements OnInit {
   id: string = this.activatedRoute.snapshot.params['id'];
 
   async updateService() {
+    this.formEdit.markAllAsTouched();
+    if (!this.formEdit.valid) {
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
@@ -140,8 +148,9 @@ export class EditServiceComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {
       this.servicesService.getServiceById(id).subscribe(data => {
-        this.name = data.name;
-        this.cdr.detectChanges();
+        this.formEdit.patchValue({
+          name: data.name,
+        });
       });
       this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
         data.map(data => {

@@ -214,7 +214,7 @@ export class EditStationComponent implements OnInit {
    */
   readonly columnsServicesOnPost = [`name`, `actions`];
   posts: Post[] = [];
-  namePost!: string;
+  namePost = new FormControl('', { nonNullable: true, validators: [Validators.required] });
   indexPost: number = 0;
   stationServiceForPost!: Service;
 
@@ -235,14 +235,19 @@ export class EditStationComponent implements OnInit {
   }
 
   async createPost() {
+    this.namePost.markAllAsTouched();
+    if (!this.namePost.valid) {
+      return;
+    }
     const p = await this.prompt.toPromise();
     if (!p) {
       return;
     }
+    const name = this.namePost.value;
     this.stationService
       .addPost({
         stationId: this.stationId,
-        name: this.namePost,
+        name,
       })
       .subscribe(
         data => {

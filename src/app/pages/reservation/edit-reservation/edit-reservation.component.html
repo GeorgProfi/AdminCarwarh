@@ -78,7 +78,9 @@
     </button>
   </tui-island>
 
-  <div class="tui-form__buttons tui-form__buttons_align_center">
-    <button tuiButton type="button" (click)="save()" class="tui-form__button">Сохранить</button>
+  <div class="flex-wrap tui-form__row">
+    <button tuiButton class="tui-form__button left">Перенести запись</button>
+    <button tuiButton class="tui-form__button left" (click)="save()">Сохранить</button>
+    <button tuiButton class="tui-form__button right" appearance="accent">Удалить запись</button>
   </div>
 </div>

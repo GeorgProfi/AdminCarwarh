@@ -30,11 +30,12 @@ export class CreateNewsComponent {
   @Output() createEvent = new EventEmitter();
 
   formCreateNews = new FormGroup({
-    title: new FormControl('', Validators.required),
-    text: new FormControl('', Validators.required),
+    title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    text: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
   imageId?: string;
   async onSubmit() {
+    this.formCreateNews.markAllAsTouched();
     if (!this.formCreateNews.valid) {
       this.alertService.open('форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
