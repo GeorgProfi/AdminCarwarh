@@ -8,8 +8,9 @@ import { Client } from '../../../common/entities/client.entity';
 import { filter, startWith } from 'rxjs/operators';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { ReservationService } from '../../../common/services/api/reservation.service';
-import { TUI_PROMPT } from '@taiga-ui/kit';
+import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { Order } from '../../../common/entities/order.entity';
+import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -153,7 +154,38 @@ export class EditReservationComponent implements OnInit {
       );
   }
 
+  removeOrder() {
+    this.reservationService.removeOrder(this.context.data.id).subscribe(
+      () => {
+        this.context.completeWith({});
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    );
+  }
+
   exit() {
     this.context.completeWith({ lolus: 'asd' });
+  }
+
+  // Day:
+  minDay: TuiDay = TuiDay.currentLocal();
+  maxDay: TuiDay = TuiDay.currentLocal().append({ month: 6 });
+  day = TuiDay.currentLocal();
+
+  // Time:
+  searchTimes() {
+    console.log('s');
+  }
+  time!: TuiTime;
+  times: TuiTime[] | null = [];
+  timesTest = tuiCreateTimePeriods();
+
+  open = false;
+
+  showDialog(): void {
+    this.open = true;
   }
 }

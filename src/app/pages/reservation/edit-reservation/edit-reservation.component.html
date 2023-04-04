@@ -79,8 +79,18 @@
   </tui-island>
 
   <div class="flex-wrap tui-form__row">
-    <button tuiButton class="tui-form__button left">Перенести запись</button>
+    <button tuiButton class="tui-form__button left" (click)="showDialog()">Перенести запись</button>
     <button tuiButton class="tui-form__button left" (click)="save()">Сохранить</button>
-    <button tuiButton class="tui-form__button right" appearance="accent">Удалить запись</button>
+    <button tuiButton class="tui-form__button right" appearance="accent" (click)="removeOrder()">Удалить запись</button>
   </div>
 </div>
+
+<ng-template let-observer [tuiDialogOptions]="{ label: 'Перезапись', size: 's' }" [(tuiDialog)]="open">
+  <tui-input-date class="tui-form__row" [(ngModel)]="day" (ngModelChange)="searchTimes()" [min]="minDay" [max]="maxDay">
+    Choose a date
+  </tui-input-date>
+  <tui-input-time class="tui-form__row" [items]="timesTest" [(ngModel)]="time"> Input time </tui-input-time>
+  <div class="flex-wrap tui-form__row">
+    <button tuiButton class="tui-form__button right">Сохранить</button>
+  </div>
+</ng-template>

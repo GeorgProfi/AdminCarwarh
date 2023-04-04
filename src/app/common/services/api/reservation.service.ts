@@ -33,4 +33,8 @@ export class ReservationService {
   updateReservation(data: { orderId: string; clientId?: string; servicesIds?: string[]; status?: number }) {
     return this.http.put(`${environment.apiUrl}/reservation/update`, data);
   }
+
+  removeOrder(id: string) {
+    return this.http.delete(`${environment.apiUrl}/reservation/remove/${id}`);
+  }
 }

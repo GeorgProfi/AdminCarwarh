@@ -50,19 +50,32 @@
         </button>
       </div>
       <div class="tui-col_md-6">
-        <tui-combo-box
-          *tuiLet="stations$ | async as stations"
-          class="b-form tui-form__row"
-          [stringify]="stationsStringify"
-          [(ngModel)]="station"
-          (ngModelChange)="changeStation()">
-          Поиск станции
-          <input tuiTextfield placeholder="Поиск по названию" />
-          <tui-data-list-wrapper
-            *tuiDataList
-            [itemContent]="stationsStringify | tuiStringifyContent"
-            [items]="stations | tuiFilterByInputWith : stationsStringify"></tui-data-list-wrapper>
-        </tui-combo-box>
+        <div tuiGroup class="group tui-form__row">
+          <tui-combo-box
+            *tuiLet="stations$ | async as stations"
+            [stringify]="stationsStringify"
+            [(ngModel)]="station"
+            (ngModelChange)="changeStation()">
+            Поиск станции
+            <input tuiTextfield placeholder="Поиск по названию" />
+            <tui-data-list-wrapper
+              *tuiDataList
+              [itemContent]="stationsStringify | tuiStringifyContent"
+              [items]="stations | tuiFilterByInputWith : stationsStringify"></tui-data-list-wrapper>
+          </tui-combo-box>
+          <tui-combo-box
+            *tuiLet="listPosts$ | async as posts"
+            [stringify]="stationsStringify"
+            [(ngModel)]="post"
+            (ngModelChange)="changeStation()">
+            Поиск поста
+            <input tuiTextfield placeholder="Поиск по названию" />
+            <tui-data-list-wrapper
+              *tuiDataList
+              [itemContent]="postStringify | tuiStringifyContent"
+              [items]="posts | tuiFilterByInputWith : postStringify"></tui-data-list-wrapper>
+          </tui-combo-box>
+        </div>
         <tui-input-date
           class="tui-form__row"
           [(ngModel)]="day"

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
-import { TuiDay, TuiTime } from '@taiga-ui/cdk';
+import { TuiDay, tuiIsPresent, TuiTime } from '@taiga-ui/cdk';
 import { BehaviorSubject, combineLatest, map, Observable, switchMap } from 'rxjs';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { filter, startWith } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { DateTime } from 'luxon';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { IMergeServices } from '../../../common/interfaces/merge-services.interface';
+import { Post } from '../../../common/entities/post.entity';
 
 @Component({
   selector: 'app-create-reservation',
@@ -123,6 +124,17 @@ export class CreateReservationComponent {
     this.stationId$.next(this.station.id);
     this.searchTimes();
   }
+
+  // Posts:
+  listPosts$: Observable<Post[]> = this.stationId$.pipe(
+    filter(tuiIsPresent),
+    switchMap((stationId: string) => this.stationService.getPosts(stationId)),
+    startWith([])
+  );
+  postStringify(post: Post): string {
+    return post.name;
+  }
+  post!: Post;
 
   // Day:
   minDay: TuiDay = TuiDay.currentLocal();
