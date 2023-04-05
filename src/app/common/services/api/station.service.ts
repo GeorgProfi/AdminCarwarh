@@ -122,4 +122,12 @@ export class StationService {
   removeStation(id: string) {
     return this.http.delete<any>(`${environment.apiUrl}/station/delete/${id}`);
   }
+
+  getFullStation(id: string) {
+    return this.http.get<any>(`${environment.apiUrl}/station/full/${id}`);
+  }
+
+  getAllPost(data: { stationId: string; servicesIds?: string[] }) {
+    return this.http.post<any>(`${environment.apiUrl}/station/all-post`, data);
+  }
 }

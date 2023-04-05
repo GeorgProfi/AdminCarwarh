@@ -337,20 +337,54 @@ export class EditStationComponent implements OnInit {
   /******************************************************/
 
   ngOnInit() {
-    this.stationService.getStationById(this.stationId).subscribe(station => {
-      this.formEditStation.patchValue({
-        name: station.name,
-        address: station.address,
-        aroundClock: station.aroundClock,
-        description: station.description,
-        startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
-        endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
-      });
-      this.cdr.detectChanges();
-    });
-    this.getServices().subscribe(() => {
-      this.getPosts().subscribe();
-    });
+    this.stationService.getFullStation(this.stationId).subscribe(
+      station => {
+        this.formEditStation.patchValue({
+          name: station.name,
+          address: station.address,
+          aroundClock: station.aroundClock,
+          description: station.description,
+          startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
+          endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
+        });
+        const usedService: string[] = [];
+        this.services = station.services.map((service: any) => {
+          usedService.push(service.classServices.id);
+          service.name = service.classServices.name;
+          return service;
+        });
+        this.classServices$.subscribe(classServices => {
+          this.filterClassServices = classServices.filter(s => !usedService.includes(s.id));
+          this.cdr.detectChanges();
+        });
+        // Пиздец
+        this.posts = station.posts.map((post: Post) => {
+          post.freeServices = this.services.filter(s => {
+            for (const ps of post.services) if (ps.id === s.id) return false;
+            return true;
+          });
+          return post;
+        });
+        this.cdr.detectChanges();
+      },
+      err => {
+        console.error(err);
+      }
+    );
+    // this.stationService.getStationById(this.stationId).subscribe(station => {
+    //   this.formEditStation.patchValue({
+    //     name: station.name,
+    //     address: station.address,
+    //     aroundClock: station.aroundClock,
+    //     description: station.description,
+    //     startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
+    //     endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
+    //   });
+    //   this.cdr.detectChanges();
+    // });
+    // this.getServices().subscribe(() => {
+    //   this.getPosts().subscribe();
+    // });
   }
 
   changeAroundClock() {

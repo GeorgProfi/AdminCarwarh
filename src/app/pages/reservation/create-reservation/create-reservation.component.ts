@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
-import { TuiDay, tuiIsPresent, TuiTime } from '@taiga-ui/cdk';
+import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 import { BehaviorSubject, combineLatest, map, Observable, switchMap } from 'rxjs';
 import { ClientsService } from '../../../common/services/api/clients.service';
 import { filter, startWith } from 'rxjs/operators';
@@ -126,9 +126,9 @@ export class CreateReservationComponent {
   }
 
   // Posts:
-  listPosts$: Observable<Post[]> = this.stationId$.pipe(
-    filter(tuiIsPresent),
-    switchMap((stationId: string) => this.stationService.getPosts(stationId)),
+  listPosts$: Observable<Post[]> = combineLatest([this.stationId$, this.servicesIds$]).pipe(
+    filter((query: any[]) => query[0]),
+    switchMap((query: any[]) => this.stationService.getAllPost({ stationId: query[0], servicesIds: query[1] })),
     startWith([])
   );
   postStringify(post: Post): string {
@@ -154,6 +154,7 @@ export class CreateReservationComponent {
         day: this.day.toLocalNativeDate(),
         stationId: this.station.id,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
+        postId: this.post?.id,
       })
       .pipe(
         map((times: string[]) =>
@@ -189,6 +190,7 @@ export class CreateReservationComponent {
         clientId: this.client.id,
         stationId: this.station.id,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
+        postId: this.post.id,
       })
       .subscribe(
         () => {
