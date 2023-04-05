@@ -190,7 +190,7 @@ export class CreateReservationComponent {
         clientId: this.client.id,
         stationId: this.station.id,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
-        postId: this.post.id,
+        postId: this.post?.id,
       })
       .subscribe(
         () => {

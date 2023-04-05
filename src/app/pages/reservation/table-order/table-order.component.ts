@@ -152,10 +152,11 @@ export class TableOrderComponent implements OnInit {
           for (const order of post.orders) {
             const sw = new Date(order.startWork);
             const ew = new Date(order.endWork);
+            const stepDay = sw.getDay() !== ew.getDay() ? 1 : 0;
             orders.push({
               title: 'Запись',
               start: startDate.plus({ day: postIndex, hour: sw.getHours(), minute: sw.getMinutes() }).toISO(),
-              end: startDate.plus({ day: postIndex, hour: ew.getHours(), minute: ew.getMinutes() }).toISO(),
+              end: startDate.plus({ day: postIndex + stepDay, hour: ew.getHours(), minute: ew.getMinutes() }).toISO(),
               backgroundColor: this.colorStatus[order.status],
               textColor: 'black',
               id: order.id,
