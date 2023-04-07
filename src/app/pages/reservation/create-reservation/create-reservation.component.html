@@ -31,10 +31,14 @@
             (ngModelChange)="changeServices()">
             Поиск услуги
             <input tuiTextfield placeholder="Поиск по названию" />
-            <tui-data-list-wrapper
-              *tuiDataList
-              [itemContent]="serviceStringify | tuiStringifyContent"
-              [items]="listServices | tuiFilterByInputWith : serviceStringify"></tui-data-list-wrapper>
+            <div *ngIf="listServices">
+              <tui-data-list-wrapper
+                *tuiDataList
+                [itemContent]="serviceStringify | tuiStringifyContent"
+                [items]="
+                  listServices | tuiFilter : matcherService | tuiFilterByInputWith : serviceStringify
+                "></tui-data-list-wrapper>
+            </div>
           </tui-combo-box>
           <button
             tuiIconButton

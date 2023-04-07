@@ -62,6 +62,7 @@ export class CreateReservationComponent {
   // Services:
   purchaseAmount: number = 0;
   durationAmount: number = 0;
+  services: IMergeServices[] = [{ name: '' } as IMergeServices];
 
   listServices$: Observable<IMergeServices[]> = this.stationId$.pipe(
     switchMap(stationId => {
@@ -97,8 +98,8 @@ export class CreateReservationComponent {
     }
     return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
+  readonly matcherService = (item: any): boolean => !this.services.find(s => s.id === item.id);
 
-  services: IMergeServices[] = [{ name: '' } as IMergeServices];
   addService() {
     this.services.push({ name: '' } as IMergeServices);
   }

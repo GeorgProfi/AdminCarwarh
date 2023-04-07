@@ -28,7 +28,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
 import { TuiTableModule } from '@taiga-ui/addon-table';
-import { TuiLetModule } from '@taiga-ui/cdk';
+import { TuiFilterPipeModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
 import { TableReservationComponent } from './table-reservation/table-reservation.component';
 import { StationModule } from '../stations/station.module';
@@ -71,6 +71,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     TuiMoneyModule,
     TuiTagModule,
     FullCalendarModule,
+    TuiFilterPipeModule,
   ],
   declarations: [
     ReservationComponent,

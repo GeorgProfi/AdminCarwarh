@@ -93,6 +93,18 @@ export class TableOrderComponent implements OnInit {
     eventClick: e => {
       this.openEditOrder({ id: e.event.id });
     },
+    eventContent: function (arg) {
+      const event = arg.event;
+      const props = event.extendedProps;
+      let customHtml = `<div>${props['titleStart']} - ${props['titleEnd']} (${props['durationHour']} ч. ${props['durationMinute']} мин.)</div>`;
+      if (props['durationHour'] > 0) {
+        customHtml += `<div>${props['client']} (${props['phone']})</div>`;
+      }
+      if (props['durationHour'] > 1) {
+        customHtml += `<div>services</div>`;
+      }
+      return { html: customHtml };
+    },
   };
 
   indexPost = 0;
@@ -112,7 +124,6 @@ export class TableOrderComponent implements OnInit {
   events$ = new BehaviorSubject<EventInput[]>([]);
   posts: any[] = [];
   getOrders(day: Date, stationId: string) {
-    console.log(day);
     this.reservationService
       .getReservationStation({
         day,
@@ -121,27 +132,24 @@ export class TableOrderComponent implements OnInit {
       .subscribe((station: any) => {
         const orders = [];
         const startDate = DateTime.fromISO('2023-03-26');
+        const selectDay = DateTime.fromJSDate(day);
         let postIndex = 0;
         let length = station.posts.length > 5 ? 5 : station.posts.length;
-        if (station.aroundClock) {
-          this.calendarOptions.views = {
-            timeGridFourDay: {
-              type: 'timeGrid',
-              dayCount: length,
-              allDaySlot: false,
-            },
-          };
-        } else {
-          this.calendarOptions.views = {
-            timeGridFourDay: {
-              type: 'timeGrid',
-              dayCount: length,
-              slotMinTime: DateTime.fromISO(station.startWork).toISOTime(),
-              slotMaxTime: DateTime.fromISO(station.endWork).toISOTime(),
-              allDaySlot: false,
-            },
-          };
-        }
+        const stationStart = station.aroundClock
+          ? DateTime.local().set({ hour: 0, minute: 0 })
+          : DateTime.fromISO(station.startWork);
+        const stationEnd = station.aroundClock
+          ? DateTime.local().set({ hour: 23, minute: 59 })
+          : DateTime.fromISO(station.endWork);
+        this.calendarOptions.views = {
+          timeGridFourDay: {
+            type: 'timeGrid',
+            dayCount: length,
+            slotMinTime: stationStart.toISOTime(),
+            slotMaxTime: stationEnd.toISOTime(),
+            allDaySlot: false,
+          },
+        };
 
         this.posts = station.posts;
 
@@ -150,13 +158,21 @@ export class TableOrderComponent implements OnInit {
         };
         for (const post of station.posts) {
           for (const order of post.orders) {
-            const sw = new Date(order.startWork);
-            const ew = new Date(order.endWork);
-            const stepDay = sw.getDay() !== ew.getDay() ? 1 : 0;
+            const realStart = DateTime.fromISO(order.startWork);
+            const realEnd = DateTime.fromISO(order.endWork);
+            const eventStart = realStart.day !== selectDay.day ? stationStart : realStart;
+            const eventEnd = realEnd.day !== selectDay.day ? stationEnd : realEnd;
             orders.push({
-              title: 'Запись',
-              start: startDate.plus({ day: postIndex, hour: sw.getHours(), minute: sw.getMinutes() }).toISO(),
-              end: startDate.plus({ day: postIndex + stepDay, hour: ew.getHours(), minute: ew.getMinutes() }).toISO(),
+              extendedProps: {
+                titleStart: realStart.toISOTime({ suppressSeconds: true, includeOffset: false }),
+                titleEnd: realEnd.toISOTime({ suppressSeconds: true, includeOffset: false }),
+                durationHour: eventEnd.hour - eventStart.hour,
+                durationMinute: eventEnd.minute - eventStart.minute,
+                client: order.client.name,
+                phone: order.client.phone,
+              },
+              start: startDate.plus({ day: postIndex, hour: eventStart.hour, minute: eventStart.minute }).toISO(),
+              end: startDate.plus({ day: postIndex, hour: eventEnd.hour, minute: eventEnd.minute }).toISO(),
               backgroundColor: this.colorStatus[order.status],
               textColor: 'black',
               id: order.id,
