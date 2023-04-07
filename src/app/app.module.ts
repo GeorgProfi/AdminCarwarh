@@ -21,6 +21,8 @@ import { Error404Module } from './pages/error-404/error-404.module';
 import { LayoutModule } from './layouts/left-menu/layout.module';
 import { ServicesModule } from './pages/services/services.module';
 import { MarketingModule } from './pages/marketing/marketing.module';
+import { AngularYandexMapsModule } from 'angular8-yandex-maps';
+import { TuiInputModule } from '@taiga-ui/kit';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +31,8 @@ import { MarketingModule } from './pages/marketing/marketing.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
+    AngularYandexMapsModule,
 
     HttpClientModule,
     // Taiga
@@ -46,6 +50,7 @@ import { MarketingModule } from './pages/marketing/marketing.module';
     SettingModule,
     ReservationModule,
     MarketingModule,
+    TuiInputModule,
   ],
   providers: [
     { provide: TUI_SANITIZER, useClass: NgDompurifySanitizer },
