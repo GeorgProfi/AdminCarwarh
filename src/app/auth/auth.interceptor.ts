@@ -1,23 +1,15 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private router: Router) {}
 
-  private handle401Error(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<object>> {
+  private handle401Error(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<object>> {
     const token = localStorage.getItem('refresh');
     if (!token) {
       this.authService.logout();
@@ -43,10 +35,10 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<object>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<object>> {
+    if (!req.url.includes(environment.apiUrl)) {
+      return next.handle(req);
+    }
     const token = this.authService.authorization;
 
     const authReq = req.clone({
@@ -74,6 +66,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError(err => {
         if (
           err instanceof HttpErrorResponse &&
+          authReq.url.includes(environment.apiUrl) &&
           !authReq.url.includes('auth') &&
           err.status === 401
         ) {

@@ -6,6 +6,9 @@ import { CreateStationDto } from '../../../common/dto/station/create-station.dto
 import { DateTime } from 'luxon';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
+import { DadataApiService } from '../../../common/services/dadata-api.service';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { filter, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-station',
@@ -19,8 +22,21 @@ export class CreateStationComponent {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
+    private dadataApiService: DadataApiService
   ) {}
+
+  searchAddress$ = new BehaviorSubject<string | null>('');
+  extractValueFromEvent(event: Event): string | null {
+    return (event.target as HTMLInputElement)?.value || null;
+  }
+  suggest$: Observable<string[]> = this.searchAddress$.pipe(
+    filter(address => address !== null && address !== ''),
+    switchMap(address => this.dadataApiService.suggestAddress(address ?? '')),
+    map((suggestions: any[]) => suggestions.map(value => value.value)),
+    startWith([])
+  );
+
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
     size: 's',
