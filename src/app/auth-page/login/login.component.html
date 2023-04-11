@@ -1,19 +1,44 @@
-<div class="tui-form__row tui-form__row_multi-fields">
-  <div class="tui-form__multi-field">
-    <tui-input [(ngModel)]="email">
-      Электронная почта
-      <input tuiTextfield type="email" />
-    </tui-input>
+<form [formGroup]="form">
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input formControlName="email">
+        Электронная почта
+        <input tuiTextfield type="email" />
+      </tui-input>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input-password formControlName="password">
+        Пароль
+        <input tuiTextfield type="password" />
+      </tui-input-password>
+    </div>
   </div>
-  <div class="tui-form__multi-field">
-    <tui-input-password [(ngModel)]="password"> Пароль </tui-input-password>
+  <tui-error [error]="computedError"></tui-error>
+  <div class="tui-form__buttons">
+    <button
+      tuiButton
+      class="tui-form__button"
+      type="submit"
+      appearance="primary"
+      (click)="login()"
+      [disabled]="isInvalid">
+      Войти
+    </button>
+    <button
+      tuiButton
+      class="tui-form__button"
+      appearance="primary"
+      [disabled]="!email"
+      (click)="onShowRefreshPasswordDialog(refreshPass)">
+      Забыли пароль?
+    </button>
   </div>
-</div>
+</form>
 
-<tui-error [error]="computedError"></tui-error>
-<div class="tui-form__buttons">
-  <button tuiButton class="tui-form__button" type="submit" appearance="primary" (click)="login()">Войти</button>
-  <button tuiButton class="tui-form__button" type="submit" appearance="primary" (click)="refreshPassword()">
-    Забыли пароль?
+<ng-template #refreshPass let-subscription>
+  <p>На почту {{ email }} будет отправлено письмо с временным паролем</p>
+  <button [disabled]="isLoading" tuiButton class="tui-space_right-3" type="button" (click)="onPasswordRefresh()">
+    Да
   </button>
-</div>
+  <button [disabled]="isLoading" tuiButton type="button" (click)="subscription.complete()">Нет</button>
+</ng-template>
