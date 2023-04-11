@@ -3,12 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Order } from '../../entities/order.entity';
+import { GetReservationStationDto } from '../../dto/reservation/get-reservation-station.dto';
+import { SearchFreeTimesDto } from '../../dto/reservation/search-free-times.dto';
+import { CreateReservationDto } from '../../dto/reservation/create-reservation.dto';
+import { UpdateReservationDto } from '../../dto/reservation/update-reservation.dto';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
   constructor(private http: HttpClient) {}
 
-  getReservationStation(data: { stationId: string; day: Date }): Observable<Order[]> {
+  getReservationStation(data: GetReservationStationDto): Observable<Order[]> {
     return this.http.get<Order[]>(`${environment.apiUrl}/reservation/station`, {
       params: {
         stationId: data.stationId,
@@ -17,17 +21,11 @@ export class ReservationService {
     });
   }
 
-  searchFreeTimes(data: {
-    stationId: string;
-    servicesIds: string[];
-    day: Date;
-    postId?: string;
-  }): Observable<string[]> {
+  searchFreeTimes(data: SearchFreeTimesDto): Observable<string[]> {
     return this.http.post<string[]>(`${environment.apiUrl}/reservation/search`, data);
   }
 
-  createReservation(data: { clientId: string; stationId: string; servicesIds: string[]; date: Date; postId?: string }) {
-    console.log(data);
+  createReservation(data: CreateReservationDto) {
     return this.http.post<string[]>(`${environment.apiUrl}/reservation/reservation-for-owner`, data);
   }
 
@@ -35,7 +33,7 @@ export class ReservationService {
     return this.http.get<Order>(`${environment.apiUrl}/reservation/get/${id}`);
   }
 
-  updateReservation(data: { orderId: string; clientId?: string; servicesIds?: string[]; status?: number }) {
+  updateReservation(data: UpdateReservationDto) {
     return this.http.put(`${environment.apiUrl}/reservation/update`, data);
   }
 

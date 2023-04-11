@@ -1,5 +1,5 @@
-export interface CreateNotificationDto {
-  title: string;
-  content: string;
+export class CreateNotificationDto {
+  title!: string;
+  content!: string;
   send?: boolean;
 }

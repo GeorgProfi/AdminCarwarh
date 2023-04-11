@@ -1,4 +1,4 @@
-export interface OtpDto {
-  deviceId: string;
-  code: number;
+export class OtpDto {
+  deviceId!: string;
+  code!: number;
 }

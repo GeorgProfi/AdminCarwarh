@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { PaginateRes } from '../../dto/paginate-response.dto';
 import { environment } from '../../../../environments/environment';
 import { Pagination } from '../../dto/pagination.dto';
+import { CreateNewsDto } from '../../dto/news/create-news.dto';
+import { UpdateNewsDto } from '../../dto/news/update-news.dto';
 
 @Injectable({ providedIn: 'root' })
 export class NewsService {
@@ -18,11 +20,11 @@ export class NewsService {
     return this.http.get<any>(`${environment.apiUrl}/news/get/${id}`);
   }
 
-  createNews(data: { title: string; text: string; imageId?: string }) {
+  createNews(data: CreateNewsDto) {
     return this.http.post(`${environment.apiUrl}/news/create`, data);
   }
 
-  updateNews(data: { id: string; title?: string; text?: string; imageId?: string }) {
+  updateNews(data: UpdateNewsDto) {
     return this.http.put(`${environment.apiUrl}/news/update`, data);
   }
 

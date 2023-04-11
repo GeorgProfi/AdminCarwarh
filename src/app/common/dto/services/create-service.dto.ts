@@ -1,4 +1,4 @@
-export interface CreateServiceDto {
-  name: string;
+export class CreateServiceDto {
+  name!: string;
   description?: string;
 }

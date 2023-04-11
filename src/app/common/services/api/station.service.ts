@@ -6,6 +6,15 @@ import { PaginateRes } from '../../dto/paginate-response.dto';
 import { Station } from '../../entities/station.entity';
 import { Pagination } from '../../dto/pagination.dto';
 import { Service } from '../../entities/service.entity';
+import { CreateStationDto } from '../../dto/station/create-station.dto';
+import { UpdateStationDto } from '../../dto/station/update-station.dto';
+import { SetVisibleStationDto } from '../../dto/station/set-visible-station.dto';
+import { AddPostDto } from '../../dto/station/add-post.dto';
+import { RenamePostDto } from '../../dto/station/rename-post.dto';
+import { AddServiceOnStationDto } from '../../dto/station/add-service-on-station.dto';
+import { SetVisibleServiceDto } from '../../dto/station/set-visible-service.dto';
+import { AddServicePostDto } from '../../dto/station/add-service-post.dto';
+import { GetAllPostDto } from '../../dto/station/get-all-post.dto';
 
 @Injectable({ providedIn: 'root' })
 export class StationService {
@@ -42,29 +51,15 @@ export class StationService {
     });
   }
 
-  createStation(data: {
-    address: string;
-    name: string;
-    startWork: Date;
-    endWork: Date;
-    description?: string;
-  }): Observable<Station> {
+  createStation(data: CreateStationDto): Observable<Station> {
     return this.http.post<Station>(`${environment.apiUrl}/station`, data);
   }
 
-  updateStation(data: {
-    id: string;
-    name?: string;
-    address?: string;
-    startWork?: Date;
-    endWork?: Date;
-    aroundClock?: boolean;
-    description?: string;
-  }) {
+  updateStation(data: UpdateStationDto) {
     return this.http.put<any>(`${environment.apiUrl}/station/update`, data);
   }
 
-  setVisibleStation(data: { stationId: string; visible: boolean }) {
+  setVisibleStation(data: SetVisibleStationDto) {
     return this.http.put(`${environment.apiUrl}/station/visible`, data);
   }
 
@@ -72,11 +67,11 @@ export class StationService {
     return this.http.get<any>(`${environment.apiUrl}/station/get/${id}`);
   }
 
-  addPost(data: { stationId: string; name: string }) {
+  addPost(data: AddPostDto) {
     return this.http.post<any>(`${environment.apiUrl}/station/post`, data);
   }
 
-  renamePost(data: { postId: string; name: string }) {
+  renamePost(data: RenamePostDto) {
     return this.http.put<any>(`${environment.apiUrl}/station/post/rename`, data);
   }
 
@@ -84,14 +79,7 @@ export class StationService {
     return this.http.delete(`${environment.apiUrl}/station/post/${id}`);
   }
 
-  addServiceOnStation(data: {
-    idClassService: string;
-    stationId: string;
-    price: number;
-    duration: number;
-    discount: number;
-    bonusPercentage: number;
-  }) {
+  addServiceOnStation(data: AddServiceOnStationDto) {
     return this.http.post<any>(`${environment.apiUrl}/station/service`, data);
   }
 
@@ -99,7 +87,7 @@ export class StationService {
     return this.http.put(`${environment.apiUrl}/station/service`, data);
   }
 
-  setVisibleService(data: { serviceId: string; visible: boolean }) {
+  setVisibleService(data: SetVisibleServiceDto) {
     return this.http.put(`${environment.apiUrl}/station/service/visible`, data);
   }
 
@@ -109,7 +97,7 @@ export class StationService {
     });
   }
 
-  addServicePost(data: { postId: string; serviceId: string }) {
+  addServicePost(data: AddServicePostDto) {
     return this.http.post<any>(`${environment.apiUrl}/station/service-on-post`, data);
   }
 
@@ -127,7 +115,7 @@ export class StationService {
     return this.http.get<any>(`${environment.apiUrl}/station/full/${id}`);
   }
 
-  getAllPost(data: { stationId: string; servicesIds?: string[] }) {
+  getAllPost(data: GetAllPostDto) {
     return this.http.post<any>(`${environment.apiUrl}/station/all-post`, data);
   }
 }

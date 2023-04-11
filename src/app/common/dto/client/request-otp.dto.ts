@@ -1,5 +1,5 @@
-export interface RequestOtpDto {
-  phone: string;
-  deviceId: string;
-  companyId: string;
+export class RequestOtpDto {
+  phone!: string;
+  deviceId!: string;
+  companyId!: string;
 }

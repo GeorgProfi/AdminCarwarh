@@ -4,6 +4,9 @@ import { PaginateRes } from '../../dto/paginate-response.dto';
 import { Client } from '../../entities/client.entity';
 import { environment } from '../../../../environments/environment';
 import { Pagination } from '../../dto/pagination.dto';
+import { CreateClientDto } from '../../dto/client/create-client.dto';
+import { RequestRegistrationClientDto } from '../../dto/client/request-registration-client.dto';
+import { SaveDataClientDto } from '../../dto/client/save-data-client.dto';
 
 @Injectable({ providedIn: 'root' })
 export class ClientsService {
@@ -20,14 +23,14 @@ export class ClientsService {
     return this.http.get<PaginateRes<Client>>(`${environment.apiUrl}/client/list`, { params: { ...data } });
   }
 
-  createClient(data: { phone: string; name?: string }) {
+  createClient(data: CreateClientDto) {
     return this.http.post<Client>(`${environment.apiUrl}/client/create`, {
       phone: data.phone,
       name: data.name,
     });
   }
 
-  requestRegistrationClient(data: { phone: string; name?: string }) {
+  requestRegistrationClient(data: RequestRegistrationClientDto) {
     const deviceId = localStorage.getItem('device_id');
     return this.http.post<Client>(`${environment.apiUrl}/auth/client/request/with-company`, {
       phone: data.phone,
@@ -48,7 +51,7 @@ export class ClientsService {
     return this.http.get<Client>(`${environment.apiUrl}/client/get-full/${idClient}`);
   }
 
-  saveDataClient(data: { clientId: string; name?: string; phone?: string; email?: string; bonuses?: number }) {
+  saveDataClient(data: SaveDataClientDto) {
     return this.http.put(`${environment.apiUrl}/client/update`, data);
   }
 }
