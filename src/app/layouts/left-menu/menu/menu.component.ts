@@ -21,7 +21,7 @@ export class MenuComponent implements OnInit {
     { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
     { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
     { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
-    { name: 'Запись на время', icon: 'tuiIconTime', link: 'reservation' },
+    { name: 'Запись на время', icon: 'tuiIconClock', link: 'reservation' },
     {
       name: 'Маркетинг',
       icon: 'tuiIconBriefcase',
