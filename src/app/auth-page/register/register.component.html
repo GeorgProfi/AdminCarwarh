@@ -23,6 +23,8 @@
   <tui-error [error]="computedError"></tui-error>
 
   <div class="tui-form__buttons">
-    <button tuiButton class="tui-form__button" type="submit" appearance="primary">Зарегистрироваться</button>
+    <button tuiButton class="tui-form__button" type="submit" appearance="primary" [disabled]="isInvalid">
+      Зарегистрироваться
+    </button>
   </div>
 </form>

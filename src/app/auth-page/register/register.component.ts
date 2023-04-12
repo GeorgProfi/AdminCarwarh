@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiValidationError } from '@taiga-ui/cdk';
 import { RegistrationService } from '../../common/services/api/registration.service';
 import { TuiDialogService } from '@taiga-ui/core';
+import { matchValidator } from 'src/app/shared/validators';
 
 @Component({
   selector: 'app-register',
@@ -11,21 +12,25 @@ import { TuiDialogService } from '@taiga-ui/core';
   styleUrls: ['./register.component.less'],
 })
 export class RegisterComponent {
-  constructor(
-    private route: Router,
-    private registrationService: RegistrationService,
-    @Inject(TuiDialogService) private readonly dialogService: TuiDialogService
-  ) {}
-
   authForm = new FormGroup({
     nameCarWash: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    passwordRepeat: new FormControl('', Validators.required),
+    password: new FormControl('', [Validators.required, matchValidator('passwordRepeat', true)]),
+    passwordRepeat: new FormControl('', [Validators.required, matchValidator('password')]),
   });
 
   enabledError = false;
   error = new TuiValidationError(`Неверно логин или пароль`);
+
+  constructor(
+    private route: Router,
+    private registrationService: RegistrationService,
+    private readonly dialogService: TuiDialogService
+  ) {}
+
+  get isInvalid(): boolean {
+    return this.authForm.invalid;
+  }
 
   get computedError(): TuiValidationError | null {
     return this.enabledError ? this.error : null;
