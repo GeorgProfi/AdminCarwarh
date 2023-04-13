@@ -8,10 +8,10 @@
       <tui-text-area formControlName="description">Описание</tui-text-area>
     </div>
     <div class="flex-wrap tui-form__row">
-      <button tuiButton class="tui-form__button center" size="s" (click)="updateService()" appearance="primary">
+      <button tuiButton class="tui-form__button center" size="s" (click)="onUpdateService()" appearance="primary">
         Сохранить
       </button>
-      <button class="tui-form__button right" tuiButton size="s" (click)="removeServiceClass()" appearance="accent">
+      <button class="tui-form__button right" tuiButton size="s" (click)="onRemoveServiceClass()" appearance="accent">
         Удалить
       </button>
     </div>
@@ -64,7 +64,7 @@
             size="s"
             icon="tuiIconPlus"
             shape="rounded"
-            (click)="addService()"></button>
+            (click)="onAddService()"></button>
         </td>
       </tr>
       <tr *ngFor="let service of services; let i = index" tuiTr>
@@ -97,13 +97,19 @@
             size="s"
             icon="tuiIconTrash"
             shape="rounded"
-            (click)="removeService(service.stationId, service.id)"></button>
+            (click)="onRemoveService(service.stationId, service.id)"></button>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="tui-form__buttons">
-    <button tuiButton type="button" appearance="primary" size="xs" class="tui-form__button" (click)="updateServices()">
+    <button
+      tuiButton
+      type="button"
+      appearance="primary"
+      size="xs"
+      class="tui-form__button"
+      (click)="onUpdateServices()">
       Обновить
     </button>
   </div>
