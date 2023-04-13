@@ -11,13 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateServiceComponent {
-  constructor(
-    private servicesService: ServicesService,
-    @Inject(TuiAlertService)
-    private readonly alertService: TuiAlertService,
-    @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService
-  ) {}
+  @Output() eCreate = new EventEmitter();
 
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -26,31 +20,32 @@ export class CreateServiceComponent {
     dismissible: false,
   });
 
-  @Output() createEvent = new EventEmitter();
-
   readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl(``, { nonNullable: true }),
   });
 
-  async onSubmit() {
+  constructor(
+    private servicesService: ServicesService,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService
+  ) {}
+
+  onSubmit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
-      return;
-    }
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
+    if (this.form.valid) this.prompt.subscribe({ next: value => value && this._submit() })
+  }
+
+  private _submit(): void {
     const data: any = this.form.value;
-    this.servicesService.createService(data).subscribe(
-      () => {
-        this.createEvent.emit();
+    this.servicesService.createService(data).subscribe({
+      next: () => {
+        this.eCreate.emit();
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },
-      error => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-      }
-    );
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
   }
 }
