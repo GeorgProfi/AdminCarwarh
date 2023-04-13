@@ -5,8 +5,8 @@
       <div class="tui-form__row">
         <tui-combo-box formControlName="address" (searchChange)="searchAddress$.next($event)">
           Адрес
-          <input tuiTextfield (input)="searchAddress$.next(extractValueFromEvent($event))" />
-          <tui-data-list-wrapper *tuiDataList [items]="suggest$ | async"></tui-data-list-wrapper>
+          <input tuiTextfield [formControl]="searchControl" />
+          <tui-data-list-wrapper *tuiDataList [items]="adressList$ | async"></tui-data-list-wrapper>
         </tui-combo-box>
         <tui-error formControlName="address" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
@@ -20,16 +20,10 @@
         <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="changeAroundClock()">
           Круглосуточно
         </tui-checkbox-block>
-        <tui-input-time
-          *ngIf="!formCreateStation.get('aroundClock')?.value"
-          tuiUnfinishedValidator
-          formControlName="startWork">
+        <tui-input-time *ngIf="!aroundTheClock" tuiUnfinishedValidator formControlName="startWork">
           Начало работы
         </tui-input-time>
-        <tui-input-time
-          *ngIf="!formCreateStation.get('aroundClock')?.value"
-          tuiUnfinishedValidator
-          formControlName="endWork">
+        <tui-input-time *ngIf="!aroundTheClock" tuiUnfinishedValidator formControlName="endWork">
           Окончание работы
         </tui-input-time>
       </div>
