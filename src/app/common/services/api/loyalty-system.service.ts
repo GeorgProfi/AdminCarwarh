@@ -11,16 +11,11 @@ export class LoyaltySystemService {
 
   changeBonuses(data: ChangeBonusesDto, phone: string): Observable<number> {
     phone = encodeURIComponent(phone);
-    return this.http.put<number>(
-      `${environment.apiUrl}/loyalty-system/change-bonuses/${phone}`,
-      data
-    );
+    return this.http.put<number>(`${environment.apiOwnerUrl}/loyalty-system/change-bonuses/${phone}`, data);
   }
 
   getClientAndBonuses(phone: string): Observable<ClientAndBonusesDto> {
     phone = encodeURIComponent(phone);
-    return this.http.get<ClientAndBonusesDto>(
-      `${environment.apiUrl}/loyalty-system/client/${phone}`
-    );
+    return this.http.get<ClientAndBonusesDto>(`${environment.apiOwnerUrl}/loyalty-system/client/${phone}`);
   }
 }

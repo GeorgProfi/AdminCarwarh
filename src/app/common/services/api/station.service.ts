@@ -22,7 +22,7 @@ export class StationService {
 
   getStationList(data: Pagination): Observable<PaginateRes<Station>> {
     return this.http
-      .get<PaginateRes<Station>>(`${environment.apiUrl}/station/list`, {
+      .get<PaginateRes<Station>>(`${environment.apiOwnerUrl}/station/list`, {
         params: { ...data },
       })
       .pipe(
@@ -34,88 +34,88 @@ export class StationService {
   }
 
   getALLStation(serviceIds?: string[]): Observable<Station[]> {
-    return this.http.put<Station[]>(`${environment.apiUrl}/station/all`, {
+    return this.http.put<Station[]>(`${environment.apiOwnerUrl}/station/all`, {
       serviceIds,
     });
   }
 
   getServices(stationId: string): Observable<Service[]> {
-    return this.http.get<Service[]>(`${environment.apiUrl}/station/service`, {
+    return this.http.get<Service[]>(`${environment.apiOwnerUrl}/station/service`, {
       params: { stationId },
     });
   }
 
   getPosts(stationId: string) {
-    return this.http.get<any[]>(`${environment.apiUrl}/station/post`, {
+    return this.http.get<any[]>(`${environment.apiOwnerUrl}/station/post`, {
       params: { stationId },
     });
   }
 
   createStation(data: CreateStationDto): Observable<Station> {
-    return this.http.post<Station>(`${environment.apiUrl}/station`, data);
+    return this.http.post<Station>(`${environment.apiOwnerUrl}/station`, data);
   }
 
   updateStation(data: UpdateStationDto) {
-    return this.http.put<any>(`${environment.apiUrl}/station/update`, data);
+    return this.http.put<any>(`${environment.apiOwnerUrl}/station/update`, data);
   }
 
   setVisibleStation(data: SetVisibleStationDto) {
-    return this.http.put(`${environment.apiUrl}/station/visible`, data);
+    return this.http.put(`${environment.apiOwnerUrl}/station/visible`, data);
   }
 
   getStationById(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/station/get/${id}`);
+    return this.http.get<any>(`${environment.apiOwnerUrl}/station/get/${id}`);
   }
 
   addPost(data: AddPostDto) {
-    return this.http.post<any>(`${environment.apiUrl}/station/post`, data);
+    return this.http.post<any>(`${environment.apiOwnerUrl}/station/post`, data);
   }
 
   renamePost(data: RenamePostDto) {
-    return this.http.put<any>(`${environment.apiUrl}/station/post/rename`, data);
+    return this.http.put<any>(`${environment.apiOwnerUrl}/station/post/rename`, data);
   }
 
   removePost(id: string) {
-    return this.http.delete(`${environment.apiUrl}/station/post/${id}`);
+    return this.http.delete(`${environment.apiOwnerUrl}/station/post/${id}`);
   }
 
   addServiceOnStation(data: AddServiceOnStationDto) {
-    return this.http.post<any>(`${environment.apiUrl}/station/service`, data);
+    return this.http.post<any>(`${environment.apiOwnerUrl}/station/service`, data);
   }
 
   updateServices(data: Service[]) {
-    return this.http.put(`${environment.apiUrl}/station/service`, data);
+    return this.http.put(`${environment.apiOwnerUrl}/station/service`, data);
   }
 
   setVisibleService(data: SetVisibleServiceDto) {
-    return this.http.put(`${environment.apiUrl}/station/service/visible`, data);
+    return this.http.put(`${environment.apiOwnerUrl}/station/service/visible`, data);
   }
 
   removeService(data: { stationId: string; serviceId: string }) {
-    return this.http.delete<any>(`${environment.apiUrl}/station/service`, {
+    return this.http.delete<any>(`${environment.apiOwnerUrl}/station/service`, {
       params: data,
     });
   }
 
   addServicePost(data: AddServicePostDto) {
-    return this.http.post<any>(`${environment.apiUrl}/station/service-on-post`, data);
+    return this.http.post<any>(`${environment.apiOwnerUrl}/station/service-on-post`, data);
   }
 
   removeServicePost(data: { postId: string; serviceId: string }) {
-    return this.http.delete<any>(`${environment.apiUrl}/station/service-on-post`, {
+    return this.http.delete<any>(`${environment.apiOwnerUrl}/station/service-on-post`, {
       params: data,
     });
   }
 
   removeStation(id: string) {
-    return this.http.delete<any>(`${environment.apiUrl}/station/delete/${id}`);
+    return this.http.delete<any>(`${environment.apiOwnerUrl}/station/delete/${id}`);
   }
 
   getFullStation(id: string) {
-    return this.http.get<any>(`${environment.apiUrl}/station/full/${id}`);
+    return this.http.get<any>(`${environment.apiOwnerUrl}/station/full/${id}`);
   }
 
   getAllPost(data: GetAllPostDto) {
-    return this.http.post<any>(`${environment.apiUrl}/station/all-post`, data);
+    return this.http.post<any>(`${environment.apiOwnerUrl}/station/all-post`, data);
   }
 }

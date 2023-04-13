@@ -13,30 +13,30 @@ export class NotificationService {
   constructor(private http: HttpClient) {}
 
   getNotificationList(data: Pagination): Observable<PaginateRes<NotificationTemplate>> {
-    return this.http.get<PaginateRes<NotificationTemplate>>(`${environment.apiUrl}/notification/list`, {
+    return this.http.get<PaginateRes<NotificationTemplate>>(`${environment.apiOwnerUrl}/notification/list`, {
       params: { ...data },
     });
   }
 
   getNotification(id: string) {
-    return this.http.get<NotificationTemplate>(`${environment.apiUrl}/notification/get/${id}`);
+    return this.http.get<NotificationTemplate>(`${environment.apiOwnerUrl}/notification/get/${id}`);
   }
 
   createNotification(data: CreateNotificationDto) {
-    return this.http.post<NotificationTemplate>(`${environment.apiUrl}/notification/save`, data);
+    return this.http.post<NotificationTemplate>(`${environment.apiOwnerUrl}/notification/save`, data);
   }
 
   pushNotification(idNotification: string) {
-    return this.http.post<NotificationTemplate>(`${environment.apiUrl}/notification/push`, {
+    return this.http.post<NotificationTemplate>(`${environment.apiOwnerUrl}/notification/push`, {
       idNotification,
     });
   }
 
   removeNotification(idNotification: string) {
-    return this.http.delete<NotificationTemplate>(`${environment.apiUrl}/notification/${idNotification}`);
+    return this.http.delete<NotificationTemplate>(`${environment.apiOwnerUrl}/notification/${idNotification}`);
   }
 
   updateNotification(id: string, data: UpdateNotificationDto) {
-    return this.http.put<NotificationTemplate>(`${environment.apiUrl}/notification/${id}`, data);
+    return this.http.put<NotificationTemplate>(`${environment.apiOwnerUrl}/notification/${id}`, data);
   }
 }

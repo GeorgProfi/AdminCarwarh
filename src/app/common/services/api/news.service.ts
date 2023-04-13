@@ -11,24 +11,24 @@ export class NewsService {
   constructor(private http: HttpClient) {}
 
   getNewsList(data: Pagination) {
-    return this.http.get<PaginateRes<any>>(`${environment.apiUrl}/news/list`, {
+    return this.http.get<PaginateRes<any>>(`${environment.apiOwnerUrl}/news/list`, {
       params: { ...data },
     });
   }
 
   getNews(id: string) {
-    return this.http.get<any>(`${environment.apiUrl}/news/get/${id}`);
+    return this.http.get<any>(`${environment.apiOwnerUrl}/news/get/${id}`);
   }
 
   createNews(data: CreateNewsDto) {
-    return this.http.post(`${environment.apiUrl}/news/create`, data);
+    return this.http.post(`${environment.apiOwnerUrl}/news/create`, data);
   }
 
   updateNews(data: UpdateNewsDto) {
-    return this.http.put(`${environment.apiUrl}/news/update`, data);
+    return this.http.put(`${environment.apiOwnerUrl}/news/update`, data);
   }
 
   removeNews(id: string) {
-    return this.http.delete(`${environment.apiUrl}/news/remove/${id}`);
+    return this.http.delete(`${environment.apiOwnerUrl}/news/remove/${id}`);
   }
 }

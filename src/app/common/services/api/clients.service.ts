@@ -14,44 +14,45 @@ export class ClientsService {
 
   searchClient(search: string) {
     //console.log(search);
-    return this.http.get<Client[]>(`${environment.apiUrl}/client/search`, {
+    return this.http.get<Client[]>(`${environment.apiOwnerUrl}/client/search`, {
       params: { search },
     });
   }
 
   getClientsList(data: Pagination) {
-    return this.http.get<PaginateRes<Client>>(`${environment.apiUrl}/client/list`, { params: { ...data } });
+    return this.http.get<PaginateRes<Client>>(`${environment.apiOwnerUrl}/client/list`, { params: { ...data } });
   }
 
   createClient(data: CreateClientDto) {
-    return this.http.post<Client>(`${environment.apiUrl}/client/create`, {
+    return this.http.post<Client>(`${environment.apiOwnerUrl}/client/create`, {
       phone: data.phone,
       name: data.name,
     });
   }
 
   requestRegistrationClient(data: RequestRegistrationClientDto) {
+    console.log(data);
     const deviceId = localStorage.getItem('device_id');
-    return this.http.post<Client>(`${environment.apiUrl}/auth/client/request/with-company`, {
-      phone: data.phone,
-      name: data.name,
+    return this.http.post<Client>(`${environment.apiOwnerUrl}/auth/client/request/with-company`, {
+      ...data,
+      names: 'TEST',
       deviceId,
     });
   }
 
   codeRegistrationClient(code: string) {
     const deviceId = localStorage.getItem('device_id');
-    return this.http.post<Client>(`${environment.apiUrl}/auth/client/otp`, {
+    return this.http.post<Client>(`${environment.apiOwnerUrl}/auth/client/otp`, {
       code,
       deviceId,
     });
   }
 
   getClientAndCard(idClient: string) {
-    return this.http.get<Client>(`${environment.apiUrl}/client/get-full/${idClient}`);
+    return this.http.get<Client>(`${environment.apiOwnerUrl}/client/get-full/${idClient}`);
   }
 
   saveDataClient(data: SaveDataClientDto) {
-    return this.http.put(`${environment.apiUrl}/client/update`, data);
+    return this.http.put(`${environment.apiOwnerUrl}/client/update`, data);
   }
 }

@@ -13,7 +13,7 @@ export class ReservationService {
   constructor(private http: HttpClient) {}
 
   getReservationStation(data: GetReservationStationDto): Observable<Order[]> {
-    return this.http.get<Order[]>(`${environment.apiUrl}/reservation/station`, {
+    return this.http.get<Order[]>(`${environment.apiOwnerUrl}/reservation/station`, {
       params: {
         stationId: data.stationId,
         day: data.day.toISOString(),
@@ -22,22 +22,22 @@ export class ReservationService {
   }
 
   searchFreeTimes(data: SearchFreeTimesDto): Observable<string[]> {
-    return this.http.post<string[]>(`${environment.apiUrl}/reservation/search`, data);
+    return this.http.post<string[]>(`${environment.apiOwnerUrl}/reservation/search`, data);
   }
 
   createReservation(data: CreateReservationDto) {
-    return this.http.post<string[]>(`${environment.apiUrl}/reservation/reservation-for-owner`, data);
+    return this.http.post<string[]>(`${environment.apiOwnerUrl}/reservation/reservation-for-owner`, data);
   }
 
   getOrder(id: string) {
-    return this.http.get<Order>(`${environment.apiUrl}/reservation/get/${id}`);
+    return this.http.get<Order>(`${environment.apiOwnerUrl}/reservation/get/${id}`);
   }
 
   updateReservation(data: UpdateReservationDto) {
-    return this.http.put(`${environment.apiUrl}/reservation/update`, data);
+    return this.http.put(`${environment.apiOwnerUrl}/reservation/update`, data);
   }
 
   removeOrder(id: string) {
-    return this.http.delete(`${environment.apiUrl}/reservation/remove/${id}`);
+    return this.http.delete(`${environment.apiOwnerUrl}/reservation/remove/${id}`);
   }
 }

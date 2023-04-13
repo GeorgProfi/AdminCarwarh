@@ -36,7 +36,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<object>> {
-    if (!req.url.includes(environment.apiUrl)) {
+    if (!req.url.includes(environment.apiOwnerUrl)) {
       return next.handle(req);
     }
     const token = this.authService.authorization;
@@ -66,7 +66,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError(err => {
         if (
           err instanceof HttpErrorResponse &&
-          authReq.url.includes(environment.apiUrl) &&
+          authReq.url.includes(environment.apiOwnerUrl) &&
           !authReq.url.includes('auth') &&
           err.status === 401
         ) {
