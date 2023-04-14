@@ -138,9 +138,9 @@ export class CreateReservationComponent {
   post!: Post;
 
   // Day:
-  minDay: TuiDay = TuiDay.currentLocal();
-  maxDay: TuiDay = TuiDay.currentLocal().append({ month: 6 });
-  day = TuiDay.currentLocal();
+  minDay: TuiDay = TuiDay.currentUtc();
+  maxDay: TuiDay = TuiDay.currentUtc().append({ month: 6 });
+  day = TuiDay.currentUtc();
 
   // Time:
   searchTimes() {
@@ -152,7 +152,7 @@ export class CreateReservationComponent {
     // this.durationAmount = this.services.reduce((a, s) => a + s.duration, 0);
     this.reservationService
       .searchFreeTimes({
-        day: this.day.toLocalNativeDate(),
+        day: this.day.toUtcNativeDate(),
         stationId: this.station.id,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
         postId: this.post?.id,

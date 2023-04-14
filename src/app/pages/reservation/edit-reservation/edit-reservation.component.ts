@@ -171,9 +171,9 @@ export class EditReservationComponent implements OnInit {
   }
 
   // Day:
-  minDay: TuiDay = TuiDay.currentLocal();
-  maxDay: TuiDay = TuiDay.currentLocal().append({ month: 6 });
-  day = TuiDay.currentLocal();
+  minDay: TuiDay = TuiDay.currentUtc();
+  maxDay: TuiDay = TuiDay.currentUtc().append({ month: 6 });
+  day = TuiDay.currentUtc();
 
   // Time:
   searchTimes() {

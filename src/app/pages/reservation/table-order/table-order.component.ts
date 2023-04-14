@@ -55,12 +55,12 @@ export class TableOrderComponent implements OnInit {
     return station.name;
   }
   station!: Station;
-  day: TuiDay = TuiDay.currentLocal();
+  day: TuiDay = TuiDay.currentUtc();
 
   change() {
     this.indexPost = 0;
     this.calendarComponent.getApi().today();
-    this.getOrders(this.day.toLocalNativeDate(), this.station.id);
+    this.getOrders(this.day.toUtcNativeDate(), this.station.id);
   }
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
@@ -184,6 +184,6 @@ export class TableOrderComponent implements OnInit {
       });
   }
   ngOnInit(): void {
-    this.getOrders(this.day.toLocalNativeDate(), '00000000-0000-0000-0000-000000000000');
+    this.getOrders(this.day.toUtcNativeDate(), '00000000-0000-0000-0000-000000000000');
   }
 }
