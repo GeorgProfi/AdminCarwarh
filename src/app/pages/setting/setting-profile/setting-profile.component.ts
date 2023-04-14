@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { AccountService } from '../../../common/services/api/account.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiValidationError } from '@taiga-ui/cdk';
+import { matchValidator } from 'src/app/shared/validators';
 
 @Component({
   selector: 'app-setting-profile',
@@ -11,6 +12,32 @@ import { TuiValidationError } from '@taiga-ui/cdk';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingProfileComponent {
+  repeatPassErr = new TuiValidationError('Пароли не совпадают!');
+  emailErr = new TuiValidationError('Некорректный email');
+
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
+
+  emailForm = new FormGroup({
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+  })
+
+  passwordForm = new FormGroup({
+    oldPassword: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    newPassword: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, matchValidator('repeatPassword', true)]
+    }),
+    repeatPassword: new FormControl('', [Validators.required, matchValidator('newPassword')]),
+  })
+
   constructor(
     private accountService: AccountService,
     @Inject(TuiAlertService)
@@ -18,70 +45,67 @@ export class SettingProfileComponent {
     @Inject(TuiDialogService)
     private readonly dialogService: TuiDialogService
   ) {}
-  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
-    label: 'Вы уверены?',
-    size: 's',
-    closeable: false,
-    dismissible: false,
-  });
-  emailControl = new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] });
-  oldPassword = '';
-  newPassword = '';
-  repeatPassword = '';
 
-  repeatPassErr = new TuiValidationError('Пароли не совпадают!');
-  get passwordError() {
-    if (this.newPassword !== this.repeatPassword) {
-      return this.repeatPassErr;
-    }
-    return null;
+  get newEmail(): string {
+    return this.emailForm.get('email')?.value as string;
+  };
+
+  get oldPassword(): string {
+    return this.passwordForm.get('oldPassword')?.value as string;
+  };
+
+  get newPassword(): string {
+    return this.passwordForm.get('newPassword')?.value as string;
+  };
+
+  get repeatPassword(): string {
+    return this.passwordForm.get('repeatPassword')?.value as string;
+  };
+
+  get isPasswordFormInvalid(): boolean {
+    return this.passwordForm.invalid;
   }
 
-  async changeEmail() {
-    this.emailControl.markAllAsTouched();
-    if (!this.emailControl.valid) {
-      return;
-    }
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
+  get isEmailFormInvalid(): boolean {
+    return this.emailForm.invalid;
+  }
 
-    const email = this.emailControl.value;
+  get passwordError(): TuiValidationError | null {
+    return this.newPassword !== this.repeatPassword ? this.repeatPassErr : null
+  }
+
+  get emailError(): TuiValidationError | null {
+    return this.emailForm.touched && this.isEmailFormInvalid ? this.emailErr : null;
+  }
+
+  onChangeEmail() {
+    this.prompt.subscribe({ next: value => value && this._changeEmail(this.newEmail) });
+  }
+
+  onChangePassword() {
+    this.prompt.subscribe({ next: value => value && this._changePassword() });
+  }
+
+  private _changeEmail(email: string): void {
     this.accountService
       .changeEmail({
         newEmail: email,
       })
-      .subscribe(
-        () => {
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
+      .subscribe({
+        next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
   }
 
-  async changePassword() {
-    if (this.newPassword !== this.repeatPassword) {
-      return;
-    }
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
+  private _changePassword(): void {
     this.accountService
       .changePassword({
         oldPassword: this.oldPassword,
         newPassword: this.newPassword,
       })
-      .subscribe(
-        () => {
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
+      .subscribe({
+        next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
   }
 }
