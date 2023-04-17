@@ -1,30 +1,27 @@
-<form class="b-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+<form class="b-form" [formGroup]="form" (submit)="onSubmit()">
   <div class="tui-form__row tui-form__row_multi-fields">
     <div class="tui-form__multi-field">
-      <tui-input formControlName="nameCarWash"> Название компании </tui-input>
+      <tui-input formControlName="name"> Название компании </tui-input>
+      <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <div class="tui-form__multi-field">
-      <tui-input formControlName="email">
-        Электронная почта
-        <input tuiTextfield />
-      </tui-input>
+      <tui-input formControlName="email"> Электронная почта </tui-input>
+      <tui-error formControlName="email" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
   </div>
 
   <div class="tui-form__row tui-form__row_multi-fields">
     <div class="tui-form__multi-field">
       <tui-input-password formControlName="password"> Пароль </tui-input-password>
+      <tui-error formControlName="password" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <div class="tui-form__multi-field">
       <tui-input-password formControlName="passwordRepeat"> Повтор пароля </tui-input-password>
+      <tui-error formControlName="password" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
   </div>
 
-  <tui-error [error]="computedError"></tui-error>
-
   <div class="tui-form__buttons">
-    <button tuiButton class="tui-form__button" type="submit" appearance="primary" [disabled]="isInvalid">
-      Зарегистрироваться
-    </button>
+    <button tuiButton class="tui-form__button" type="submit" appearance="primary">Зарегистрироваться</button>
   </div>
 </form>

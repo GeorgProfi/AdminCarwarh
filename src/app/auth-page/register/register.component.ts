@@ -1,62 +1,77 @@
-import { Component, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TuiValidationError } from '@taiga-ui/cdk';
 import { RegistrationService } from '../../common/services/api/registration.service';
 import { TuiDialogService } from '@taiga-ui/core';
 import { matchValidator } from 'src/app/shared/validators';
+import { TUI_VALIDATION_ERRORS } from '@taiga-ui/kit/tokens';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.less'],
+  providers: [
+    {
+      provide: TUI_VALIDATION_ERRORS,
+      useValue: {
+        required: 'Поле не может быть пустым',
+        email: 'Не валидный email',
+        matching: 'Пароли не совпадают',
+        minlength: 'Минимум 4 символа',
+      },
+    }
+  ] ,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  authForm = new FormGroup({
-    nameCarWash: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.required),
-    password: new FormControl('', [Validators.required, matchValidator('passwordRepeat', true)]),
-    passwordRepeat: new FormControl('', [Validators.required, matchValidator('password')]),
+  form = new FormGroup({
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(4), matchValidator('passwordRepeat')],
+    }),
+    passwordRepeat: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(4), matchValidator('password', true)],
+    }),
   });
 
-  enabledError = false;
-  error = new TuiValidationError(`Неверно логин или пароль`);
-
   constructor(
-    private route: Router,
     private registrationService: RegistrationService,
-    private readonly dialogService: TuiDialogService
+    private readonly dialogService: TuiDialogService,
   ) {}
 
-  get isInvalid(): boolean {
-    return this.authForm.invalid;
-  }
+  onSubmit(): void {
+    this.form.markAllAsTouched();
+    Object.values(this.form.controls).map(control => control.updateValueAndValidity())
 
-  get computedError(): TuiValidationError | null {
-    return this.enabledError ? this.error : null;
-  }
-
-  async onSubmit(): Promise<void> {
-    const data = this.authForm.value;
-    if (!(data.email && data.nameCarWash && data.password)) {
-      return;
+    if (this.form.valid) {
+      const data = this.form.value;
+      data.name && data.email && data.password && this._submit(data.name, data.email, data.password);
     }
+  }
 
+  private _submit(name: string, email: string, password: string): void {
     this.registrationService
-      .register({
-        password: data.password,
-        email: data.email,
-        name: data.nameCarWash,
-      })
+      .register({ name, email, password })
       .subscribe({
-        next: () => {
-          this.dialogService.open(`Письмо с подтверждением отправлено на почту ${data.email}`).subscribe();
-          this.authForm.reset();
-        },
-        error: error => {
-          console.log(error);
-          this.enabledError = true;
-        },
+        next: () => this._registerSuccess(email),
+        error: () => this._registerError(),
       });
+  }
+
+  private _registerSuccess(email: string): void {
+    this.dialogService.open(`Письмо с подтверждением отправлено на почту ${email}`).subscribe();
+    this.form.reset();
+  }
+
+  private _registerError(): void {
+    this.dialogService.open(`Что-то пошло не так`).subscribe();
   }
 }

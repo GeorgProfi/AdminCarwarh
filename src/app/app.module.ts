@@ -22,7 +22,7 @@ import { LayoutModule } from './layouts/left-menu/layout.module';
 import { ServicesModule } from './pages/services/services.module';
 import { MarketingModule } from './pages/marketing/marketing.module';
 import { AngularYandexMapsModule } from 'angular8-yandex-maps';
-import { TuiInputModule } from '@taiga-ui/kit';
+import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
 
 @NgModule({
   declarations: [AppComponent],
@@ -53,6 +53,14 @@ import { TuiInputModule } from '@taiga-ui/kit';
     TuiInputModule,
   ],
   providers: [
+    {
+      provide: TUI_VALIDATION_ERRORS,
+      useValue: {
+        required: 'Поле не может быть пустым',
+        email: 'Не валидный email',
+        matching: 'Пароли не совпадают',
+      },
+    },
     { provide: TUI_SANITIZER, useClass: NgDompurifySanitizer },
     {
       provide: TUI_LANGUAGE,
@@ -64,7 +72,8 @@ import { TuiInputModule } from '@taiga-ui/kit';
       useClass: AuthInterceptor,
       multi: true,
     },
-  ],
+    {provide: TUI_SANITIZER, useClass: NgDompurifySanitizer}
+],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
