@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
-import { LoginComponent } from './auth-page/login/login.component';
-import { RegisterComponent } from './auth-page/register/register.component';
 import { ClientsComponent } from './pages/clients/clients.component';
 import { StationComponent } from './pages/stations/station.component';
 import { NotificationComponent } from './pages/marketing/notification/notification.component';
-import { AuthPageComponent } from './auth-page/auth-page.component';
 import { ReservationComponent } from './pages/reservation/reservation.component';
 import { Error404Component } from './pages/error-404/error-404.component';
 import { EditStationComponent } from './pages/stations/edit-station/edit-station.component';
@@ -134,12 +131,7 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    component: AuthPageComponent,
-    children: [
-      { path: '', redirectTo: 'login', pathMatch: 'prefix' },
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },
-    ],
+    loadChildren: () => import('./pages/auth-page/auth-page.module').then(m => m.AuthPageModule),
   },
   { path: '**', component: Error404Component },
 ];

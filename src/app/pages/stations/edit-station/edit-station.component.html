@@ -9,7 +9,7 @@
       <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <div tuiGroup class="group tui-form__row">
-      <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="changeAroundClock()">
+      <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="onChangeAroundClock()">
         Круглосуточно
       </tui-checkbox-block>
       <tui-input-time
@@ -29,10 +29,10 @@
       <tui-text-area formControlName="description">Описание</tui-text-area>
     </div>
     <div class="flex-wrap tui-form__row">
-      <button class="tui-form__button center" tuiButton size="s" (click)="updateStation()" appearance="primary">
+      <button class="tui-form__button center" tuiButton size="s" (click)="onUpdateStation()" appearance="primary">
         Сохранить
       </button>
-      <button class="tui-form__button right" tuiButton size="s" (click)="removeStation()" appearance="accent">
+      <button class="tui-form__button right" tuiButton size="s" (click)="onRemoveStation()" appearance="accent">
         Удалить
       </button>
     </div>
@@ -89,10 +89,10 @@
                 size="s"
                 icon="tuiIconPlus"
                 shape="rounded"
-                (click)="addService()"></button>
+                (click)="onAddService()"></button>
             </td>
           </tr>
-          <tr *ngFor="let service of services | tuiTableSort; let i = index" tuiTr>
+          <tr *ngFor="let service of services | tuiTableSort; index as i" tuiTr>
             <td *tuiCell="'action-1'" tuiTd>
               <button
                 tuiIconButton
@@ -100,7 +100,7 @@
                 size="s"
                 [icon]="service.visible ? 'tuiIconEye' : 'tuiIconEyeOff'"
                 shape="rounded"
-                (click)="setVisibleService(i)"></button>
+                (click)="onSetVisibleService(i)"></button>
             </td>
             <td *tuiCell="'name'" tuiTd>
               {{ service.name }}
@@ -124,7 +124,7 @@
                 size="s"
                 icon="tuiIconTrash"
                 shape="rounded"
-                (click)="removeServiceForStation(service.id)"></button>
+                (click)="onRemoveServiceForStation(service.id)"></button>
             </td>
           </tr>
         </tbody>
@@ -136,7 +136,7 @@
           appearance="primary"
           size="xs"
           class="tui-form__button"
-          (click)="updateServices()">
+          (click)="onUpdateServices()">
           Обновить
         </button>
       </div>
@@ -151,18 +151,18 @@
           <tui-input [formControl]="namePost"> Введите название нового поста </tui-input>
           <tui-error [formControl]="namePost" [error]="[] | tuiFieldError | async"></tui-error>
         </div>
-        <button class="tui-form__button" tuiButton (click)="createPost()" appearance="primary">Создать пост</button>
+        <button class="tui-form__button" tuiButton (click)="onCreatePost()" appearance="primary">Создать пост</button>
       </div>
       <div class="content-post tui-form__row" *ngIf="posts.length > 0; else nothing">
-        <nav tuiTabs [(activeItemIndex)]="indexPost" vertical="left" class="left">
-          <button tuiTab *ngFor="let post of posts; let i = index" (click)="selectPost(i)">
+        <nav tuiTabs [(activeItemIndex)]="activePostIndex" vertical="left" class="left">
+          <button tuiTab *ngFor="let post of posts; index as i" (click)="onSelectPost(i)">
             {{ post.name }}
           </button>
         </nav>
         <div [style.width.%]="100">
           <div tuiGroup class="tui-form__row">
-            <tui-input [(ngModel)]="posts[indexPost].name"> Название поста </tui-input>
-            <button class="tui-form__button" tuiButton (click)="updateNamePost()" appearance="primary">
+            <tui-input [(ngModel)]="posts[activePostIndex].name"> Название поста </tui-input>
+            <button class="tui-form__button" tuiButton (click)="onUpdatePostName()" appearance="primary">
               Сохранить
             </button>
           </div>
@@ -173,7 +173,7 @@
                 <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
               </tr>
             </thead>
-            <tbody *tuiLet="posts[indexPost].services as servicesSort" tuiTbody [data]="servicesSort">
+            <tbody *tuiLet="posts[activePostIndex].services as servicesSort" tuiTbody [data]="servicesSort">
               <tr tuiTr>
                 <td *tuiCell="'name'" tuiTd>
                   <tui-combo-box class="b-form" [(ngModel)]="stationServiceForPost" [stringify]="serviceStringify">
@@ -183,7 +183,7 @@
                       *tuiDataList
                       [itemContent]="serviceStringify | tuiStringifyContent"
                       [items]="
-                        posts[indexPost].freeServices | tuiFilterByInputWith : serviceStringify
+                        posts[activePostIndex].freeServices | tuiFilterByInputWith : serviceStringify
                       "></tui-data-list-wrapper>
                   </tui-combo-box>
                 </td>
@@ -194,7 +194,7 @@
                     size="s"
                     icon="tuiIconPlus"
                     shape="rounded"
-                    (click)="addServicePost()"></button>
+                    (click)="onAddServicePost()"></button>
                 </td>
               </tr>
               <tr *ngFor="let service of servicesSort; let i = index" tuiTr>
@@ -208,7 +208,7 @@
                     size="s"
                     icon="tuiIconTrash"
                     shape="rounded"
-                    (click)="removeServicePost(service.id)"></button>
+                    (click)="onRemoveServicePost(service.id)"></button>
                 </td>
               </tr>
             </tbody>
@@ -220,7 +220,7 @@
               appearance="accent"
               size="xs"
               class="tui-form__button"
-              (click)="removePost()">
+              (click)="onRemovePost()">
               Удалить пост
             </button>
           </div>

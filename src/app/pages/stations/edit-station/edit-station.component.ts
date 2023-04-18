@@ -26,35 +26,6 @@ interface Post {
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditStationComponent implements OnInit {
-  constructor(
-    private stationService: StationService,
-    private servicesService: ServicesService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    @Inject(TuiAlertService)
-    private readonly alertService: TuiAlertService,
-    @Inject(TuiDialogService)
-    private readonly dialogService: TuiDialogService,
-    private cdr: ChangeDetectorRef
-  ) {}
-
-  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
-    label: 'Вы уверены?',
-    size: 's',
-    closeable: false,
-    dismissible: false,
-  });
-
-  stationId: string = this.activatedRoute.snapshot.queryParams['id'];
-
-  listServices$ = this.servicesService.getAllClassServices();
-  serviceStringify(service: ClassService | Service): string {
-    return service.name;
-  }
-
-  /*
-  station
-   */
   formEditStation = new FormGroup({
     address: new FormControl(``, {
       nonNullable: true,
@@ -78,6 +49,32 @@ export class EditStationComponent implements OnInit {
     }),
     description: new FormControl(``, { nonNullable: true }),
   });
+
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
+
+  constructor(
+    private stationService: StationService,
+    private servicesService: ServicesService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    @Inject(TuiAlertService)
+    private readonly alertService: TuiAlertService,
+    @Inject(TuiDialogService)
+    private readonly dialogService: TuiDialogService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  stationId: string = this.activatedRoute.snapshot.queryParams['id'];
+
+  listServices$ = this.servicesService.getAllClassServices();
+  serviceStringify(service: ClassService | Service): string {
+    return service.name;
+  }
 
   classServices$ = this.servicesService.getAllClassServices();
   filterClassServices!: ClassService[];
@@ -124,98 +121,13 @@ export class EditStationComponent implements OnInit {
     );
   }
 
-  async addService() {
-    this.formAddService.markAllAsTouched();
-    if (!this.formAddService.valid) {
-      this.cdr.detectChanges();
-      return;
-    }
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    const data: any = this.formAddService.value;
-    this.stationService
-      .addServiceOnStation({
-        idClassService: 'data.classService.id',
-        stationId: this.stationId,
-        bonusPercentage: data.bonusPercentage,
-        price: data.price,
-        discount: data.discount,
-        duration: data.duration,
-      })
-      .subscribe(
-        data => {
-          this.getServices().subscribe();
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
-  }
-
-  async removeServiceForStation(serviceId: string) {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService
-      .removeService({
-        stationId: this.stationId,
-        serviceId: serviceId,
-      })
-      .subscribe(
-        () => {
-          this.getServices().subscribe();
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
-  }
-
-  async updateServices() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService.updateServices(this.services).subscribe(
-      () => {
-        this.getServices().subscribe();
-        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-      },
-      error => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-      }
-    );
-  }
-
-  setVisibleService(index: number) {
-    const service = this.services[index];
-    this.stationService
-      .setVisibleService({
-        serviceId: service.id,
-        visible: !service.visible,
-      })
-      .subscribe(
-        () => {
-          this.getServices().subscribe();
-        },
-        () => {
-          this.dialogService.open('Услуга не подключена ни к одному посту', { label: 'Ошибка', size: 's' }).subscribe();
-        }
-      );
-  }
-
   /*
   station posts
    */
   readonly columnsServicesOnPost = [`name`, `actions`];
   posts: Post[] = [];
   namePost = new FormControl('', { nonNullable: true, validators: [Validators.required] });
-  indexPost: number = 0;
+  activePostIndex: number = 0;
   stationServiceForPost!: Service;
 
   getPosts() {
@@ -234,111 +146,11 @@ export class EditStationComponent implements OnInit {
     );
   }
 
-  async createPost() {
-    this.namePost.markAllAsTouched();
-    if (!this.namePost.valid) {
-      return;
-    }
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    const name = this.namePost.value;
-    this.stationService
-      .addPost({
-        stationId: this.stationId,
-        name,
-      })
-      .subscribe(
-        data => {
-          this.getPosts().subscribe();
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
-  }
-  selectPost(index: number) {
-    this.indexPost = index;
-  }
-  async addServicePost() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService
-      .addServicePost({
-        postId: this.posts[this.indexPost].id,
-        serviceId: this.stationServiceForPost.id,
-      })
-      .subscribe(
-        data => {
-          this.getPosts().subscribe();
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
-  }
-  removeServicePost(serviceId: string) {
-    if (!confirm(`Вы уверены?`)) {
-      return;
-    }
-    this.stationService
-      .removeServicePost({
-        postId: this.posts[this.indexPost].id,
-        serviceId: serviceId,
-      })
-      .subscribe(
-        () => {
-          this.getPosts().subscribe();
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
-  }
-  async updateNamePost() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService
-      .renamePost({
-        postId: this.posts[this.indexPost].id,
-        name: this.posts[this.indexPost].name,
-      })
-      .subscribe(() => {
-        this.getPosts().subscribe();
-      });
-  }
-  async removePost() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService.removePost(this.posts[this.indexPost].id).subscribe(
-      () => {
-        if (this.indexPost > 0) {
-          this.indexPost -= 1;
-        }
-        this.getPosts().subscribe();
-        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-      },
-      error => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-      }
-    );
-  }
-
   /******************************************************/
 
   ngOnInit() {
-    this.stationService.getFullStation(this.stationId).subscribe(
-      station => {
+    this.stationService.getFullStation(this.stationId).subscribe({
+      next: station => {
         this.formEditStation.patchValue({
           name: station.name,
           address: station.address,
@@ -367,10 +179,10 @@ export class EditStationComponent implements OnInit {
         });
         this.cdr.detectChanges();
       },
-      err => {
+      error: err => {
         console.error(err);
       }
-    );
+    });
     // this.stationService.getStationById(this.stationId).subscribe(station => {
     //   this.formEditStation.patchValue({
     //     name: station.name,
@@ -387,7 +199,60 @@ export class EditStationComponent implements OnInit {
     // });
   }
 
-  changeAroundClock() {
+  onAddService(): void {
+    this.formAddService.markAllAsTouched();
+    if (!this.formAddService.valid) {
+      this.cdr.detectChanges();
+      return;
+    }
+    this.prompt.subscribe({ next: value => value && this._addService() });
+  }
+
+  onRemoveServiceForStation(serviceId: string): void {
+    this.prompt.subscribe({ next: value => value && this._removeServiceForStation(serviceId) });
+  }
+
+  onUpdateServices() {
+    this.prompt.subscribe({ next: value => value && this._updateServices() });
+  }
+
+  onSetVisibleService(index: number) {
+    const service = this.services[index];
+    this.stationService
+      .setVisibleService({
+        serviceId: service.id,
+        visible: !service.visible,
+      })
+      .subscribe({
+        next: () => this.getServices().subscribe(),
+        error: () => {
+          this.dialogService.open('Услуга не подключена ни к одному посту', { label: 'Ошибка', size: 's' }).subscribe();
+        }
+      });
+  }
+
+  onCreatePost() {
+    this.namePost.markAllAsTouched();
+
+    if (this.namePost.valid) {
+      const name = this.namePost.value;
+      this.prompt.subscribe({ next: value => value && this._createPost(this.stationId, name) });
+    }
+  }
+
+  onAddServicePost() {
+    this.prompt.subscribe({ next: value => value && this._addServicePost() });
+  }
+
+  onRemoveServicePost(serviceId: string) {
+    this.prompt.subscribe({ next: value => value && this._removeServicePost(serviceId) });
+  }
+
+  onUpdatePostName() {
+    this.prompt.subscribe({ next: value => value && this._updatePostName() });
+  }
+
+  onChangeAroundClock() {
     if (this.formEditStation.controls.aroundClock.value) {
       this.formEditStation.controls.startWork.disable();
       this.formEditStation.controls.endWork.disable();
@@ -397,26 +262,153 @@ export class EditStationComponent implements OnInit {
     }
   }
 
-  formatTime(time: TuiTime) {
-    return DateTime.local(2022, 1, 1, time.hours, time.minutes).toJSDate();
+  onSelectPost(index: number) {
+    this.activePostIndex = index;
   }
 
-  async updateStation() {
+  onRemovePost(): void {
+    this.prompt.subscribe({ next: value => value && this._removePost() });
+  }
+
+  onUpdateStation(): void {
     if (!this.formEditStation.valid) {
       this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
     }
 
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
+    this.prompt.subscribe({ next: value => value && this._updateStation() });
+  }
 
+  onRemoveStation(): void {
+    this.prompt.subscribe({ next: value => value && this._removeStation() });
+  }
+
+  private _formatTime(time: TuiTime) {
+    return DateTime.local(2022, 1, 1, time.hours, time.minutes).toJSDate();
+  }
+
+  private _addService() {
+    const data: any = this.formAddService.value;
+    this.stationService
+      .addServiceOnStation({
+        idClassService: data.classService.id,
+        stationId: this.stationId,
+        bonusPercentage: data.bonusPercentage,
+        price: data.price,
+        discount: data.discount,
+        duration: data.duration,
+      })
+      .subscribe({
+        next: () => {
+          this.getServices().subscribe();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
+  }
+
+  private _removeServiceForStation(serviceId: string) {
+    this.stationService
+      .removeService({
+        stationId: this.stationId,
+        serviceId: serviceId,
+      })
+      .subscribe({
+        next: () => {
+          this.getServices().subscribe();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
+  }
+
+  private _updateServices(): void {
+    this.stationService.updateServices(this.services).subscribe({
+      next: () => {
+        this.getServices().subscribe();
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
+  }
+
+  private _createPost(stationId: string, name: string): void {
+    this.stationService
+      .addPost({
+        stationId,
+        name,
+      })
+      .subscribe({
+        next: () => {
+          this.getPosts().subscribe();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
+  }
+
+  private _updatePostName(): void {
+    this.stationService
+      .renamePost({
+        postId: this.posts[this.activePostIndex].id,
+        name: this.posts[this.activePostIndex].name,
+      })
+      .subscribe(() => {
+        this.getPosts().subscribe();
+      });
+  }
+
+  private _addServicePost(): void {
+    this.stationService
+      .addServicePost({
+        postId: this.posts[this.activePostIndex].id,
+        serviceId: this.stationServiceForPost.id,
+      })
+      .subscribe({
+        next: () => {
+          this.getPosts().subscribe();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
+  }
+
+  private _removeServicePost(serviceId: string): void {
+    this.stationService
+      .removeServicePost({
+        postId: this.posts[this.activePostIndex].id,
+        serviceId: serviceId,
+      })
+      .subscribe(
+        () => {
+          this.getPosts().subscribe();
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
+  }
+
+  private _removePost(): void {
+    this.stationService.removePost(this.posts[this.activePostIndex].id).subscribe({
+      next: () => {
+        if (this.activePostIndex > 0) {
+          this.activePostIndex -= 1;
+        }
+        this.getPosts().subscribe();
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
+  }
+
+  private _updateStation() {
     const data: CreateStationDto = this.formEditStation.value as unknown as CreateStationDto;
     if (!data.aroundClock) {
       // Без этого кринжа не работает =))))
-      data.startWork = this.formatTime(data.startWork as unknown as TuiTime);
-      data.endWork = this.formatTime(data.endWork as unknown as TuiTime);
+      data.startWork = this._formatTime(data.startWork as unknown as TuiTime);
+      data.endWork = this._formatTime(data.endWork as unknown as TuiTime);
     }
 
     this.stationService
@@ -429,29 +421,19 @@ export class EditStationComponent implements OnInit {
         startWork: data.startWork,
         endWork: data.endWork,
       })
-      .subscribe(
-        () => {
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        () => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
+      .subscribe({
+        next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
   }
 
-  async removeStation() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService.removeStation(this.stationId).subscribe(
-      async () => {
-        await this.router.navigateByUrl('stations');
+  private _removeStation() {
+    this.stationService.removeStation(this.stationId).subscribe({
+      next: () => {
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        this.router.navigateByUrl('stations');
       },
-      () => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-      }
-    );
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
   }
 }

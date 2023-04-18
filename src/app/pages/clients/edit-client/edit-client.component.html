@@ -1,5 +1,5 @@
-<tui-island>
-  <form [formGroup]="form">
+<form [formGroup]="form">
+  <tui-island>
     <div class="tui-form__row">
       <tui-input formControlName="name"> Имя </tui-input>
     </div>
@@ -22,8 +22,9 @@
       <tui-input-number formControlName="bonuses" [postfix]="'RUB' | tuiCurrency"> Число бонусов </tui-input-number>
       <tui-error formControlName="bonuses" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
-  </form>
-</tui-island>
-<div class="tui-form__buttons">
-  <button class="tui-form__button" tuiButton appearance="primary" (click)="saveData()">Сохранить</button>
-</div>
+  </tui-island>
+  <div class="tui-form__buttons">
+    <button class="tui-form__button" tuiButton appearance="primary" type="submit" (click)="onSave()">Сохранить</button>
+    <button class="tui-form__button" tuiButton appearance="primary" (click)="onCancel()">Отмена</button>
+  </div>
+</form>

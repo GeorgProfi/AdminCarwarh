@@ -1,28 +1,47 @@
-<h3 class="tui-form__header">Смена электронной почты</h3>
-<div class="tui-form__row">
-  <tui-input [formControl]="emailControl">
-    Электронная почта
-    <input tuiTextfield type="email" />
-  </tui-input>
-  <tui-error [formControl]="emailControl" [error]="[] | tuiFieldError | async"></tui-error>
-</div>
-<div class="tui-form__buttons">
-  <button tuiButton class="tui-form__button" appearance="primary" (click)="changeEmail()">Подтвердить</button>
-</div>
+<form [formGroup]="emailForm">
+  <h3 class="tui-form__header">Смена электронной почты</h3>
+  <div class="tui-form__row">
+    <tui-input formControlName="email">
+      Электронная почта
+      <input tuiTextfield type="email" autocomplete="email" />
+    </tui-input>
+    <tui-error [error]="emailError"></tui-error>
+  </div>
+  <div class="tui-form__buttons">
+    <button
+      tuiButton
+      class="tui-form__button"
+      appearance="primary"
+      [disabled]="isEmailFormInvalid"
+      (click)="onChangeEmail()">
+      Подтвердить
+    </button>
+  </div>
+</form>
 
-<h3 class="tui-form__header">Смена пароля</h3>
-<div class="tui-form__row">
-  <tui-input-password [(ngModel)]="oldPassword"> Старый пароль </tui-input-password>
-</div>
-<div class="tui-form__row tui-form__row_multi-fields">
-  <div class="tui-form__multi-field">
-    <tui-input-password [(ngModel)]="newPassword"> Новый пароль </tui-input-password>
+<form [formGroup]="passwordForm">
+  <h3 class="tui-form__header">Смена пароля</h3>
+  <div class="tui-form__row">
+    <tui-input-password name="password" formControlName="oldPassword"> Старый пароль </tui-input-password>
   </div>
-  <div class="tui-form__multi-field">
-    <tui-input-password [(ngModel)]="repeatPassword"> Повтор нового пароля </tui-input-password>
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input-password formControlName="newPassword"> Новый пароль </tui-input-password>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input-password formControlName="repeatPassword"> Повтор нового пароля </tui-input-password>
+    </div>
   </div>
-</div>
-<tui-error [error]="passwordError"></tui-error>
-<div class="tui-form__buttons">
-  <button tuiButton class="tui-form__button" appearance="primary" (click)="changePassword()">Сохранить</button>
-</div>
+  <tui-error [error]="passwordError"></tui-error>
+  <div class="tui-form__buttons">
+    <button
+      tuiButton
+      class="tui-form__button"
+      appearance="primary"
+      type="submit"
+      [disabled]="isPasswordFormInvalid"
+      (click)="onChangePassword()">
+      Сохранить
+    </button>
+  </div>
+</form>

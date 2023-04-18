@@ -13,6 +13,28 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditServiceComponent implements OnInit {
+  station!: Station;
+  listStation$ = this.stationService.getALLStation();
+  id: string = this.activatedRoute.snapshot.params['id'];
+  services: any[] = [];
+  duration: number = 0;
+  bonusPercentage: number = 0;
+  price: number = 0;
+  discount: number = 0;
+  readonly columnsServices = ['action-1', 'station', 'duration', 'bonusPercentage', 'price', 'discount', 'action-2'];
+
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
+
+  readonly formEdit = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    description: new FormControl('', { nonNullable: true }),
+  });
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -24,79 +46,13 @@ export class EditServiceComponent implements OnInit {
     private readonly dialogService: TuiDialogService,
     private cdr: ChangeDetectorRef
   ) {}
-  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
-    label: 'Вы уверены?',
-    size: 's',
-    closeable: false,
-    dismissible: false,
-  });
 
-  station!: Station;
-
-  readonly formEdit = new FormGroup({
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    description: new FormControl(``, { nonNullable: true }),
-  });
-
-  readonly columnsServices = [`action-1`, `station`, 'duration', 'bonusPercentage', 'price', 'discount', `action-2`];
-  services: any[] = [];
-  duration: number = 0;
-  bonusPercentage: number = 0;
-  price: number = 0;
-  discount: number = 0;
-
-  async addService() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService
-      .addServiceOnStation({
-        idClassService: this.id,
-        stationId: this.station.id,
-        bonusPercentage: this.bonusPercentage,
-        price: this.price,
-        discount: this.discount,
-        duration: this.duration,
-      })
-      .subscribe(
-        data => {
-          this.services.push({
-            id: data.id,
-            stationName: data.station.name,
-            bonusPercentage: this.bonusPercentage,
-            price: this.price,
-            discount: this.discount,
-            duration: this.duration,
-          });
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        () => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
+  onAddService() {
+    this.prompt.subscribe({ next: value => value && this._addService() });
   }
 
-  async removeService(stationId: string, serviceId: string) {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-
-    this.stationService
-      .removeService({
-        stationId,
-        serviceId,
-      })
-      .subscribe(
-        () => {
-          //this.services.splice(index, 1);
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
+  onRemoveService(stationId: string, serviceId: string) {
+    this.prompt.subscribe({ next: value => value && this._removeService({ stationId, serviceId }) });
   }
 
   setVisibleService(index: number) {
@@ -111,36 +67,15 @@ export class EditServiceComponent implements OnInit {
       });
   }
 
-  async updateServices() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.stationService.updateServices(this.services).subscribe(
-      () => {
-        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-      },
-      error => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-      }
-    );
+  onUpdateServices(): void {
+    this.prompt.subscribe({ next: value => value && this._updateServices() });
   }
 
-  id: string = this.activatedRoute.snapshot.params['id'];
-
-  async updateService() {
+  onUpdateService() {
     this.formEdit.markAllAsTouched();
-    if (!this.formEdit.valid) {
-      return;
-    }
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    console.log(1);
+    this.formEdit.valid && this.prompt.subscribe({ next: value => value && this._updateService() })
   }
 
-  listStation$ = this.stationService.getALLStation();
   stationStringify(station: Station): string {
     return station.name;
   }
@@ -163,20 +98,65 @@ export class EditServiceComponent implements OnInit {
     });
   }
 
-  async removeServiceClass() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
+  onRemoveServiceClass() {
+    this.prompt.subscribe({ next: value => value && this._removeServiceClass() });
+  }
 
-    this.servicesService.removeServiceClass(this.id).subscribe(
-      async () => {
-        await this.router.navigateByUrl('services');
+  private _addService(): void {
+    this.stationService
+      .addServiceOnStation({
+        idClassService: this.id,
+        stationId: this.station.id,
+        bonusPercentage: this.bonusPercentage,
+        price: this.price,
+        discount: this.discount,
+        duration: this.duration,
+      })
+      .subscribe({
+        next: data => this._addServiceSuccess(data),
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
+  }
+
+  private _addServiceSuccess(data: any): void {
+    this.services.push({
+      id: data.id,
+      stationName: data.station.name,
+      bonusPercentage: this.bonusPercentage,
+      price: this.price,
+      discount: this.discount,
+      duration: this.duration,
+    });
+    this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+  }
+
+  private _removeService(data: {stationId: string, serviceId: string}): void {
+    this.stationService
+      .removeService(data)
+      .subscribe({
+        next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
+  }
+
+  private _updateServices(): void {
+    this.stationService.updateServices(this.services).subscribe({
+      next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
+  }
+
+  private _updateService(): void {
+    alert('Метод отсутсвует в сервисе');
+  }
+
+  private _removeServiceClass() {
+    this.servicesService.removeServiceClass(this.id).subscribe({
+      next: () => {
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        this.router.navigateByUrl('services');
       },
-      error => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-      }
-    );
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
   }
 }
