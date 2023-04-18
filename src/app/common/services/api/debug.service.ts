@@ -7,26 +7,26 @@ export class DebugService {
   constructor(private http: HttpClient) {}
 
   createStation20() {
-    return this.http.get(`${environment.apiOwnerUrl}/debug/station`);
+    return this.http.get(`${environment.apiUrl}/debug/station`);
   }
 
   createService10() {
-    return this.http.get(`${environment.apiOwnerUrl}/debug/service`);
+    return this.http.get(`${environment.apiUrl}/debug/service`);
   }
 
   createClient100() {
-    return this.http.get(`${environment.apiOwnerUrl}/debug/client`);
+    return this.http.get(`${environment.apiUrl}/debug/client`);
   }
 
   createNotification20() {
-    return this.http.get(`${environment.apiOwnerUrl}/debug/notification`);
+    return this.http.get(`${environment.apiUrl}/debug/notification`);
   }
 
   createOrder20() {
-    return this.http.get(`${environment.apiOwnerUrl}/debug/order`);
+    return this.http.get(`${environment.apiUrl}/debug/order`);
   }
 
   clearData() {
-    return this.http.get(`${environment.apiOwnerUrl}/debug/clear`);
+    return this.http.get(`${environment.apiUrl}/debug/clear`);
   }
 }

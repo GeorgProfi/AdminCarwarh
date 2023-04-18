@@ -14,7 +14,7 @@ export class ServicesService {
   constructor(private http: HttpClient) {}
 
   getAllClassServices(): Observable<ClassService[]> {
-    return this.http.get<ClassService[]>(`${environment.apiOwnerUrl}/services/owner/all`);
+    return this.http.get<ClassService[]>(`${environment.apiOwnerUrl}/services/all`);
   }
 
   getAllStationServices(stationId: string) {

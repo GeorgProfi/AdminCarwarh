@@ -7,6 +7,6 @@ export class RegistrationService {
   constructor(private http: HttpClient) {}
 
   register(data: { name: string; email: string; password: string }) {
-    return this.http.post(`${environment.apiOwnerUrl}/company/account/registration`, data);
+    return this.http.post(`${environment.apiUrl}/company/account/registration`, data);
   }
 }

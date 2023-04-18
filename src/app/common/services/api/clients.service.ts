@@ -31,9 +31,8 @@ export class ClientsService {
   }
 
   requestRegistrationClient(data: RequestRegistrationClientDto) {
-    console.log(data);
     const deviceId = localStorage.getItem('device_id');
-    return this.http.post<Client>(`${environment.apiOwnerUrl}/auth/client/request/with-company`, {
+    return this.http.post<Client>(`${environment.apiUrl}/auth/client/request/with-company`, {
       ...data,
       names: 'TEST',
       deviceId,
@@ -42,7 +41,7 @@ export class ClientsService {
 
   codeRegistrationClient(code: string) {
     const deviceId = localStorage.getItem('device_id');
-    return this.http.post<Client>(`${environment.apiOwnerUrl}/auth/client/otp`, {
+    return this.http.post<Client>(`${environment.apiUrl}/auth/client/otp`, {
       code,
       deviceId,
     });

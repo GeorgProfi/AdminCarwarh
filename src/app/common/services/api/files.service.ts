@@ -7,6 +7,6 @@ export class FilesService {
   constructor(private http: HttpClient) {}
 
   oneImageUpload(formData: any) {
-    return this.http.post(`${environment.apiOwnerUrl}/files/one-image`, formData);
+    return this.http.post(`${environment.apiUrl}/files/one-image`, formData);
   }
 }
