@@ -6,7 +6,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthModule } from './auth-page/auth.module';
 import { AuthService } from './auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
@@ -41,7 +40,6 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
     TuiAlertModule,
     // My app
     Error404Module,
-    AuthModule,
     LayoutModule,
     ClientsModule,
     StationModule,

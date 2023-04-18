@@ -1,0 +1,29 @@
+<form [formGroup]="form" (submit)="onLogin()">
+  <div class="tui-form__row tui-form__row_multi-fields">
+    <div class="tui-form__multi-field">
+      <tui-input formControlName="email">
+        Электронная почта
+        <input tuiTextfield type="email" />
+      </tui-input>
+      <tui-error formControlName="email" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+    <div class="tui-form__multi-field">
+      <tui-input-password formControlName="password">
+        Пароль
+        <input tuiTextfield type="password" />
+      </tui-input-password>
+      <tui-error formControlName="password" [error]="[] | tuiFieldError | async"></tui-error>
+    </div>
+  </div>
+  <div class="tui-form__buttons">
+    <button tuiButton class="tui-form__button" type="submit" appearance="primary">Войти</button>
+    <button
+      tuiButton
+      class="tui-form__button"
+      appearance="primary"
+      type="button"
+      [routerLink]="['/', 'auth', 'password-reset']">
+      Забыли пароль?
+    </button>
+  </div>
+</form>
