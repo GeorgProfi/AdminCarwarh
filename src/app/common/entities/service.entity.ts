@@ -1,3 +1,5 @@
+import { ClassService } from './class-service.entity';
+
 export class Service {
   id!: string;
   stationId!: string;
@@ -8,5 +10,5 @@ export class Service {
   bonusPercentage!: number;
   duration!: number;
   visible!: boolean;
-  classServices: any;
+  classServices!: ClassService;
 }

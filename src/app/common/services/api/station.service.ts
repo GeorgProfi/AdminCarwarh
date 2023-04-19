@@ -20,6 +20,8 @@ import { GetAllPostDto } from '../../dto/station/get-all-post.dto';
 export class StationService {
   constructor(public http: HttpClient) {}
 
+  // Station:
+
   getStationList(data: Pagination): Observable<PaginateRes<Station>> {
     return this.http.get<PaginateRes<Station>>(`${environment.apiOwnerUrl}/station/list`, {
       params: { ...data },
@@ -29,18 +31,6 @@ export class StationService {
   getALLStation(serviceIds?: string[]): Observable<Station[]> {
     return this.http.put<Station[]>(`${environment.apiOwnerUrl}/station/all`, {
       serviceIds,
-    });
-  }
-
-  getServices(stationId: string): Observable<Service[]> {
-    return this.http.get<Service[]>(`${environment.apiOwnerUrl}/station/service`, {
-      params: { stationId },
-    });
-  }
-
-  getPosts(stationId: string) {
-    return this.http.get<any[]>(`${environment.apiOwnerUrl}/station/post`, {
-      params: { stationId },
     });
   }
 
@@ -60,16 +50,25 @@ export class StationService {
     return this.http.get<any>(`${environment.apiOwnerUrl}/station/get/${id}`);
   }
 
-  addPost(data: AddPostDto) {
-    return this.http.post<any>(`${environment.apiOwnerUrl}/station/post`, data);
+  removeStation(id: string) {
+    return this.http.delete<any>(`${environment.apiOwnerUrl}/station/delete/${id}`);
   }
 
-  renamePost(data: RenamePostDto) {
-    return this.http.put<any>(`${environment.apiOwnerUrl}/station/post/rename`, data);
+  getFullStation(id: string) {
+    return this.http.get<any>(`${environment.apiOwnerUrl}/station/full/${id}`);
   }
 
-  removePost(id: string) {
-    return this.http.delete(`${environment.apiOwnerUrl}/station/post/${id}`);
+  // Services:
+  getServicesAll(stationId: string, visible?: boolean): Observable<Service[]> {
+    // отсутствие visible - означает, что не важно состояние visible,
+    // а false означает, что важно чтобы visible был false
+    const data: any = { stationId };
+    if (visible !== undefined) {
+      data.visible = visible;
+    }
+    return this.http.get<Service[]>(`${environment.apiOwnerUrl}/station/services/all`, {
+      params: data,
+    });
   }
 
   addServiceOnStation(data: AddServiceOnStationDto) {
@@ -90,6 +89,26 @@ export class StationService {
     });
   }
 
+  // Posts:
+
+  getPosts(stationId: string) {
+    return this.http.get<any[]>(`${environment.apiOwnerUrl}/station/post`, {
+      params: { stationId },
+    });
+  }
+
+  addPost(data: AddPostDto) {
+    return this.http.post<any>(`${environment.apiOwnerUrl}/station/post`, data);
+  }
+
+  renamePost(data: RenamePostDto) {
+    return this.http.put<any>(`${environment.apiOwnerUrl}/station/post/rename`, data);
+  }
+
+  removePost(id: string) {
+    return this.http.delete(`${environment.apiOwnerUrl}/station/post/${id}`);
+  }
+
   addServicePost(data: AddServicePostDto) {
     return this.http.post<any>(`${environment.apiOwnerUrl}/station/service-on-post`, data);
   }
@@ -98,14 +117,6 @@ export class StationService {
     return this.http.delete<any>(`${environment.apiOwnerUrl}/station/service-on-post`, {
       params: data,
     });
-  }
-
-  removeStation(id: string) {
-    return this.http.delete<any>(`${environment.apiOwnerUrl}/station/delete/${id}`);
-  }
-
-  getFullStation(id: string) {
-    return this.http.get<any>(`${environment.apiOwnerUrl}/station/full/${id}`);
   }
 
   getAllPost(data: GetAllPostDto) {

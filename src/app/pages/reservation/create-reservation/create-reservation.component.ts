@@ -67,9 +67,10 @@ export class CreateReservationComponent {
   listServices$: Observable<IMergeServices[]> = this.stationId$.pipe(
     switchMap(stationId => {
       if (stationId === undefined) {
-        return this.servicesService.getAllClassServices();
+        return this.servicesService.getAllClasses();
       }
-      return this.servicesService.getAllStationServices(stationId).pipe(
+
+      return this.stationService.getServicesAll(stationId).pipe(
         map((services: Service[]) => {
           this.purchaseAmount = 0;
           this.durationAmount = 0;
