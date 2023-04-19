@@ -64,10 +64,14 @@
                 [stringify]="serviceStringify">
                 Поиск услуги
                 <input tuiTextfield placeholder="Поиск по названию" />
-                <tui-data-list-wrapper
-                  *tuiDataList
-                  [itemContent]="serviceStringify | tuiStringifyContent"
-                  [items]="listServices | tuiFilterByInputWith : serviceStringify"></tui-data-list-wrapper>
+                <div *ngIf="listServices as s">
+                  <tui-data-list-wrapper
+                    *tuiDataList
+                    [itemContent]="serviceStringify | tuiStringifyContent"
+                    [items]="
+                      listServices | tuiFilter : filterExistServices | tuiFilterByInputWith : serviceStringify
+                    "></tui-data-list-wrapper>
+                </div>
               </tui-combo-box>
             </td>
             <td *tuiCell="'duration'" tuiTd>
@@ -183,7 +187,9 @@
                       *tuiDataList
                       [itemContent]="serviceStringify | tuiStringifyContent"
                       [items]="
-                        posts[activePostIndex].freeServices | tuiFilterByInputWith : serviceStringify
+                        services
+                          | tuiFilter : filterPostServices : posts[activePostIndex]
+                          | tuiFilterByInputWith : serviceStringify
                       "></tui-data-list-wrapper>
                   </tui-combo-box>
                 </td>

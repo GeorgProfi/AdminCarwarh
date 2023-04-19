@@ -104,6 +104,14 @@ export class EditStationComponent implements OnInit {
   });
   //controlsServices = new FormArray<FormGroup<any>>([]);
 
+  readonly filterExistServices = (service: ClassService): boolean => {
+    return this.services.find(s => s.classServices.id === service.id) === undefined;
+  };
+
+  readonly filterPostServices = (service: Service, post: Post): boolean => {
+    return post.services.find(s => s.id === service.id) === undefined;
+  };
+
   getServices() {
     return this.stationService.getServicesAll(this.stationId).pipe(
       tap(services => {

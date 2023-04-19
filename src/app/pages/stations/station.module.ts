@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { StationComponent } from './station.component';
 import { TuiReorderModule, TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
-import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
+import { TuiAutoFocusModule, TuiFilterPipeModule, TuiIsPresentPipeModule, TuiLetModule } from '@taiga-ui/cdk';
 import { AsyncPipe, DatePipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import {
   TuiButtonModule,
@@ -101,6 +101,8 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     TuiCurrencyPipeModule,
+    TuiFilterPipeModule,
+    TuiIsPresentPipeModule,
   ],
   declarations: [StationComponent, CreateStationComponent, EditStationComponent, TimePipe],
   exports: [StationComponent, TimePipe],
