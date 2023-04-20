@@ -26,49 +26,46 @@ import {
   TuiSelectModule,
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
-import {ClientsModuleRouting} from './clients.routing';
-import {ClientsListComponent} from './clients-list/clients-list.component';
+import { ClientsModuleRouting } from './clients.routing';
+import { ClientsListComponent } from './clients-list/clients-list.component';
 
 @NgModule({
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
     TuiTextfieldControllerModule,
     TuiInputModule,
-    FormsModule,
     TuiLoaderModule,
-    AsyncPipe,
-    NgIf,
     TuiTableModule,
     TuiLetModule,
-    NgForOf,
     TuiButtonModule,
     TuiTablePaginationModule,
     TuiExpandModule,
     TuiIslandModule,
-    ReactiveFormsModule,
     TuiAutoFocusModule,
     TuiAccordionModule,
     TuiGroupModule,
     TuiPaginationModule,
     TuiSelectModule,
     TuiDataListWrapperModule,
-    DatePipe,
     TuiFormatDatePipeModule,
     TuiInputNumberModule,
     TuiInputPhoneModule,
-    RouterModule,
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     TuiLinkModule,
     TuiScrollbarModule,
-    ScrollingModule,
     TuiCurrencyPipeModule,
     TuiCheckboxBlockModule,
+    ScrollingModule,
     ClientsModuleRouting,
   ],
   declarations: [
