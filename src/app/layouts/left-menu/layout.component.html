@@ -1,6 +1,6 @@
 <app-menu></app-menu>
 <section class="content">
-  <section *tuiLet="$title | async as title" class="header">
+  <section *tuiLet="title$ | async as title" class="header">
     <h3 *ngIf="title" class="tui-form__header">{{ title }}</h3>
     <app-breadcrumbs></app-breadcrumbs>
   </section>
