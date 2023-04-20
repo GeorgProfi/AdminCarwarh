@@ -19,6 +19,7 @@
     <p class="tui-island__paragraph">Имя: {{ client.name }}</p>
     <p class="tui-island__paragraph">Телефон: {{ client.phone }}</p>
     <p class="tui-island__paragraph">Email: {{ client.email }}</p>
+    <p class="tui-island__paragraph">Бонусов: {{ client.card.bonuses }}</p>
     <tui-combo-box
       *ngIf="replaceClient"
       class="b-form tui-form__row"
@@ -50,6 +51,9 @@
     <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">Список услуг</h3>
     <p class="tui-island__paragraph">Стоимость: <tui-money [value]="purchaseAmount"></tui-money></p>
     <p class="tui-island__paragraph">Время: {{ durationAmount }} мин.</p>
+    <tui-checkbox-labeled class="tui-form__row" [(ngModel)]="chargeOffBonuses" size="l">
+      Списать все бонусы
+    </tui-checkbox-labeled>
     <div tuiGroup class="tui-form__row" *ngFor="let service of services; index as idx">
       <tui-combo-box
         *tuiLet="listServices$ | async as listServices"
@@ -87,10 +91,22 @@
 
 <ng-template let-observer [tuiDialogOptions]="{ label: 'Перезапись', size: 's' }" [(tuiDialog)]="open">
   <tui-input-date class="tui-form__row" [(ngModel)]="day" (ngModelChange)="searchTimes()" [min]="minDay" [max]="maxDay">
-    Choose a date
+    Выбор даты
   </tui-input-date>
-  <tui-input-time class="tui-form__row" [items]="timesTest" [(ngModel)]="time"> Input time </tui-input-time>
-  <div class="flex-wrap tui-form__row">
-    <button tuiButton class="tui-form__button right">Сохранить</button>
+  <div tuiGroup class="group tui-form__row">
+    <tui-combo-box>
+      Поиск станции
+      <input tuiTextfield placeholder="Поиск по названию" />
+      <tui-data-list-wrapper *tuiDataList></tui-data-list-wrapper>
+    </tui-combo-box>
+    <tui-combo-box>
+      Поиск поста
+      <input tuiTextfield placeholder="Поиск по названию" />
+      <tui-data-list-wrapper *tuiDataList></tui-data-list-wrapper>
+    </tui-combo-box>
+  </div>
+  <tui-input-time class="tui-form__row" [items]="timesTest" [(ngModel)]="time"> Выбор времени </tui-input-time>
+  <div class="tui-form__buttons tui-form__buttons_align_center">
+    <button tuiButton class="tui-form__button">Перезапись</button>
   </div>
 </ng-template>

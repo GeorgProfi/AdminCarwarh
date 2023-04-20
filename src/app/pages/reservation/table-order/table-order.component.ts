@@ -1,10 +1,18 @@
-import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  Injector,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { StationService } from '../../../common/services/api/station.service';
 import { TuiAlertService, TuiDialogService } from '@taiga-ui/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 import { DateTime } from 'luxon';
 import { TuiDay } from '@taiga-ui/cdk';
 import { Station } from '../../../common/entities/station.entity';
@@ -27,7 +35,8 @@ export class TableOrderComponent implements OnInit {
     @Inject(TuiDialogService)
     private readonly dialogService: TuiDialogService,
     @Inject(Injector)
-    private readonly injector: Injector
+    private readonly injector: Injector,
+    private cdr: ChangeDetectorRef
   ) {}
 
   openEditOrder(order: any): void {
@@ -50,17 +59,27 @@ export class TableOrderComponent implements OnInit {
     });
   }
 
-  stations$ = this.stationService.getALLStation();
+  stations$ = this.stationService.getALLStation().pipe(
+    map(stations => {
+      console.log(stations);
+      return stations.filter(station => station);
+    }),
+    tap(stations => {
+      this.station.next(stations[0]);
+      this.getOrders(this.day.toUtcNativeDate(), stations[0].id);
+    })
+  );
   stationsStringify(station: Station): string {
     return station.name;
   }
-  station!: Station;
+  //tap(station => this.getOrders(this.day.toUtcNativeDate(), station?.id))
+  station = new BehaviorSubject<Station | undefined>(undefined);
   day: TuiDay = TuiDay.currentUtc();
 
   change() {
     this.indexPost = 0;
     this.calendarComponent.getApi().today();
-    this.getOrders(this.day.toUtcNativeDate(), this.station.id);
+    this.getOrders(this.day.toUtcNativeDate(), this.station.value!.id);
   }
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
@@ -124,6 +143,8 @@ export class TableOrderComponent implements OnInit {
   events$ = new BehaviorSubject<EventInput[]>([]);
   posts: any[] = [];
   getOrders(day: Date, stationId: string) {
+    this.loading = true;
+    this.cdr.detectChanges();
     this.reservationService
       .getReservationStation({
         day,
@@ -181,9 +202,13 @@ export class TableOrderComponent implements OnInit {
           postIndex += 1;
         }
         this.events$.next([...orders]);
+        this.loading = false;
+        this.cdr.detectChanges();
       });
   }
+  loading = true;
   ngOnInit(): void {
-    this.getOrders(this.day.toUtcNativeDate(), '00000000-0000-0000-0000-000000000000');
+    console.log(1);
+    //this.getOrders(this.day.toUtcNativeDate(), '00000000-0000-0000-0000-000000000000');
   }
 }

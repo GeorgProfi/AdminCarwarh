@@ -42,7 +42,6 @@ export class EditReservationComponent implements OnInit {
   stationId$ = new BehaviorSubject<string>('00000000-0000-0000-0000-000000000000');
   ngOnInit(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: Order) => {
-      //this.listServices$ = this.servicesService.getAllClassServices();
       this.stationId$.next(order.stationId);
       this.client = order.client;
       this.services = order.services.map((service: any) => {
@@ -52,7 +51,6 @@ export class EditReservationComponent implements OnInit {
         return service;
       });
       this.status = order.status;
-      //this.purchaseAmount = order.purchaseAmount;
       this.cdr.detectChanges();
     });
   }
@@ -60,6 +58,8 @@ export class EditReservationComponent implements OnInit {
   client!: any;
   purchaseAmount = 0;
   durationAmount = 0;
+  bonuses = 0;
+  chargeOffBonuses = false;
 
   // Client
   replaceClient: boolean = false;

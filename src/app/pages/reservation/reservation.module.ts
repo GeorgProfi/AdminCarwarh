@@ -13,6 +13,7 @@ import {
 } from '@taiga-ui/core';
 import {
   TuiAccordionModule,
+  TuiCheckboxLabeledModule,
   TuiComboBoxModule,
   TuiDataListWrapperModule,
   TuiFilterByInputPipeModule,
@@ -30,7 +31,6 @@ import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
 import { TuiTableModule } from '@taiga-ui/addon-table';
 import { TuiFilterPipeModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
-import { TableReservationComponent } from './table-reservation/table-reservation.component';
 import { StationModule } from '../stations/station.module';
 import { EditReservationComponent } from './edit-reservation/edit-reservation.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
@@ -72,14 +72,9 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     TuiTagModule,
     FullCalendarModule,
     TuiFilterPipeModule,
+    TuiCheckboxLabeledModule,
   ],
-  declarations: [
-    ReservationComponent,
-    CreateReservationComponent,
-    TableReservationComponent,
-    EditReservationComponent,
-    TableOrderComponent,
-  ],
+  declarations: [ReservationComponent, CreateReservationComponent, EditReservationComponent, TableOrderComponent],
   exports: [ReservationComponent],
 })
 export class ReservationModule {}

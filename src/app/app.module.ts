@@ -10,7 +10,6 @@ import { AuthService } from './auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { StationModule } from './pages/stations/station.module';
-import { LoyaltySystemModule } from './pages/loyalty-system/loyalty-system.module';
 import { SettingModule } from './pages/setting/setting.module';
 import { of } from 'rxjs';
 import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
@@ -41,7 +40,6 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
     Error404Module,
     LayoutModule,
     StationModule,
-    LoyaltySystemModule,
     ServicesModule,
     SettingModule,
     ReservationModule,
@@ -68,8 +66,8 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
       useClass: AuthInterceptor,
       multi: true,
     },
-    {provide: TUI_SANITIZER, useClass: NgDompurifySanitizer}
-],
+    { provide: TUI_SANITIZER, useClass: NgDompurifySanitizer },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
