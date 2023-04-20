@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { TuiDialogContext, TuiDialogService } from "@taiga-ui/core";
 import { PolymorpheusContent } from '@tinkoff/ng-polymorpheus';
 import { AccountService } from "src/app/common/services/api/account.service";
+import { emailValidator } from "src/app/shared/validators";
 
 @Component({
   selector: 'app-password-reset',
@@ -15,7 +16,7 @@ export class PasswordResetComponent {
   readonly form = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email]
+      validators: [Validators.required, emailValidator]
     })
   });
 

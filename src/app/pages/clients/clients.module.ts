@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ClientsComponent } from './clients.component';
-import { CreateClientComponent } from './create-client/create-client.component';
+import { CreateClientComponent } from './clients-list/create-client/create-client.component';
 import { EditClientComponent } from './edit-client/edit-client.component';
 import {
   TuiButtonModule,
@@ -32,6 +32,8 @@ import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
+import {ClientsModuleRouting} from './clients.routing';
+import {ClientsListComponent} from './clients-list/clients-list.component';
 
 @NgModule({
   imports: [
@@ -67,8 +69,14 @@ import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
     ScrollingModule,
     TuiCurrencyPipeModule,
     TuiCheckboxBlockModule,
+    ClientsModuleRouting,
   ],
-  declarations: [ClientsComponent, CreateClientComponent, EditClientComponent],
+  declarations: [
+    ClientsComponent,
+    ClientsListComponent,
+    CreateClientComponent,
+    EditClientComponent
+  ],
   exports: [ClientsComponent],
 })
 export class ClientsModule {}

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegistrationService } from '../../../common/services/api/registration.service';
 import { TuiDialogService } from '@taiga-ui/core';
-import { matchValidator } from 'src/app/shared/validators';
+import { emailValidator, matchValidator } from 'src/app/shared/validators';
 import { TUI_VALIDATION_ERRORS } from '@taiga-ui/kit/tokens';
 
 @Component({
@@ -30,7 +30,7 @@ export class RegisterComponent {
     }),
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required, emailValidator],
     }),
     password: new FormControl('', {
       nonNullable: true,

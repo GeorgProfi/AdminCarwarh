@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
-import { ClientsComponent } from './pages/clients/clients.component';
 import { StationComponent } from './pages/stations/station.component';
 import { NotificationComponent } from './pages/marketing/notification/notification.component';
 import { ReservationComponent } from './pages/reservation/reservation.component';
@@ -13,7 +12,6 @@ import { SettingCompanyComponent } from './pages/setting/setting-company/setting
 import { ServicesComponent } from './pages/services/services.component';
 import { EditServiceComponent } from './pages/services/edit-service/edit-service.component';
 import { EditNotificationComponent } from './pages/marketing/notification/edit-notification/edit-notification.component';
-import { EditClientComponent } from './pages/clients/edit-client/edit-client.component';
 import { MarketingComponent } from './pages/marketing/marketing.component';
 import { NewsComponent } from './pages/marketing/news/news.component';
 import { EditNewsComponent } from './pages/marketing/news/edit-news/edit-news.component';
@@ -24,22 +22,8 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'clients',
-        pathMatch: 'prefix',
-      },
-      {
         path: 'clients',
-        component: ClientsComponent,
-        title: 'Клиенты',
-      },
-      {
-        path: 'clients/edit',
-        component: EditClientComponent,
-        title: 'Редактор клиента',
-        data: {
-          breadcrumbs: [{ title: 'Клиенты', url: 'clients' }, { title: 'Редактор' }],
-        },
+        loadChildren: () => import('./pages/clients/clients.module').then(m => m.ClientsModule),
       },
       {
         path: 'stations',
@@ -126,6 +110,7 @@ const routes: Routes = [
         component: SettingProfileComponent,
         title: 'Настройки профиля',
       },
+      {path: '', redirectTo: 'clients', pathMatch: 'full'},
     ],
     canActivate: [AuthGuard],
   },
