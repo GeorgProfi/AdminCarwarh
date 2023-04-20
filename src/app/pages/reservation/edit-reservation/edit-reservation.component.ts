@@ -11,6 +11,7 @@ import { ReservationService } from '../../../common/services/api/reservation.ser
 import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { Order } from '../../../common/entities/order.entity';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
+import { StationService } from '../../../common/services/api/station.service';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -20,6 +21,7 @@ import { TuiDay, TuiTime } from '@taiga-ui/cdk';
 export class EditReservationComponent implements OnInit {
   constructor(
     private servicesService: ServicesService,
+    private stationService: StationService,
     @Inject(TuiDialogService)
     private readonly dialogService: TuiDialogService,
     @Inject(POLYMORPHEUS_CONTEXT)
@@ -78,7 +80,7 @@ export class EditReservationComponent implements OnInit {
   // Services:
   listServices$: Observable<Service[]> = this.stationId$.pipe(
     switchMap(stationId =>
-      this.servicesService.getAllStationServices(stationId).pipe(
+      this.stationService.getServicesAll(stationId).pipe(
         map((services: Service[]) => {
           this.purchaseAmount = 0;
           this.durationAmount = 0;

@@ -42,6 +42,14 @@ export class MenuComponent implements OnInit {
   ];
 
   nameCompany!: string;
+  balance!: number;
+  // { color: 'green', label: 'Активирован' },
+  // { color: 'red', label: 'Не активирован' },
+  statuses: any = {
+    Active: { color: 'green', label: 'Активирован' },
+    Disable: { color: 'green', label: 'Активирован' },
+  };
+  status: any = { color: 'white', label: '' };
 
   async logout() {
     this.authService.logout();
@@ -50,6 +58,8 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.companyService.getDataCompany().subscribe((data: any) => {
+      this.status = this.statuses[data.status] ?? { color: 'black', label: 'Неизвестно' };
+      this.balance = data.balance;
       this.nameCompany = data.name;
     });
   }

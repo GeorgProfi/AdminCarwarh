@@ -71,12 +71,12 @@ export class EditStationComponent implements OnInit {
 
   stationId: string = this.activatedRoute.snapshot.queryParams['id'];
 
-  listServices$ = this.servicesService.getAllClassServices();
+  listServices$ = this.servicesService.getAllClasses();
   serviceStringify(service: ClassService | Service): string {
     return service.name;
   }
 
-  classServices$ = this.servicesService.getAllClassServices();
+  classServices$ = this.servicesService.getAllClasses();
   filterClassServices!: ClassService[];
   //@tuiPure
   stringify(classServices: ClassService[]): TuiStringHandler<TuiContextWithImplicit<string>> {
@@ -104,8 +104,16 @@ export class EditStationComponent implements OnInit {
   });
   //controlsServices = new FormArray<FormGroup<any>>([]);
 
+  readonly filterExistServices = (service: ClassService): boolean => {
+    return this.services.find(s => s.classServices.id === service.id) === undefined;
+  };
+
+  readonly filterPostServices = (service: Service, post: Post): boolean => {
+    return post.services.find(s => s.id === service.id) === undefined;
+  };
+
   getServices() {
-    return this.stationService.getServices(this.stationId).pipe(
+    return this.stationService.getServicesAll(this.stationId).pipe(
       tap(services => {
         const usedService: string[] = [];
         this.services = services.map((service: any) => {
@@ -181,22 +189,8 @@ export class EditStationComponent implements OnInit {
       },
       error: err => {
         console.error(err);
-      }
+      },
     });
-    // this.stationService.getStationById(this.stationId).subscribe(station => {
-    //   this.formEditStation.patchValue({
-    //     name: station.name,
-    //     address: station.address,
-    //     aroundClock: station.aroundClock,
-    //     description: station.description,
-    //     startWork: TuiTime.fromLocalNativeDate(new Date(station.startWork)),
-    //     endWork: TuiTime.fromLocalNativeDate(new Date(station.endWork)),
-    //   });
-    //   this.cdr.detectChanges();
-    // });
-    // this.getServices().subscribe(() => {
-    //   this.getPosts().subscribe();
-    // });
   }
 
   onAddService(): void {
@@ -227,7 +221,7 @@ export class EditStationComponent implements OnInit {
         next: () => this.getServices().subscribe(),
         error: () => {
           this.dialogService.open('Услуга не подключена ни к одному посту', { label: 'Ошибка', size: 's' }).subscribe();
-        }
+        },
       });
   }
 

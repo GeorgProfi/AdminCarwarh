@@ -13,16 +13,20 @@ import { ClassService } from '../../entities/class-service.entity';
 export class ServicesService {
   constructor(private http: HttpClient) {}
 
-  getAllClassServices(): Observable<ClassService[]> {
-    return this.http.get<ClassService[]>(`${environment.apiOwnerUrl}/services/all`);
-  }
-
-  getAllStationServices(stationId: string) {
-    return this.http.get<Service[]>(`${environment.apiOwnerUrl}/services/on-station/all/${stationId}`);
+  getAllClasses(visible?: boolean): Observable<ClassService[]> {
+    // отсутствие visible - означает, что не важно состояние visible,
+    // а false означает, что важно чтобы visible был false
+    // При указании visible вернуться только те услуги, которые привязаны хотя бы к одной станции!
+    const data: any = {};
+    if (visible !== undefined) {
+      data.visible = visible;
+    }
+    return this.http.get<ClassService[]>(`${environment.apiOwnerUrl}/services/all`, {
+      params: data,
+    });
   }
 
   getServicesList(data: GetServicesListDto): Observable<PaginateRes<Service>> {
-    console.log(data);
     return this.http.get<PaginateRes<Service>>(`${environment.apiOwnerUrl}/services`, { params: { ...data } });
   }
 
@@ -34,8 +38,17 @@ export class ServicesService {
     return this.http.get<Service>(`${environment.apiOwnerUrl}/services/get/${id}`);
   }
 
-  getServicesForClass(id: string) {
-    return this.http.get<any[]>(`${environment.apiOwnerUrl}/services/get-services-for-class/${id}`);
+  getServicesForClass(id: string, visible?: boolean) {
+    // отсутствие visible - означает, что не важно состояние visible,
+    // а false означает, что важно чтобы visible был false
+    // При указании visible вернуться только те услуги, которые привязаны хотя бы к одной станции!
+    const data: any = {};
+    if (visible !== undefined) {
+      data.visible = visible;
+    }
+    return this.http.get<any[]>(`${environment.apiOwnerUrl}/services/get-services-for-class/${id}`, {
+      params: data,
+    });
   }
 
   updateService(id: string, data: UpdateServiceDto) {

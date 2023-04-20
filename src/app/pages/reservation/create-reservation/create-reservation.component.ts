@@ -67,9 +67,10 @@ export class CreateReservationComponent {
   listServices$: Observable<IMergeServices[]> = this.stationId$.pipe(
     switchMap(stationId => {
       if (stationId === undefined) {
-        return this.servicesService.getAllClassServices();
+        return this.servicesService.getAllClasses(true);
       }
-      return this.servicesService.getAllStationServices(stationId).pipe(
+
+      return this.stationService.getServicesAll(stationId).pipe(
         map((services: Service[]) => {
           this.purchaseAmount = 0;
           this.durationAmount = 0;
@@ -98,10 +99,12 @@ export class CreateReservationComponent {
     }
     return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
-  readonly matcherService = (item: any): boolean => !this.services.find(s => s.id === item.id);
+  readonly matcherService = (item: IMergeServices): boolean => {
+    return this.services.find(s => s.id === item.id) === undefined;
+  };
 
   addService() {
-    this.services.push({ name: '' } as IMergeServices);
+    this.services.push({ name: '', id: '' } as IMergeServices);
   }
   removeService(idx: number) {
     this.services.splice(idx, 1);
@@ -114,7 +117,9 @@ export class CreateReservationComponent {
   }
 
   // Stations:
-  stations$ = combineLatest([this.servicesIds$]).pipe(switchMap(query => this.stationService.getALLStation(...query)));
+  stations$ = combineLatest([this.servicesIds$]).pipe(
+    switchMap(query => this.stationService.getALLStation(...query, true))
+  );
   stationsStringify(station: Station): string {
     return station.name;
   }
@@ -139,7 +144,7 @@ export class CreateReservationComponent {
 
   // Day:
   minDay: TuiDay = TuiDay.currentUtc();
-  maxDay: TuiDay = TuiDay.currentUtc().append({ month: 6 });
+  maxDay: TuiDay = TuiDay.currentUtc().append({ month: 1 });
   day = TuiDay.currentUtc();
 
   // Time:
