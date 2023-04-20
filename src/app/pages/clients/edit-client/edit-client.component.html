@@ -3,28 +3,38 @@
     <div class="tui-form__row">
       <tui-input formControlName="name"> Имя </tui-input>
     </div>
-    <div tuiGroup class="group tui-form__row">
-      <div>
+    <div tuiGroup class="group tui-form__row tui-form__row_multi-fields">
+      <div class="tui-form__multi-field">
         <tui-input-phone formControlName="phone">
           Телефон
           <input tuiTextfield autocomplete="tel" />
         </tui-input-phone>
         <tui-error formControlName="phone" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
-      <div>
+      <div class="tui-form__multi-field">
         <tui-input formControlName="email"> Электронная почта </tui-input>
         <tui-error formControlName="email" [error]="[] | tuiFieldError | async"></tui-error>
       </div>
     </div>
 
-    <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">Карта клиента</h3>
+    <h3 class="tui-form__row tui-form__header tui-form__header_margin-top_none">Бонусная карта клиента</h3>
     <div class="tui-form__row">
       <tui-input-number formControlName="bonuses" [postfix]="'RUB' | tuiCurrency"> Число бонусов </tui-input-number>
       <tui-error formControlName="bonuses" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
   </tui-island>
   <div class="tui-form__buttons">
-    <button class="tui-form__button" tuiButton appearance="primary" type="submit" (click)="onSave()">Сохранить</button>
-    <button class="tui-form__button" tuiButton appearance="primary" (click)="onCancel()">Отмена</button>
+    <button
+      (click)="onSave()"
+      [disabled]="isLoading"
+      class="tui-form__button"
+      tuiButton
+      appearance="primary"
+      type="submit">
+      Сохранить
+    </button>
+    <button class="tui-form__button" [disabled]="isLoading" tuiButton appearance="primary" (click)="onCancel()">
+      Отмена
+    </button>
   </div>
 </form>
