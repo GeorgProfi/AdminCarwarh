@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
-import { StationService } from '../../common/services/api/station.service';
+import { StationService } from '../../../common/services/api/station.service';
 import { TuiDialogService } from '@taiga-ui/core';
-import { Station } from '../../common/entities/station.entity';
+import { Station } from '../../../common/entities/station.entity';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, share, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { tuiIsPresent } from '@taiga-ui/cdk';
@@ -10,12 +10,12 @@ import {FormControl} from '@angular/forms';
 type Key = 'name';
 
 @Component({
-  selector: 'app-stations',
-  templateUrl: './station.component.html',
-  styleUrls: ['./station.component.less'],
+  selector: 'app-stations-list',
+  templateUrl: './stations-list.component.html',
+  styleUrls: ['./stations-list.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StationComponent implements OnInit, OnDestroy {
+export class StationsListComponent implements OnInit, OnDestroy {
   columns: string[] = ['action', 'name', 'address', 'schedule'];
   search$ = new BehaviorSubject('');
   page$ = new BehaviorSubject(0);

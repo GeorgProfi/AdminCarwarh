@@ -1,23 +1,22 @@
 import { NgModule } from '@angular/core';
 import { MarketingComponent } from './marketing.component';
 import { TuiTabsModule } from '@taiga-ui/kit';
-import { NgForOf, NgSwitch, NgSwitchCase } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TuiSvgModule } from '@taiga-ui/core';
 import { NotificationModule } from './notification/notification.module';
 import { NewsModule } from './news/news.module';
 
 @NgModule({
   imports: [
+    CommonModule,
+    RouterModule,
+
     TuiTabsModule,
-    NgForOf,
-    RouterLink,
     TuiSvgModule,
-    RouterOutlet,
+
     NotificationModule,
     NewsModule,
-    NgSwitch,
-    NgSwitchCase,
   ],
   declarations: [MarketingComponent],
   exports: [MarketingComponent],

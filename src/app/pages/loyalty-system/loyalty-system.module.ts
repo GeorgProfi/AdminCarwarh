@@ -17,17 +17,19 @@ import {
 } from '@taiga-ui/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
-import { AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+
     TuiIslandModule,
     TuiButtonModule,
-    ReactiveFormsModule,
     TuiInputModule,
     TuiStepperModule,
     TuiExpandModule,
-    FormsModule,
     TuiInputPhoneModule,
     TuiInputCountModule,
     TuiInputNumberModule,
@@ -35,7 +37,6 @@ import { AsyncPipe } from '@angular/common';
     TuiGroupModule,
     TuiErrorModule,
     TuiFieldErrorPipeModule,
-    AsyncPipe,
   ],
   declarations: [LoyaltySystemComponent],
   exports: [LoyaltySystemComponent],
