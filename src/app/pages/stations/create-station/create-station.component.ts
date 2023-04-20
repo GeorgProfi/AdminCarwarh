@@ -85,6 +85,8 @@ export class CreateStationComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     this.formCreateStation.markAllAsTouched();
+    Object.values(this.formCreateStation.controls).map(control => control.updateValueAndValidity());
+
     if (!this.formCreateStation.valid) {
       this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
