@@ -35,6 +35,10 @@ export class EditServiceComponent implements OnInit {
     description: new FormControl('', { nonNullable: true }),
   });
 
+  readonly filterExistStation = (station: Station): boolean => {
+    return this.services.find(s => s.station.id === station.id) === undefined;
+  };
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -73,7 +77,7 @@ export class EditServiceComponent implements OnInit {
 
   onUpdateService() {
     this.formEdit.markAllAsTouched();
-    this.formEdit.valid && this.prompt.subscribe({ next: value => value && this._updateService() })
+    this.formEdit.valid && this.prompt.subscribe({ next: value => value && this._updateService() });
   }
 
   stationStringify(station: Station): string {
@@ -130,13 +134,11 @@ export class EditServiceComponent implements OnInit {
     this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
   }
 
-  private _removeService(data: {stationId: string, serviceId: string}): void {
-    this.stationService
-      .removeService(data)
-      .subscribe({
-        next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
-        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
-      });
+  private _removeService(data: { stationId: string; serviceId: string }): void {
+    this.stationService.removeService(data).subscribe({
+      next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
   }
 
   private _updateServices(): void {

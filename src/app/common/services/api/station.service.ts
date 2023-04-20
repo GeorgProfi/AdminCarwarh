@@ -28,9 +28,10 @@ export class StationService {
     });
   }
 
-  getALLStation(serviceIds?: string[]): Observable<Station[]> {
+  getALLStation(serviceIds?: string[], visible?: boolean): Observable<Station[]> {
     return this.http.put<Station[]>(`${environment.apiOwnerUrl}/station/all`, {
       serviceIds,
+      visible,
     });
   }
 
@@ -120,6 +121,7 @@ export class StationService {
   }
 
   getAllPost(data: GetAllPostDto) {
+    console.log(data);
     return this.http.post<any>(`${environment.apiOwnerUrl}/station/all-post`, data);
   }
 }
