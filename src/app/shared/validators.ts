@@ -13,3 +13,12 @@ export function matchValidator(matchTo: string, reverse?: boolean): ValidatorFn 
       : { matching: true };
   };
 }
+
+export function emailValidator(control: AbstractControl): ValidationErrors | null {
+  if (control.value) {
+    const matches = control.value.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+    return matches ? null : { 'email': true };
+  } else {
+    return null;
+  }
+}

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
 import { TuiDialogService } from '@taiga-ui/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { emailValidator } from 'src/app/shared/validators';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   readonly form = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, emailValidator]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -52,7 +53,7 @@ export class LoginComponent implements OnInit {
 
   private _login(email: string, password: string): void {
     this.authService.login(email, password).subscribe({
-      next: () => this.route.navigateByUrl(''),
+      next: () => this.route.navigateByUrl('clients'),
       error: res => this._showError(res?.error?.message),
     });
   }
