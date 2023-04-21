@@ -31,11 +31,11 @@ export class ServicesService {
   }
 
   createService(data: CreateServiceDto) {
-    return this.http.post<Service>(`${environment.apiOwnerUrl}/services`, data);
+    return this.http.post<ClassService>(`${environment.apiOwnerUrl}/services`, data);
   }
 
   getServiceById(id: string) {
-    return this.http.get<Service>(`${environment.apiOwnerUrl}/services/get/${id}`);
+    return this.http.get<ClassService>(`${environment.apiOwnerUrl}/services/get/${id}`);
   }
 
   getServicesForClass(id: string, visible?: boolean) {
@@ -46,13 +46,13 @@ export class ServicesService {
     if (visible !== undefined) {
       data.visible = visible;
     }
-    return this.http.get<any[]>(`${environment.apiOwnerUrl}/services/get-services-for-class/${id}`, {
+    return this.http.get<Service[]>(`${environment.apiOwnerUrl}/services/get-services-for-class/${id}`, {
       params: data,
     });
   }
 
   updateService(id: string, data: UpdateServiceDto) {
-    return this.http.put<Service>(`${environment.apiOwnerUrl}/services/${id}`, data);
+    return this.http.put<ClassService>(`${environment.apiOwnerUrl}/services/${id}`, data);
   }
 
   removeServiceClass(id: string) {

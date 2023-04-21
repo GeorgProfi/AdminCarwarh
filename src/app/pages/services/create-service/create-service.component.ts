@@ -35,7 +35,7 @@ export class CreateServiceComponent {
 
   onSubmit() {
     this.form.markAllAsTouched();
-    if (this.form.valid) this.prompt.subscribe({ next: value => value && this._submit() })
+    if (this.form.valid) this.prompt.subscribe({ next: value => value && this._submit() });
   }
 
   private _submit(): void {
