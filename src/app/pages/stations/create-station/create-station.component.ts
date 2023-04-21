@@ -17,7 +17,7 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateStationComponent implements OnInit, OnDestroy {
-  @Output() createEvent = new EventEmitter();
+  @Output() eCreate = new EventEmitter();
   adressList$: Observable<string[]> = new Observable();
   searchAddress$ = new BehaviorSubject<string | null>('');
   searchControl = new FormControl('');
@@ -85,6 +85,8 @@ export class CreateStationComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     this.formCreateStation.markAllAsTouched();
+    Object.values(this.formCreateStation.controls).map(control => control.updateValueAndValidity());
+
     if (!this.formCreateStation.valid) {
       this.alertService.open('Форма не валидна', { status: TuiNotification.Warning }).subscribe();
       return;
@@ -113,7 +115,7 @@ export class CreateStationComponent implements OnInit, OnDestroy {
         this.formCreateStation.controls.startWork.enable();
         this.formCreateStation.controls.endWork.enable();
         this.formCreateStation.reset();
-        this.createEvent.emit();
+        this.eCreate.emit();
         this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
       },
       error: () => {

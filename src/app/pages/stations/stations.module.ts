@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { StationComponent } from './station.component';
+import { StationsComponent } from './stations.component';
 import { TuiReorderModule, TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
 import { TuiAutoFocusModule, TuiFilterPipeModule, TuiIsPresentPipeModule, TuiLetModule } from '@taiga-ui/cdk';
-import { AsyncPipe, DatePipe, KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   TuiButtonModule,
   TuiDataListModule,
@@ -45,27 +45,31 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateStationComponent } from './create-station/create-station.component';
 import { EditStationComponent } from './edit-station/edit-station.component';
 import { TuiCurrencyPipeModule, TuiMoneyModule } from '@taiga-ui/addon-commerce';
-import { RouterLink, RouterModule } from '@angular/router';
-import { TimePipe } from '../../common/pipes/time.pipe';
+import { RouterModule } from '@angular/router';
+import { StationsListComponent } from './stations-list/stations-list.component';
+import { StationsModuleRouting } from './stations.routing';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    StationsModuleRouting,
+    SharedModule,
+
     TuiTableModule,
     TuiLetModule,
-    NgForOf,
-    NgIf,
     TuiLinkModule,
     TuiTagModule,
     TuiButtonModule,
     TuiTextfieldControllerModule,
     TuiInputModule,
     TuiInputCountModule,
-    ReactiveFormsModule,
-    FormsModule,
     TuiHostedDropdownModule,
     TuiReorderModule,
     TuiLoaderModule,
-    AsyncPipe,
     TuiTablePaginationModule,
     TuiExpandModule,
     TuiIslandModule,
@@ -78,22 +82,17 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     TuiHintModule,
     TuiPaginationModule,
     TuiGroupModule,
-    DatePipe,
     TuiInputTimeModule,
     TuiTextAreaModule,
-    RouterLink,
     TuiDataListModule,
     TuiMultiSelectModule,
     TuiCheckboxBlockModule,
-    KeyValuePipe,
-
     TuiArrowModule,
     TuiDataListDropdownManagerModule,
     TuiMultiSelectOptionModule,
     TuiLabelModule,
     TuiNotificationModule,
     TuiInputNumberModule,
-    RouterModule,
     TuiTabsModule,
     TuiFilterByInputPipeModule,
     TuiComboBoxModule,
@@ -104,7 +103,12 @@ import { TimePipe } from '../../common/pipes/time.pipe';
     TuiFilterPipeModule,
     TuiIsPresentPipeModule,
   ],
-  declarations: [StationComponent, CreateStationComponent, EditStationComponent, TimePipe],
-  exports: [StationComponent, TimePipe],
+  declarations: [
+    StationsComponent,
+    StationsListComponent,
+    CreateStationComponent,
+    EditStationComponent,
+  ],
+  exports: [StationsComponent],
 })
-export class StationModule {}
+export class StationsModule {}

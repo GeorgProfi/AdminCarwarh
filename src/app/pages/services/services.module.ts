@@ -27,31 +27,31 @@ import {
   TuiStringifyContentPipeModule,
   TuiTextAreaModule,
 } from '@taiga-ui/kit';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateServiceComponent } from './create-service/create-service.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
 
 @NgModule({
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+
     TuiTextfieldControllerModule,
     TuiInputModule,
     TuiLoaderModule,
-    AsyncPipe,
-    NgIf,
     TuiTableModule,
-    FormsModule,
     TuiLetModule,
     TuiButtonModule,
     TuiTablePaginationModule,
-    NgForOf,
     TuiExpandModule,
     TuiIslandModule,
-    ReactiveFormsModule,
     TuiAutoFocusModule,
     TuiSelectModule,
     TuiDataListWrapperModule,
@@ -63,8 +63,6 @@ import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
     TuiTextAreaModule,
     TuiInputTimeModule,
     TuiCheckboxBlockModule,
-    RouterLink,
-    RouterModule,
     TuiErrorModule,
     TuiFieldErrorPipeModule,
     TuiLinkModule,

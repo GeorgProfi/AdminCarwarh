@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { StationService } from '../../../common/services/api/station.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TuiContextWithImplicit, TuiStringHandler, TuiTime } from '@taiga-ui/cdk';
@@ -10,7 +10,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { CreateStationDto } from '../../../common/dto/station/create-station.dto';
 import { TUI_PROMPT } from '@taiga-ui/kit';
-import { tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, debounceTime, filter, firstValueFrom, map, switchMap, takeUntil, tap } from 'rxjs';
+import {DadataApiService} from 'src/app/common/services/dadata-api.service';
 
 interface Post {
   id: string;
@@ -25,7 +26,9 @@ interface Post {
   styleUrls: ['./edit-station.component.less'],
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditStationComponent implements OnInit {
+export class EditStationComponent implements OnInit, OnDestroy {
+  stationId: string = this.activatedRoute.snapshot.queryParams['id'];
+
   formEditStation = new FormGroup({
     address: new FormControl(``, {
       nonNullable: true,
@@ -50,12 +53,18 @@ export class EditStationComponent implements OnInit {
     description: new FormControl(``, { nonNullable: true }),
   });
 
+  adressList$: Observable<string[]> = new Observable();
+  searchAddress$ = new BehaviorSubject<string | null>('');
+  searchControl = new FormControl('');
+
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
     size: 's',
     closeable: false,
     dismissible: false,
   });
+
+  private _sbs = new Subject<void>();
 
   constructor(
     private stationService: StationService,
@@ -66,12 +75,16 @@ export class EditStationComponent implements OnInit {
     private readonly alertService: TuiAlertService,
     @Inject(TuiDialogService)
     private readonly dialogService: TuiDialogService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dadataApiService: DadataApiService,
   ) {}
 
-  stationId: string = this.activatedRoute.snapshot.queryParams['id'];
+  ngOnDestroy(): void {
+    this._unsubscribe();
+  }
 
   listServices$ = this.servicesService.getAllClasses();
+
   serviceStringify(service: ClassService | Service): string {
     return service.name;
   }
@@ -91,18 +104,17 @@ export class EditStationComponent implements OnInit {
   services: Service[] = [];
   formAddService = new FormGroup({
     classService: new FormControl(null, { validators: [Validators.required] }),
-    duration: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    duration: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     bonusPercentage: new FormControl(0, {
       nonNullable: true,
-      validators: [Validators.required, Validators.min(0), Validators.max(100)],
+      validators: [Validators.required, Validators.min(1), Validators.max(100)],
     }),
-    price: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    price: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     discount: new FormControl(0, {
       nonNullable: true,
       validators: [Validators.required, Validators.min(0), Validators.max(100)],
     }),
   });
-  //controlsServices = new FormArray<FormGroup<any>>([]);
 
   readonly filterExistServices = (service: ClassService): boolean => {
     return this.services.find(s => s.classServices.id === service.id) === undefined;
@@ -157,6 +169,7 @@ export class EditStationComponent implements OnInit {
   /******************************************************/
 
   ngOnInit() {
+    this._sbsSearch();
     this.stationService.getFullStation(this.stationId).subscribe({
       next: station => {
         this.formEditStation.patchValue({
@@ -195,11 +208,8 @@ export class EditStationComponent implements OnInit {
 
   onAddService(): void {
     this.formAddService.markAllAsTouched();
-    if (!this.formAddService.valid) {
-      this.cdr.detectChanges();
-      return;
-    }
-    this.prompt.subscribe({ next: value => value && this._addService() });
+    Object.values(this.formAddService.controls).map(control => control.updateValueAndValidity());
+    this.formAddService.valid && this.prompt.subscribe({ next: value => value && this._addService() });
   }
 
   onRemoveServiceForStation(serviceId: string): void {
@@ -373,15 +383,15 @@ export class EditStationComponent implements OnInit {
         postId: this.posts[this.activePostIndex].id,
         serviceId: serviceId,
       })
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.getPosts().subscribe();
           this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
         },
-        error => {
+        error: () => {
           this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
         }
-      );
+      });
   }
 
   private _removePost(): void {
@@ -429,5 +439,25 @@ export class EditStationComponent implements OnInit {
       },
       error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
     });
+  }
+
+  private _sbsSearch(): void {
+    this.adressList$ = this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      filter(address => address !== null && address !== ''),
+      takeUntil(this._sbs),
+      switchMap(query => this._getAdresses(query)),
+    );
+  }
+
+  private _getAdresses(query: string | null): Promise<string[]> {
+    return firstValueFrom(this.dadataApiService.suggestAddress(query || '').pipe(
+      map((suggestions: any[]) => suggestions.map(value => value.value)))
+    )
+  }
+
+  private _unsubscribe(): void {
+    this._sbs.next();
+    this._sbs.complete();
   }
 }
