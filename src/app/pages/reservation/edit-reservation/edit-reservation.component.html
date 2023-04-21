@@ -94,19 +94,35 @@
     Выбор даты
   </tui-input-date>
   <div tuiGroup class="group tui-form__row">
-    <tui-combo-box>
+    <tui-combo-box
+      *tuiLet="stations$ | async as stations"
+      [stringify]="stationsStringify"
+      [(ngModel)]="station"
+      (ngModelChange)="changeStation()">
       Поиск станции
       <input tuiTextfield placeholder="Поиск по названию" />
-      <tui-data-list-wrapper *tuiDataList></tui-data-list-wrapper>
+      <tui-data-list-wrapper
+        *tuiDataList
+        [itemContent]="stationsStringify | tuiStringifyContent"
+        [items]="stations | tuiFilterByInputWith : stationsStringify"></tui-data-list-wrapper>
     </tui-combo-box>
-    <tui-combo-box>
+    <tui-combo-box
+      *tuiLet="listPosts$ | async as posts"
+      [stringify]="stationsStringify"
+      [(ngModel)]="post"
+      (ngModelChange)="changeStation()">
       Поиск поста
       <input tuiTextfield placeholder="Поиск по названию" />
-      <tui-data-list-wrapper *tuiDataList></tui-data-list-wrapper>
+      <tui-data-list-wrapper
+        *tuiDataList
+        [itemContent]="postStringify | tuiStringifyContent"
+        [items]="posts | tuiFilterByInputWith : postStringify"></tui-data-list-wrapper>
     </tui-combo-box>
   </div>
-  <tui-input-time class="tui-form__row" [items]="timesTest" [(ngModel)]="time"> Выбор времени </tui-input-time>
+  <tui-input-time *ngIf="times" class="tui-form__row" [items]="times" [(ngModel)]="time">
+    Выбор времени
+  </tui-input-time>
   <div class="tui-form__buttons tui-form__buttons_align_center">
-    <button tuiButton class="tui-form__button">Перезапись</button>
+    <button tuiButton class="tui-form__button" (click)="reOrder()">Перезапись</button>
   </div>
 </ng-template>

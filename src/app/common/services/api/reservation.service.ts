@@ -7,6 +7,7 @@ import { GetReservationStationDto } from '../../dto/reservation/get-reservation-
 import { SearchFreeTimesDto } from '../../dto/reservation/search-free-times.dto';
 import { CreateReservationDto } from '../../dto/reservation/create-reservation.dto';
 import { UpdateReservationDto } from '../../dto/reservation/update-reservation.dto';
+import { ReReservationDto } from '../../dto/reservation/re-reservation.dto';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
@@ -27,6 +28,10 @@ export class ReservationService {
 
   createReservation(data: CreateReservationDto) {
     return this.http.post<string[]>(`${environment.apiOwnerUrl}/reservation/reservation-for-owner`, data);
+  }
+
+  reReservation(data: ReReservationDto) {
+    return this.http.put<Order>(`${environment.apiOwnerUrl}/reservation/re-reservation`, data);
   }
 
   getOrder(id: string) {
