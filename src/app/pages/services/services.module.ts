@@ -30,7 +30,7 @@ import {
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { TuiTableModule, TuiTablePaginationModule } from '@taiga-ui/addon-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiAutoFocusModule, TuiLetModule } from '@taiga-ui/cdk';
+import { TuiAutoFocusModule, TuiFilterPipeModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateServiceComponent } from './create-service/create-service.component';
 import { EditServiceComponent } from './edit-service/edit-service.component';
 import { RouterLink, RouterModule } from '@angular/router';
@@ -73,6 +73,7 @@ import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
     TuiStringifyContentPipeModule,
     TuiFilterByInputPipeModule,
     TuiCurrencyPipeModule,
+    TuiFilterPipeModule,
   ],
   declarations: [ServicesComponent, CreateServiceComponent, EditServiceComponent],
   exports: [ServicesComponent],

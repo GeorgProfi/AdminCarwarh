@@ -64,7 +64,7 @@
                 [stringify]="serviceStringify">
                 Поиск услуги
                 <input tuiTextfield placeholder="Поиск по названию" />
-                <div *ngIf="listServices as s">
+                <div *ngIf="listServices">
                   <tui-data-list-wrapper
                     *tuiDataList
                     [itemContent]="serviceStringify | tuiStringifyContent"

@@ -39,10 +39,14 @@
             [stringify]="stationStringify">
             Выбрать станцию
             <input tuiTextfield placeholder="Поиск по названию" />
-            <tui-data-list-wrapper
-              *tuiDataList
-              [itemContent]="stationStringify | tuiStringifyContent"
-              [items]="listStation | tuiFilterByInputWith : stationStringify"></tui-data-list-wrapper>
+            <div *ngIf="listStation">
+              <tui-data-list-wrapper
+                *tuiDataList
+                [itemContent]="stationStringify | tuiStringifyContent"
+                [items]="
+                  listStation | tuiFilter : filterExistStation | tuiFilterByInputWith : stationStringify
+                "></tui-data-list-wrapper>
+            </div>
           </tui-combo-box>
         </td>
         <td *tuiCell="'duration'" tuiTd>
@@ -77,7 +81,7 @@
             shape="rounded"
             (click)="setVisibleService(i)"></button>
         </td>
-        <td *tuiCell="'station'" tuiTd>{{ service.stationName }}</td>
+        <td *tuiCell="'station'" tuiTd>{{ service.station.name }}</td>
         <td *tuiCell="'duration'" tuiTd>
           <tui-input-number [(ngModel)]="service.duration" [postfix]="'мин.'"></tui-input-number>
         </td>

@@ -93,10 +93,6 @@ export class EditServiceComponent implements OnInit {
         });
       });
       this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
-        data.map(data => {
-          data.stationName = data.station.name;
-          return data;
-        });
         this.services = data;
         this.cdr.detectChanges();
       });
