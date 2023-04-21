@@ -10,7 +10,6 @@ import { AuthService } from './auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoyaltySystemModule } from './pages/loyalty-system/loyalty-system.module';
-import { SettingModule } from './pages/setting/setting.module';
 import { of } from 'rxjs';
 import { TUI_LANGUAGE, TUI_RUSSIAN_LANGUAGE } from '@taiga-ui/i18n';
 import { ReservationModule } from './pages/reservation/reservation.module';
@@ -41,7 +40,6 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
     LayoutModule,
     LoyaltySystemModule,
     ServicesModule,
-    SettingModule,
     ReservationModule,
     MarketingModule,
     TuiInputModule,
