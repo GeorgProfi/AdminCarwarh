@@ -51,6 +51,7 @@ export class EditReservationComponent implements OnInit {
         return service;
       });
       this.status = order.status;
+      this.chargeOffBonuses = order.chargeOffBonuses;
       this.cdr.detectChanges();
     });
   }
@@ -144,6 +145,7 @@ export class EditReservationComponent implements OnInit {
         status: this.status,
         clientId,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
+        chargeOffBonuses: this.chargeOffBonuses,
       })
       .subscribe(
         () => {

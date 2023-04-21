@@ -70,7 +70,7 @@ export class CreateReservationComponent {
         return this.servicesService.getAllClasses(true);
       }
 
-      return this.stationService.getServicesAll(stationId).pipe(
+      return this.stationService.getServicesAll(stationId, true).pipe(
         map((services: Service[]) => {
           this.purchaseAmount = 0;
           this.durationAmount = 0;

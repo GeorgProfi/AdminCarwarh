@@ -3,4 +3,5 @@ export class UpdateReservationDto {
   clientId?: string;
   servicesIds?: string[];
   status?: number;
+  chargeOffBonuses?: boolean;
 }
