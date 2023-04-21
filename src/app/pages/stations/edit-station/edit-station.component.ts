@@ -104,18 +104,17 @@ export class EditStationComponent implements OnInit, OnDestroy {
   services: Service[] = [];
   formAddService = new FormGroup({
     classService: new FormControl(null, { validators: [Validators.required] }),
-    duration: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    duration: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     bonusPercentage: new FormControl(0, {
       nonNullable: true,
-      validators: [Validators.required, Validators.min(0), Validators.max(100)],
+      validators: [Validators.required, Validators.min(1), Validators.max(100)],
     }),
-    price: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    price: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     discount: new FormControl(0, {
       nonNullable: true,
       validators: [Validators.required, Validators.min(0), Validators.max(100)],
     }),
   });
-  //controlsServices = new FormArray<FormGroup<any>>([]);
 
   readonly filterExistServices = (service: ClassService): boolean => {
     return this.services.find(s => s.classServices.id === service.id) === undefined;
@@ -209,11 +208,8 @@ export class EditStationComponent implements OnInit, OnDestroy {
 
   onAddService(): void {
     this.formAddService.markAllAsTouched();
-    if (!this.formAddService.valid) {
-      this.cdr.detectChanges();
-      return;
-    }
-    this.prompt.subscribe({ next: value => value && this._addService() });
+    Object.values(this.formAddService.controls).map(control => control.updateValueAndValidity());
+    this.formAddService.valid && this.prompt.subscribe({ next: value => value && this._addService() });
   }
 
   onRemoveServiceForStation(serviceId: string): void {
