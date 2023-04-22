@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (submit)="onSave()">
   <h3 class="tui-form__header">Описание</h3>
   <div class="tui-form__row">
     <tui-text-area formControlName="description"></tui-text-area>
@@ -15,18 +15,18 @@
       (reject)="onReject($event)"></tui-input-files>
 
     <tui-files class="tui-space_top-1">
-      <tui-file *ngIf="loadedFiles$ | async as file" [file]="file" (removed)="removeFile()"></tui-file>
+      <tui-file *ngIf="loadedFiles$ | async as file" [file]="file" (removed)="onRemoveFile()"></tui-file>
 
       <tui-file
         *ngIf="rejectedFiles$ | async as file"
         state="error"
         [file]="file"
-        (removed)="clearRejected()"></tui-file>
+        (removed)="onClearRejected()"></tui-file>
 
       <tui-file *ngIf="loadingFiles$ | async as file" state="loading" [file]="file"></tui-file>
     </tui-files>
   </div>
   <div class="tui-form__buttons">
-    <button tuiButton class="tui-form__button" appearance="primary" (click)="saveData()">Сохранить</button>
+    <button tuiButton class="tui-form__button" type="submit" appearance="primary">Сохранить</button>
   </div>
 </form>

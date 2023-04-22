@@ -4,20 +4,21 @@ import { Router } from '@angular/router';
 import { CompanyService } from '../../../common/services/api/company.service';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.less'],
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.less'],
 })
-export class MenuComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router, private companyService: CompanyService) {}
+export class HeaderComponent implements OnInit {
   activeItemIndex = 0;
+  showMobileNav = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private companyService: CompanyService
+  ) {}
 
   menu = [
-    // {
-    //   name: 'Система лояльности',
-    //   icon: 'tuiIconCard',
-    //   link: 'loyalty-system',
-    // },
     { name: 'Клиенты', icon: 'tuiIconUsers', link: 'clients' },
     { name: 'Станции', icon: 'tuiIconFlag', link: 'stations' },
     { name: 'Услуги', icon: 'tuiIconFile', link: 'services' },
@@ -37,24 +38,16 @@ export class MenuComponent implements OnInit {
       icon: 'tuiIconUser',
       link: 'setting-profile',
     },
-
-    // { name: 'DEBUG', icon: 'tuiIconCancel', link: 'debug' },
   ];
 
   nameCompany!: string;
   balance!: number;
-  // { color: 'green', label: 'Активирован' },
-  // { color: 'red', label: 'Не активирован' },
   statuses: any = {
     Active: { color: 'green', label: 'Активирован' },
     Disable: { color: 'green', label: 'Активирован' },
   };
   status: any = { color: 'white', label: '' };
 
-  async logout() {
-    this.authService.logout();
-    await this.router.navigateByUrl('/auth');
-  }
 
   ngOnInit(): void {
     this.companyService.getDataCompany().subscribe((data: any) => {
@@ -62,5 +55,22 @@ export class MenuComponent implements OnInit {
       this.balance = data.balance;
       this.nameCompany = data.name;
     });
+  }
+
+  onLogout() {
+    this._logout();
+  }
+
+  onToggleMobileNav(value: boolean): void {
+    this._toggleMobileNav(value);
+  }
+
+  private _toggleMobileNav(value: boolean): void {
+    this.showMobileNav = value;
+  }
+
+  private _logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/auth');
   }
 }

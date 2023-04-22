@@ -1,0 +1,58 @@
+<section class="nav-panel">
+  <nav class="mobile-navigation">
+    <div
+      (click)="onToggleMobileNav(true)"
+      (tuiActiveZoneChange)="onToggleMobileNav($event)"
+      role="button"
+      class="nav-toggle-btn">
+      <tui-svg src="tuiIconMenu" class="icon"></tui-svg>
+      <div *tuiSidebar="showMobileNav; direction: 'left'">
+        <div class="info">
+          <div class="info__item">
+            Компания: <span>{{ nameCompany }}</span>
+          </div>
+          <div class="info__item">
+            Баланс: <span>{{ balance }} {{ 'RUB' | tuiCurrency }}</span>
+          </div>
+          <div class="info__item">
+            Статус: <span [style.color]="status.color">{{ status.label }}</span>
+          </div>
+        </div>
+        <nav class="navigation">
+          <a
+            *ngFor="let item of menu"
+            (click)="onToggleMobileNav(false)"
+            [routerLink]="item.link"
+            tuiLink
+            routerLinkActive="active">
+            <tui-svg [src]="item.icon" class="tui-space_right-2"></tui-svg>
+            <span>{{ item.name }}</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </nav>
+  <div class="info desktop">
+    <div class="info__item">
+      Компания: <span>{{ nameCompany }}</span>
+    </div>
+    <div class="info__item">
+      Баланс: <span>{{ balance }} {{ 'RUB' | tuiCurrency }}</span>
+    </div>
+    <div class="info__item">
+      Статус: <span [style.color]="status.color">{{ status.label }}</span>
+    </div>
+  </div>
+  <nav class="navigation desktop">
+    <a tuiLink *ngFor="let item of menu" [routerLink]="item.link" routerLinkActive="active">
+      <tui-svg [src]="item.icon" class="tui-space_right-2"></tui-svg>
+      <span>{{ item.name }}</span>
+    </a>
+  </nav>
+  <div class="footer">
+    <div role="button" class="logout-btn" (click)="onLogout()">
+      <tui-svg src="tuiIconLogOut" class="icon"></tui-svg>
+      <span>Выход</span>
+    </div>
+  </div>
+</section>

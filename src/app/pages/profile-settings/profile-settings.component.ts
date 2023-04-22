@@ -1,20 +1,16 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { AccountService } from '../../../common/services/api/account.service';
+import { AccountService } from '../../common/services/api/account.service';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TuiValidationError } from '@taiga-ui/cdk';
-import { matchValidator } from 'src/app/shared/validators';
+import { emailValidator, matchValidator } from 'src/app/shared/validators';
 
 @Component({
-  selector: 'app-setting-profile',
-  templateUrl: './setting-profile.component.html',
+  selector: 'app-profile-settings',
+  templateUrl: './profile-settings.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingProfileComponent {
-  repeatPassErr = new TuiValidationError('Пароли не совпадают!');
-  emailErr = new TuiValidationError('Некорректный email');
-
+export class ProfileSettingsComponent {
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
     size: 's',
@@ -23,7 +19,7 @@ export class SettingProfileComponent {
   });
 
   emailForm = new FormGroup({
-    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, emailValidator] }),
   })
 
   passwordForm = new FormGroup({
@@ -46,44 +42,25 @@ export class SettingProfileComponent {
     private readonly dialogService: TuiDialogService
   ) {}
 
-  get newEmail(): string {
-    return this.emailForm.get('email')?.value as string;
-  };
-
-  get oldPassword(): string {
-    return this.passwordForm.get('oldPassword')?.value as string;
-  };
-
-  get newPassword(): string {
-    return this.passwordForm.get('newPassword')?.value as string;
-  };
-
-  get repeatPassword(): string {
-    return this.passwordForm.get('repeatPassword')?.value as string;
-  };
-
-  get isPasswordFormInvalid(): boolean {
-    return this.passwordForm.invalid;
-  }
-
-  get isEmailFormInvalid(): boolean {
-    return this.emailForm.invalid;
-  }
-
-  get passwordError(): TuiValidationError | null {
-    return this.newPassword !== this.repeatPassword ? this.repeatPassErr : null
-  }
-
-  get emailError(): TuiValidationError | null {
-    return this.emailForm.touched && this.isEmailFormInvalid ? this.emailErr : null;
-  }
-
   onChangeEmail() {
-    this.prompt.subscribe({ next: value => value && this._changeEmail(this.newEmail) });
+    this.emailForm.markAllAsTouched();
+    Object.values(this.emailForm.controls).map(control => control.updateValueAndValidity())
+
+    this.emailForm.valid && this.prompt.subscribe({
+      next: value => value && this._changeEmail(this.emailForm.controls.email.value)
+    });
   }
 
   onChangePassword() {
-    this.prompt.subscribe({ next: value => value && this._changePassword() });
+    this.passwordForm.markAllAsTouched();
+    Object.values(this.passwordForm.controls).map(control => control.updateValueAndValidity())
+
+    this.passwordForm.valid && this.prompt.subscribe({
+      next: value => value && this._changePassword(
+        this.passwordForm.controls.oldPassword.value,
+        this.passwordForm.controls.newPassword.value,
+      ),
+    });
   }
 
   private _changeEmail(email: string): void {
@@ -97,11 +74,11 @@ export class SettingProfileComponent {
       });
   }
 
-  private _changePassword(): void {
+  private _changePassword(oldPassword: string, newPassword: string): void {
     this.accountService
       .changePassword({
-        oldPassword: this.oldPassword,
-        newPassword: this.newPassword,
+        oldPassword,
+        newPassword,
       })
       .subscribe({
         next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),

@@ -5,8 +5,6 @@ import { NotificationComponent } from './pages/marketing/notification/notificati
 import { ReservationComponent } from './pages/reservation/reservation.component';
 import { Error404Component } from './pages/error-404/error-404.component';
 import { LayoutComponent } from './layouts/left-menu/layout.component';
-import { SettingProfileComponent } from './pages/setting/setting-profile/setting-profile.component';
-import { SettingCompanyComponent } from './pages/setting/setting-company/setting-company.component';
 import { ServicesComponent } from './pages/services/services.component';
 import { EditServiceComponent } from './pages/services/edit-service/edit-service.component';
 import { EditNotificationComponent } from './pages/marketing/notification/edit-notification/edit-notification.component';
@@ -91,13 +89,12 @@ const routes: Routes = [
       },
       {
         path: 'setting-company',
-        component: SettingCompanyComponent,
-        title: 'Настройки компании',
+        loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
       },
       {
         path: 'setting-profile',
-        component: SettingProfileComponent,
-        title: 'Настройки профиля',
+        loadChildren: () => import('./pages/profile-settings/profile-settings.module')
+          .then(m => m.ProfileSettingsModule),
       },
       {path: '', redirectTo: 'clients', pathMatch: 'full'},
     ],

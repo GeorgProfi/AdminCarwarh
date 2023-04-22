@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-layout-left-menu',
+  selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,

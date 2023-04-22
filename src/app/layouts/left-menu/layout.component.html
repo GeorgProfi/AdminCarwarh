@@ -1,8 +1,14 @@
-<app-menu></app-menu>
-<section class="content">
-  <section *tuiLet="title$ | async as title" class="header">
-    <h3 *ngIf="title" class="tui-form__header">{{ title }}</h3>
-    <app-breadcrumbs></app-breadcrumbs>
-  </section>
-  <router-outlet></router-outlet>
-</section>
+<div class="layout">
+  <div class="header">
+    <app-header></app-header>
+  </div>
+  <tui-scrollbar class="content">
+    <div class="content__inner">
+      <section *tuiLet="title$ | async as title">
+        <h3 *ngIf="title" class="title">{{ title$ | async }}</h3>
+        <app-breadcrumbs></app-breadcrumbs>
+      </section>
+      <router-outlet></router-outlet>
+    </div>
+  </tui-scrollbar>
+</div>
