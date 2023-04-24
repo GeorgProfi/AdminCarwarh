@@ -27,35 +27,36 @@ import {
   TuiTagModule,
 } from '@taiga-ui/kit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TuiTableModule } from '@taiga-ui/addon-table';
 import { TuiFilterPipeModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
 import { StationModule } from '../stations/station.module';
+import { TableReservationComponent } from './table-reservation/table-reservation.component';
 import { EditReservationComponent } from './edit-reservation/edit-reservation.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TableOrderComponent } from './table-order/table-order.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule,
+
     TuiGroupModule,
     TuiInputModule,
     TuiButtonModule,
     TuiTextfieldControllerModule,
-    FormsModule,
     TuiSelectModule,
     TuiDataListWrapperModule,
     TuiLoaderModule,
-    AsyncPipe,
-    NgIf,
     TuiTableModule,
     TuiPaginationModule,
     TuiLetModule,
-    NgForOf,
-    DatePipe,
     TuiAccordionModule,
-    ReactiveFormsModule,
     TuiCalendarModule,
     TuiDataListModule,
     TuiInputDateModule,
@@ -66,10 +67,10 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     TuiStringifyContentPipeModule,
     TuiComboBoxModule,
     TuiFilterByInputPipeModule,
-    StationModule,
     TuiDialogModule,
     TuiMoneyModule,
     TuiTagModule,
+    TuiFilterPipeModule,
     FullCalendarModule,
     TuiFilterPipeModule,
     TuiCheckboxLabeledModule,

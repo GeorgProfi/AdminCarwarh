@@ -1,47 +1,34 @@
-<form [formGroup]="emailForm">
+<form [formGroup]="emailForm" (submit)="onChangeEmail()">
   <h3 class="tui-form__header">Смена электронной почты</h3>
   <div class="tui-form__row">
     <tui-input formControlName="email">
       Электронная почта
       <input tuiTextfield type="email" autocomplete="email" />
     </tui-input>
-    <tui-error [error]="emailError"></tui-error>
+    <tui-error formControlName="email" [error]="[] | tuiFieldError | async"></tui-error>
   </div>
   <div class="tui-form__buttons">
-    <button
-      tuiButton
-      class="tui-form__button"
-      appearance="primary"
-      [disabled]="isEmailFormInvalid"
-      (click)="onChangeEmail()">
-      Подтвердить
-    </button>
+    <button tuiButton type="submit" class="tui-form__button" appearance="primary">Подтвердить</button>
   </div>
 </form>
 
-<form [formGroup]="passwordForm">
+<form [formGroup]="passwordForm" (submit)="onChangePassword()">
   <h3 class="tui-form__header">Смена пароля</h3>
   <div class="tui-form__row">
     <tui-input-password name="password" formControlName="oldPassword"> Старый пароль </tui-input-password>
+    <tui-error formControlName="oldPassword" [error]="[] | tuiFieldError | async"></tui-error>
   </div>
   <div class="tui-form__row tui-form__row_multi-fields">
     <div class="tui-form__multi-field">
       <tui-input-password formControlName="newPassword"> Новый пароль </tui-input-password>
+      <tui-error formControlName="newPassword" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <div class="tui-form__multi-field">
       <tui-input-password formControlName="repeatPassword"> Повтор нового пароля </tui-input-password>
+      <tui-error formControlName="repeatPassword" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
   </div>
-  <tui-error [error]="passwordError"></tui-error>
   <div class="tui-form__buttons">
-    <button
-      tuiButton
-      class="tui-form__button"
-      appearance="primary"
-      type="submit"
-      [disabled]="isPasswordFormInvalid"
-      (click)="onChangePassword()">
-      Сохранить
-    </button>
+    <button tuiButton class="tui-form__button" appearance="primary" type="submit">Сохранить</button>
   </div>
 </form>

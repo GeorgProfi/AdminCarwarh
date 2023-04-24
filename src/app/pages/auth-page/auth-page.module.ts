@@ -4,7 +4,7 @@ import { TuiFieldErrorPipeModule, TuiInputModule, TuiInputPasswordModule, TuiTab
 import { TuiButtonModule, TuiErrorModule, TuiGroupModule } from '@taiga-ui/core';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthPageComponent } from './auth-page.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { AuthPageModuleRouting } from './auth-page.routing';
@@ -14,15 +14,16 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterModule,
+
     TuiInputModule,
     TuiInputPasswordModule,
     TuiErrorModule,
     TuiButtonModule,
-    RouterLink,
     TuiTabsModule,
-    RouterOutlet,
     TuiGroupModule,
     TuiFieldErrorPipeModule,
+
     AuthPageModuleRouting,
   ],
   declarations: [

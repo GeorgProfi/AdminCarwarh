@@ -1,5 +1,39 @@
+@import '@taiga-ui/core/styles/taiga-ui-local.less';
+
+.layout {
+  display: flex;
+  height: 100vh;
+
+  @media @tui-mobile {
+    flex-direction: column;
+  }
+}
+
+.header {
+  width: 240px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--tui-base-03);
+  z-index: 1000;
+
+  @media @tui-mobile {
+    width: 100%;
+    border-right: none;
+  }
+}
+
 .content {
-  margin: 1rem 5rem 5rem 16.25rem;
+  flex-grow: 1;
+}
 
+.content__inner {
+  padding: 40px;
 
+  @media @tui-mobile {
+    padding: 20px;
+  }
+}
+
+.title {
+  margin-top: 0;
+  font: var(--tui-font-heading-4);
 }

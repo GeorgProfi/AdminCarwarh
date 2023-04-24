@@ -1,7 +1,11 @@
 <tui-island>
   <form [formGroup]="formEditStation">
     <div class="tui-form__row">
-      <tui-input formControlName="address"> Адрес </tui-input>
+      <tui-combo-box formControlName="address" (searchChange)="searchAddress$.next($event)">
+        Адрес
+        <input tuiTextfield [formControl]="searchControl" />
+        <tui-data-list-wrapper *tuiDataList [items]="adressList$ | async"></tui-data-list-wrapper>
+      </tui-combo-box>
       <tui-error formControlName="address" [error]="[] | tuiFieldError | async"></tui-error>
     </div>
     <div class="tui-form__row">

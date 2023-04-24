@@ -41,7 +41,6 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
     LayoutModule,
     StationModule,
     ServicesModule,
-    SettingModule,
     ReservationModule,
     MarketingModule,
     TuiInputModule,

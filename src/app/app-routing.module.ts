@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
-import { StationComponent } from './pages/stations/station.component';
 import { NotificationComponent } from './pages/marketing/notification/notification.component';
 import { ReservationComponent } from './pages/reservation/reservation.component';
 import { Error404Component } from './pages/error-404/error-404.component';
-import { EditStationComponent } from './pages/stations/edit-station/edit-station.component';
 import { LayoutComponent } from './layouts/left-menu/layout.component';
-import { SettingProfileComponent } from './pages/setting/setting-profile/setting-profile.component';
-import { SettingCompanyComponent } from './pages/setting/setting-company/setting-company.component';
 import { ServicesComponent } from './pages/services/services.component';
 import { EditServiceComponent } from './pages/services/edit-service/edit-service.component';
 import { EditNotificationComponent } from './pages/marketing/notification/edit-notification/edit-notification.component';
@@ -27,16 +23,7 @@ const routes: Routes = [
       },
       {
         path: 'stations',
-        component: StationComponent,
-        title: 'Станции',
-      },
-      {
-        path: 'stations/edit',
-        component: EditStationComponent,
-        title: 'Редактор станции',
-        data: {
-          breadcrumbs: [{ title: 'Станции', url: 'stations' }, { title: 'Редактор' }],
-        },
+        loadChildren: () => import('./pages/stations/stations.module').then(m => m.StationsModule),
       },
       {
         path: 'services',
@@ -102,13 +89,12 @@ const routes: Routes = [
       },
       {
         path: 'setting-company',
-        component: SettingCompanyComponent,
-        title: 'Настройки компании',
+        loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
       },
       {
         path: 'setting-profile',
-        component: SettingProfileComponent,
-        title: 'Настройки профиля',
+        loadChildren: () => import('./pages/profile-settings/profile-settings.module')
+          .then(m => m.ProfileSettingsModule),
       },
       {path: '', redirectTo: 'clients', pathMatch: 'full'},
     ],
