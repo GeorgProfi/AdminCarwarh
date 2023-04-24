@@ -46,7 +46,7 @@ export class EditReservationComponent implements OnInit {
   ngOnInit(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: Order) => {
       console.log(order);
-      this.stationId$.next(order.stationId);
+      this.stationId$.next(order.station.id);
       this.client = order.client;
       this.services = order.services.map((service: any) => {
         service.name = service.classServices.name;
@@ -214,7 +214,8 @@ export class EditReservationComponent implements OnInit {
       .searchFreeTimes({
         day: this.day.toUtcNativeDate(),
         stationId: this.station.id,
-        servicesIds: this.services.filter(service => service.id).map(service => service.id),
+        // Осторожно, здесь id услуги на станции! для получения id класса услуги нужно лезть в classServices.
+        servicesIds: this.services.filter(service => service.classServices.id).map(service => service.id),
         postId: this.post?.id,
       })
       .pipe(
