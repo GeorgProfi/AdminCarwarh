@@ -70,13 +70,14 @@ export class CreateReservationComponent {
         return this.servicesService.getAllClasses(true);
       }
 
-      return this.stationService.getServicesAll(stationId).pipe(
+      return this.stationService.getServicesAll(stationId, true).pipe(
         map((services: Service[]) => {
           this.purchaseAmount = 0;
           this.durationAmount = 0;
           // Преобразовываю к интерфейсу IMergeServices, так удобней
           services = services.map(s => ({
             ...s,
+            // сомнительная идея в id пихать id класса услуги, хотя вроде как интерфейс написал. Путаница может быть
             id: s.classServices.id,
             name: s.classServices.name,
           }));
@@ -159,6 +160,7 @@ export class CreateReservationComponent {
       .searchFreeTimes({
         day: this.day.toUtcNativeDate(),
         stationId: this.station.id,
+        // Осторожно, здесь id класса услуги! не путать с id услуги.
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
         postId: this.post?.id,
       })

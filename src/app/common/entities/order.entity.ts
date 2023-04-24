@@ -35,4 +35,6 @@ export class Order {
   status!: EStatusOrder;
 
   ownerCreator!: boolean;
+
+  chargeOffBonuses!: boolean;
 }

@@ -89,13 +89,10 @@ export class EditServiceComponent implements OnInit {
       this.servicesService.getServiceById(id).subscribe(data => {
         this.formEdit.patchValue({
           name: data.name,
+          description: data.description,
         });
       });
       this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
-        data.map(data => {
-          data.stationName = data.station.name;
-          return data;
-        });
         this.services = data;
         this.cdr.detectChanges();
       });
@@ -149,7 +146,11 @@ export class EditServiceComponent implements OnInit {
   }
 
   private _updateService(): void {
-    alert('Метод отсутсвует в сервисе');
+    const data = this.formEdit.value;
+    this.servicesService.updateService(this.id, data).subscribe({
+      next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
   }
 
   private _removeServiceClass() {

@@ -3,8 +3,8 @@
     *tuiLet="stations$ | async as stations"
     class="b-form tui-form__row"
     [stringify]="stationsStringify"
-    [(ngModel)]="station"
-    (ngModelChange)="change()">
+    [ngModel]="station | async"
+    (ngModelChange)="station.next($event); change()">
     Поиск станции
     <input tuiTextfield placeholder="Поиск по названию" />
     <tui-data-list-wrapper
@@ -12,7 +12,7 @@
       [itemContent]="stationsStringify | tuiStringifyContent"
       [items]="stations | tuiFilterByInputWith : stationsStringify"></tui-data-list-wrapper>
   </tui-combo-box>
-  <tui-input-date [(ngModel)]="day" (ngModelChange)="change()"> Choose a date </tui-input-date>
+  <tui-input-date [(ngModel)]="day" (ngModelChange)="change()"> Выбор даты </tui-input-date>
 </div>
 <button
   *ngIf="indexPost > 0"
@@ -32,4 +32,6 @@
   icon="tuiIconArrowRight"
   (click)="pageUp()"
   class="tui-space_right-3 tui-space_bottom-3"></button>
-<full-calendar #calendar [options]="calendarOptions" [events]="events$ | async"></full-calendar>
+<tui-loader [overlay]="true" [showLoader]="loading">
+  <full-calendar *ngIf="!loading" #calendar [options]="calendarOptions" [events]="events$ | async"></full-calendar>
+</tui-loader>

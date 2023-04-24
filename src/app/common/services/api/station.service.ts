@@ -121,7 +121,6 @@ export class StationService {
   }
 
   getAllPost(data: GetAllPostDto) {
-    console.log(data);
     return this.http.post<any>(`${environment.apiOwnerUrl}/station/all-post`, data);
   }
 }

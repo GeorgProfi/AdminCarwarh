@@ -10,8 +10,11 @@ import { ClientsService } from '../../../common/services/api/clients.service';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { Order } from '../../../common/entities/order.entity';
-import { TuiDay, TuiTime } from '@taiga-ui/cdk';
+import { TuiDay, tuiIsPresent, TuiTime } from '@taiga-ui/cdk';
 import { StationService } from '../../../common/services/api/station.service';
+import { Station } from '../../../common/entities/station.entity';
+import { Post } from '../../../common/entities/post.entity';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -39,11 +42,11 @@ export class EditReservationComponent implements OnInit {
     dismissible: false,
   });
 
-  stationId$ = new BehaviorSubject<string>('00000000-0000-0000-0000-000000000000');
+  stationId$ = new BehaviorSubject<string | null>(null);
   ngOnInit(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: Order) => {
-      //this.listServices$ = this.servicesService.getAllClassServices();
-      this.stationId$.next(order.stationId);
+      console.log(order);
+      this.stationId$.next(order.station.id);
       this.client = order.client;
       this.services = order.services.map((service: any) => {
         service.name = service.classServices.name;
@@ -52,7 +55,7 @@ export class EditReservationComponent implements OnInit {
         return service;
       });
       this.status = order.status;
-      //this.purchaseAmount = order.purchaseAmount;
+      this.chargeOffBonuses = order.chargeOffBonuses;
       this.cdr.detectChanges();
     });
   }
@@ -60,6 +63,8 @@ export class EditReservationComponent implements OnInit {
   client!: any;
   purchaseAmount = 0;
   durationAmount = 0;
+  bonuses = 0;
+  chargeOffBonuses = false;
 
   // Client
   replaceClient: boolean = false;
@@ -79,6 +84,7 @@ export class EditReservationComponent implements OnInit {
 
   // Services:
   listServices$: Observable<Service[]> = this.stationId$.pipe(
+    filter(tuiIsPresent),
     switchMap(stationId =>
       this.stationService.getServicesAll(stationId).pipe(
         map((services: Service[]) => {
@@ -144,6 +150,7 @@ export class EditReservationComponent implements OnInit {
         status: this.status,
         clientId,
         servicesIds: this.services.filter(service => service.id).map(service => service.id),
+        chargeOffBonuses: this.chargeOffBonuses,
       })
       .subscribe(
         () => {
@@ -169,21 +176,91 @@ export class EditReservationComponent implements OnInit {
   }
 
   exit() {
-    this.context.completeWith({ lolus: 'asd' });
+    this.context.completeWith(1);
   }
+
+  //
+
+  stations$: Observable<Station[]> = this.stationService.getALLStation();
+  stationsStringify(station: Station): string {
+    return station.name;
+  }
+  station!: Station;
+  changeStation() {
+    this.stationId$.next(this.station.id);
+    this.searchTimes();
+  }
+
+  listPosts$: Observable<Post[]> = this.stationService.getAllPost({
+    stationId: '00000000-0000-0000-0000-000000000000',
+  });
+  postStringify(post: Post): string {
+    return post.name;
+  }
+  post!: Post;
 
   // Day:
   minDay: TuiDay = TuiDay.currentUtc();
-  maxDay: TuiDay = TuiDay.currentUtc().append({ month: 6 });
+  maxDay: TuiDay = TuiDay.currentUtc().append({ month: 1 });
   day = TuiDay.currentUtc();
 
   // Time:
   searchTimes() {
-    console.log('s');
+    this.times = null;
+    if (!this.station || this.services.filter(service => service.id).length < 1) {
+      return;
+    }
+    this.reservationService
+      .searchFreeTimes({
+        day: this.day.toUtcNativeDate(),
+        stationId: this.station.id,
+        // Осторожно, здесь id услуги на станции! для получения id класса услуги нужно лезть в classServices.
+        servicesIds: this.services.filter(service => service.classServices.id).map(service => service.id),
+        postId: this.post?.id,
+      })
+      .pipe(
+        map((times: string[]) =>
+          times.map((time: string) => {
+            const t = new Date(time);
+            return new TuiTime(t.getHours(), t.getMinutes());
+          })
+        )
+      )
+      .subscribe(data => {
+        this.times = data;
+      });
   }
   time!: TuiTime;
-  times: TuiTime[] | null = [];
+  times: TuiTime[] | null = null;
   timesTest = tuiCreateTimePeriods();
+
+  async reOrder() {
+    const p = await this.prompt.toPromise();
+    if (!p) {
+      return;
+    }
+    this.reservationService
+      .reReservation({
+        orderId: this.context.data.id,
+        date: DateTime.fromObject({
+          day: this.day.day,
+          month: this.day.month + 1,
+          year: this.day.year,
+          hour: this.time.hours,
+          minute: this.time.minutes,
+        }).toJSDate(),
+        stationId: this.station.id,
+        postId: this.post.id,
+      })
+      .subscribe(
+        () => {
+          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+        },
+        error => {
+          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+        }
+      );
+  }
 
   open = false;
 
