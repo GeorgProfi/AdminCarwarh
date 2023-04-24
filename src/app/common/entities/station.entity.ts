@@ -8,6 +8,7 @@ export interface Station {
   startWork: Date;
   endWork: Date;
   description: string;
+  aroundClock: boolean;
 
   // на беке цифрой статус прилетает, на фронте надо строчкой вывести
   status: number | string;

@@ -1,8 +1,8 @@
 export interface CreateStationDto {
   address: string;
   name: string;
-  startWork: Date;
+  startWork?: Date;
   endWork: Date;
-  aroundClock: boolean;
+  aroundClock?: boolean;
   description?: string;
 }

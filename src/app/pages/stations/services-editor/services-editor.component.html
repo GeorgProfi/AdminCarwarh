@@ -1,0 +1,99 @@
+<tui-scrollbar>
+  <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columns">
+    <thead>
+      <tr tuiThGroup>
+        <th *tuiHead="'action-1'" tuiTh [sorter]="null" [style.width.px]="56"></th>
+        <th *tuiHead="'name'" tuiTh [resizable]="false">Название</th>
+        <th *tuiHead="'duration'" tuiTh>Длительность</th>
+        <th *tuiHead="'bonusPercentage'" tuiTh>Процент бонусов</th>
+        <th *tuiHead="'price'" tuiTh>Цена</th>
+        <th *tuiHead="'discount'" tuiTh>Скидка</th>
+        <th *tuiHead="'action-2'" tuiTh [sorter]="null" [style.width.px]="56"></th>
+      </tr>
+    </thead>
+    <tbody *tuiLet="services | tuiTableSort as servicesSort" tuiTbody [data]="servicesSort">
+      <tr tuiTr [formGroup]="form">
+        <td *tuiCell="'action-1'" tuiTd></td>
+        <td *tuiCell="'name'" tuiTd>
+          <tui-combo-box
+            *tuiLet="listServices$ | async as listServices"
+            class="b-form"
+            formControlName="classService"
+            [stringify]="serviceStringify">
+            Поиск услуги
+            <input tuiTextfield placeholder="Поиск по названию" />
+            <div *ngIf="listServices">
+              <tui-data-list-wrapper
+                *tuiDataList
+                [itemContent]="serviceStringify | tuiStringifyContent"
+                [items]="
+                  listServices | tuiFilter : filterExistServices | tuiFilterByInputWith : serviceStringify
+                "></tui-data-list-wrapper>
+            </div>
+          </tui-combo-box>
+        </td>
+        <td *tuiCell="'duration'" tuiTd>
+          <tui-input-number formControlName="duration" [postfix]="'мин.'"></tui-input-number>
+        </td>
+        <td *tuiCell="'bonusPercentage'" tuiTd>
+          <tui-input-number formControlName="bonusPercentage" [postfix]="'%'"></tui-input-number>
+        </td>
+        <td *tuiCell="'price'" tuiTd>
+          <tui-input-number formControlName="price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
+        </td>
+        <td *tuiCell="'discount'" tuiTd>
+          <tui-input-number formControlName="discount" [postfix]="'%'"></tui-input-number>
+        </td>
+        <td *tuiCell="'action-2'" tuiTd>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconPlus"
+            shape="rounded"
+            (click)="onAddService()"></button>
+        </td>
+      </tr>
+      <tr *ngFor="let service of services | tuiTableSort; index as i" tuiTr>
+        <td *tuiCell="'action-1'" tuiTd>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            [icon]="service.visible ? 'tuiIconEye' : 'tuiIconEyeOff'"
+            shape="rounded"
+            (click)="onSetVisibleService(i)"></button>
+        </td>
+        <td *tuiCell="'name'" tuiTd>
+          {{ service.name }}
+        </td>
+        <td *tuiCell="'duration'" tuiTd>
+          <tui-input-number [(ngModel)]="service.duration" [postfix]="'мин.'"></tui-input-number>
+        </td>
+        <td *tuiCell="'bonusPercentage'" tuiTd>
+          <tui-input-number [(ngModel)]="service.bonusPercentage" [postfix]="'%'"></tui-input-number>
+        </td>
+        <td *tuiCell="'price'" tuiTd>
+          <tui-input-number [(ngModel)]="service.price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
+        </td>
+        <td *tuiCell="'discount'" tuiTd>
+          <tui-input-number [(ngModel)]="service.discount" [postfix]="'%'"></tui-input-number>
+        </td>
+        <td *tuiCell="'action-2'" tuiTd>
+          <button
+            tuiIconButton
+            appearance="flat"
+            size="s"
+            icon="tuiIconTrash"
+            shape="rounded"
+            (click)="onRemoveServiceForStation(service.id)"></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</tui-scrollbar>
+<div class="tui-form__buttons">
+  <button tuiButton type="button" appearance="primary" size="xs" class="tui-form__button" (click)="onUpdateServices()">
+    Обновить
+  </button>
+</div>

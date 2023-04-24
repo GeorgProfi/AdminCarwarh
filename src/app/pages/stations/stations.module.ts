@@ -15,6 +15,7 @@ import {
   TuiLinkModule,
   TuiLoaderModule,
   TuiNotificationModule,
+  TuiScrollbarModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
@@ -49,6 +50,7 @@ import { RouterModule } from '@angular/router';
 import { StationsListComponent } from './stations-list/stations-list.component';
 import { StationsModuleRouting } from './stations.routing';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ServicesEditorComponent } from './services-editor/services-editor.component';
 
 @NgModule({
   imports: [
@@ -102,12 +104,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TuiCurrencyPipeModule,
     TuiFilterPipeModule,
     TuiIsPresentPipeModule,
+    TuiScrollbarModule,
   ],
   declarations: [
     StationsComponent,
     StationsListComponent,
     CreateStationComponent,
     EditStationComponent,
+    ServicesEditorComponent,
   ],
   exports: [StationsComponent],
 })
