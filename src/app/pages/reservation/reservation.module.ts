@@ -31,8 +31,6 @@ import { CommonModule } from '@angular/common';
 import { TuiTableModule } from '@taiga-ui/addon-table';
 import { TuiFilterPipeModule, TuiLetModule } from '@taiga-ui/cdk';
 import { CreateReservationComponent } from './create-reservation/create-reservation.component';
-import { StationModule } from '../stations/station.module';
-import { TableReservationComponent } from './table-reservation/table-reservation.component';
 import { EditReservationComponent } from './edit-reservation/edit-reservation.component';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TableOrderComponent } from './table-order/table-order.component';
