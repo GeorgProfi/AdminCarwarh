@@ -8,6 +8,7 @@ import {
   TuiGroupModule,
   TuiLinkModule,
   TuiLoaderModule,
+  TuiScrollbarModule,
   TuiTextfieldControllerModule,
 } from '@taiga-ui/core';
 import {
@@ -72,6 +73,7 @@ import { TuiCurrencyPipeModule } from '@taiga-ui/addon-commerce';
     TuiFilterByInputPipeModule,
     TuiCurrencyPipeModule,
     TuiFilterPipeModule,
+    TuiScrollbarModule,
   ],
   declarations: [ServicesComponent, CreateServiceComponent, EditServiceComponent],
   exports: [ServicesComponent],
