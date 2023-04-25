@@ -85,18 +85,7 @@ export class EditServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(({ id }) => {
-      this.servicesService.getServiceById(id).subscribe(data => {
-        this.formEdit.patchValue({
-          name: data.name,
-          description: data.description,
-        });
-      });
-      this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
-        this.services = data;
-        this.cdr.detectChanges();
-      });
-    });
+    this._getData();
   }
 
   onRemoveServiceClass() {
@@ -114,26 +103,22 @@ export class EditServiceComponent implements OnInit {
         duration: this.duration,
       })
       .subscribe({
-        next: data => this._addServiceSuccess(data),
+        next: () => this._addServiceSuccess(),
         error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
       });
   }
 
-  private _addServiceSuccess(data: any): void {
-    this.services.push({
-      id: data.id,
-      stationName: data.station.name,
-      bonusPercentage: this.bonusPercentage,
-      price: this.price,
-      discount: this.discount,
-      duration: this.duration,
-    });
+  private _addServiceSuccess(): void {
+    this._getData();
     this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
   }
 
   private _removeService(data: { stationId: string; serviceId: string }): void {
     this.stationService.removeService(data).subscribe({
-      next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+      next: () => {
+        this._getData();
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe()
+      },
       error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
     });
   }
@@ -160,6 +145,21 @@ export class EditServiceComponent implements OnInit {
         this.router.navigateByUrl('services');
       },
       error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
+  }
+
+  private _getData(): void {
+    this.activatedRoute.params.subscribe(({ id }) => {
+      this.servicesService.getServiceById(id).subscribe(data => {
+        this.formEdit.patchValue({
+          name: data.name,
+          description: data.description,
+        });
+      });
+      this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
+        this.services = data;
+        this.cdr.detectChanges();
+      });
     });
   }
 }
