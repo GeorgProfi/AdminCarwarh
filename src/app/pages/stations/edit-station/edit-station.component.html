@@ -75,14 +75,14 @@
                       "></tui-data-list-wrapper>
                   </tui-combo-box>
                 </td>
-                <td *tuiCell="'actions'" tuiTd>
+                <td *tuiCell="'actions'" tuiTd [style.width.px]="56">
                   <button
+                    (click)="onAddServicePost()"
                     tuiIconButton
                     appearance="flat"
                     size="s"
                     icon="tuiIconPlus"
-                    shape="rounded"
-                    (click)="onAddServicePost()"></button>
+                    shape="rounded"></button>
                 </td>
               </tr>
               <tr *ngFor="let service of servicesSort; let i = index" tuiTr>

@@ -5,11 +5,12 @@ import { TuiContextWithImplicit, TuiStringHandler } from '@taiga-ui/cdk';
 import { Service } from '../../../common/entities/service.entity';
 import { ServicesService } from '../../../common/services/api/services.service';
 import { ClassService } from '../../../common/entities/class-service.entity';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
 import { tap } from 'rxjs';
 import { Station } from 'src/app/common/entities/station.entity';
+import { AddServicePostDto } from 'src/app/common/dto/station/add-service-post.dto';
 
 interface Post {
   id: string;
@@ -88,7 +89,7 @@ export class EditStationComponent implements OnInit {
   posts: Post[] = [];
   namePost = new FormControl('', { nonNullable: true, validators: [Validators.required] });
   activePostIndex: number = 0;
-  stationServiceForPost!: Service;
+  stationServiceForPost: Service | null = null;
 
   getPosts() {
     return this.stationService.getPosts(this.stationId).pipe(
@@ -126,7 +127,13 @@ export class EditStationComponent implements OnInit {
   }
 
   onAddServicePost() {
-    this.prompt.subscribe({ next: value => value && this._addServicePost() });
+    if (this.stationServiceForPost) {
+      const data = {
+        postId: this.posts[this.activePostIndex].id,
+        serviceId: this.stationServiceForPost.id,
+      }
+      this.prompt.subscribe({ next: value => value && this._addServicePost(data) });
+    }
   }
 
   onRemoveServicePost(serviceId: string) {
@@ -171,19 +178,15 @@ export class EditStationComponent implements OnInit {
       });
   }
 
-  private _addServicePost(): void {
-    this.stationService
-      .addServicePost({
-        postId: this.posts[this.activePostIndex].id,
-        serviceId: this.stationServiceForPost.id,
-      })
-      .subscribe({
-        next: () => {
-          this.getPosts().subscribe();
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
-      });
+  private _addServicePost(data: AddServicePostDto): void {
+    this.stationService.addServicePost(data).subscribe({
+      next: () => {
+        this.getPosts().subscribe();
+        this.stationServiceForPost = null;
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
   }
 
   private _removeServicePost(serviceId: string): void {
