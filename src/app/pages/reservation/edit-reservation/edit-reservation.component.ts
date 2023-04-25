@@ -35,6 +35,11 @@ export class EditReservationComponent implements OnInit {
     private readonly alertService: TuiAlertService,
     private cdr: ChangeDetectorRef
   ) {}
+
+  getAppearance(idx: number): string {
+    return this.status === idx ? 'primary' : 'outline'
+  }
+
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
     size: 's',
