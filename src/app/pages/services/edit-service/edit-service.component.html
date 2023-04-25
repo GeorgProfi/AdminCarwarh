@@ -29,13 +29,13 @@
       </tr>
     </thead>
     <tbody *tuiLet="services | tuiTableSort as servicesSort" tuiTbody [data]="servicesSort">
-      <tr tuiTr>
+      <tr tuiTr [formGroup]="servicesForm">
         <td *tuiCell="'action-1'" tuiTd></td>
         <td *tuiCell="'station'" tuiTd>
           <tui-combo-box
             *tuiLet="listStation$ | async as listStation"
             class="b-form"
-            [(ngModel)]="station"
+            formControlName="station"
             [stringify]="stationStringify">
             Выбрать станцию
             <input tuiTextfield placeholder="Поиск по названию" />
@@ -50,16 +50,16 @@
           </tui-combo-box>
         </td>
         <td *tuiCell="'duration'" tuiTd>
-          <tui-input-number [(ngModel)]="duration" [postfix]="'мин.'"></tui-input-number>
+          <tui-input-number formControlName="duration" [postfix]="'мин.'"></tui-input-number>
         </td>
         <td *tuiCell="'bonusPercentage'" tuiTd>
-          <tui-input-number [(ngModel)]="bonusPercentage" [postfix]="'%'"></tui-input-number>
+          <tui-input-number formControlName="bonusPercentage" [postfix]="'%'"></tui-input-number>
         </td>
         <td *tuiCell="'price'" tuiTd>
-          <tui-input-number [(ngModel)]="price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
+          <tui-input-number formControlName="price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
         </td>
         <td *tuiCell="'discount'" tuiTd>
-          <tui-input-number [(ngModel)]="discount" [postfix]="'%'"></tui-input-number>
+          <tui-input-number formControlName="discount" [postfix]="'%'"></tui-input-number>
         </td>
         <td *tuiCell="'action-2'" tuiTd>
           <button
