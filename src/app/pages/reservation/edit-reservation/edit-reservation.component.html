@@ -14,38 +14,7 @@
     </button>
   </div>
 
-  <tui-island *ngIf="client" class="tui-row tui-space_top-5 tui-space_bottom-5">
-    <h3 class="tui-island__title">Клиент:</h3>
-    <p class="tui-island__paragraph">Имя: {{ client.name }}</p>
-    <p class="tui-island__paragraph">Телефон: {{ client.phone }}</p>
-    <p class="tui-island__paragraph">Email: {{ client.email }}</p>
-    <p class="tui-island__paragraph">Бонусов: {{ client.card.bonuses }}</p>
-    <tui-combo-box
-      *ngIf="replaceClient"
-      class="b-form tui-form__row"
-      [stringify]="clientStringify"
-      [ngModel]="newClient"
-      (searchChange)="searchClient$.next($event)">
-      Поиск клиента
-      <input
-        tuiTextfield
-        placeholder="Поиск по имени/телефону"
-        (input)="searchClient$.next(extractValueFromEvent($event))" />
-      <tui-data-list-wrapper
-        *tuiDataList
-        [itemContent]="clientStringify | tuiStringifyContent"
-        [items]="clients$ | async"></tui-data-list-wrapper>
-    </tui-combo-box>
-    <button
-      tuiButton
-      type="button"
-      [appearance]="replaceClient ? 'accent' : 'flat'"
-      size="m"
-      class="tui-island__footer-button"
-      (click)="replaceClient = !replaceClient">
-      {{ replaceClient ? 'отмена' : 'Замена клиента' }}
-    </button>
-  </tui-island>
+  <app-edit-client [client]="client" (eClientChange)="onClientChange($event)"></app-edit-client>
 
   <tui-island class="tui-row">
     <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">Список услуг</h3>

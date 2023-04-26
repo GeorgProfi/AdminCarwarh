@@ -36,6 +36,7 @@ import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TableOrderComponent } from './table-order/table-order.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { EditClientComponent } from './edit-reservation/edit-client/edit-client.component';
 
 @NgModule({
   imports: [
@@ -73,7 +74,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TuiFilterPipeModule,
     TuiCheckboxLabeledModule,
   ],
-  declarations: [ReservationComponent, CreateReservationComponent, EditReservationComponent, TableOrderComponent],
+  declarations: [
+    ReservationComponent,
+    CreateReservationComponent,
+    EditReservationComponent,
+    TableOrderComponent,
+    EditClientComponent,
+  ],
   exports: [ReservationComponent],
 })
 export class ReservationModule {}

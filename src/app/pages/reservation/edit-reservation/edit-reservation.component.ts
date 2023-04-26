@@ -4,9 +4,7 @@ import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Service } from '../../../common/entities/service.entity';
 import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
 import { ServicesService } from '../../../common/services/api/services.service';
-import { Client } from '../../../common/entities/client.entity';
-import { filter, startWith } from 'rxjs/operators';
-import { ClientsService } from '../../../common/services/api/clients.service';
+import { filter } from 'rxjs/operators';
 import { ReservationService } from '../../../common/services/api/reservation.service';
 import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { Order } from '../../../common/entities/order.entity';
@@ -15,6 +13,7 @@ import { StationService } from '../../../common/services/api/station.service';
 import { Station } from '../../../common/entities/station.entity';
 import { Post } from '../../../common/entities/post.entity';
 import { DateTime } from 'luxon';
+import { Client } from 'src/app/common/entities/client.entity';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -22,6 +21,8 @@ import { DateTime } from 'luxon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditReservationComponent implements OnInit {
+  newClient: Client | null = null;
+
   constructor(
     private servicesService: ServicesService,
     private stationService: StationService,
@@ -29,12 +30,15 @@ export class EditReservationComponent implements OnInit {
     private readonly dialogService: TuiDialogService,
     @Inject(POLYMORPHEUS_CONTEXT)
     private readonly context: TuiDialogContext<any, any>,
-    private clientsService: ClientsService,
     private reservationService: ReservationService,
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
+
+  onClientChange(client: Client | null): void {
+    this.newClient = client;
+  }
 
   getAppearance(idx: number): string {
     return this.status === idx ? 'primary' : 'outline'
@@ -70,22 +74,6 @@ export class EditReservationComponent implements OnInit {
   durationAmount = 0;
   bonuses = 0;
   chargeOffBonuses = false;
-
-  // Client
-  replaceClient: boolean = false;
-  searchClient$ = new BehaviorSubject<string | null>('');
-  clients$: Observable<readonly Client[] | null> = this.searchClient$.pipe(
-    filter(value => value !== null),
-    switchMap(search => this.clientsService.searchClient(search ?? '')),
-    startWith([])
-  );
-  extractValueFromEvent(event: Event): string | null {
-    return (event.target as HTMLInputElement)?.value || null;
-  }
-  clientStringify(client: Client): string {
-    return (client.name?.length ? client.name : 'Не указано') + ` (${client.phone})` + ` (${client.email})`;
-  }
-  newClient: any;
 
   // Services:
   listServices$: Observable<Service[]> = this.stationId$.pipe(
@@ -148,7 +136,7 @@ export class EditReservationComponent implements OnInit {
     if (!p) {
       return;
     }
-    const clientId = this.replaceClient ? this.newClient.id : undefined;
+    const clientId = this.newClient?.id || this.client.id;
     this.reservationService
       .updateReservation({
         orderId: this.context.data.id,
