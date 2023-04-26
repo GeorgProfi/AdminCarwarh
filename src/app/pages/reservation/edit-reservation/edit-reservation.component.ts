@@ -14,6 +14,7 @@ import { Station } from '../../../common/entities/station.entity';
 import { Post } from '../../../common/entities/post.entity';
 import { DateTime } from 'luxon';
 import { Client } from 'src/app/common/entities/client.entity';
+import { UpdateReservationDto } from 'src/app/common/dto/reservation/update-reservation.dto';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -21,7 +22,21 @@ import { Client } from 'src/app/common/entities/client.entity';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditReservationComponent implements OnInit {
+  status: number = 0;
+  client?: Client;
   newClient: Client | null = null;
+  services: Service[] = [];
+  stationId$ = new BehaviorSubject<string | null>(null);
+  station!: Station;
+  chargeOffBonuses = false;
+  stations$: Observable<Station[]> = this.stationService.getALLStation();
+
+  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
+    label: 'Вы уверены?',
+    size: 's',
+    closeable: false,
+    dismissible: false,
+  });
 
   constructor(
     private servicesService: ServicesService,
@@ -36,44 +51,33 @@ export class EditReservationComponent implements OnInit {
     private cdr: ChangeDetectorRef,
   ) {}
 
-  onClientChange(client: Client | null): void {
-    this.newClient = client;
+  get purchaseAmount(): number {
+    return this.services.reduce((sum, service) => sum += (service.price || 0), 0);
+  }
+
+  get durationAmount(): number {
+    return this.services.reduce((min, service) => min += (service.duration || 0), 0);
+  }
+
+  ngOnInit(): void {
+    this._fetchData();
   }
 
   getAppearance(idx: number): string {
     return this.status === idx ? 'primary' : 'outline'
   }
 
-  readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
-    label: 'Вы уверены?',
-    size: 's',
-    closeable: false,
-    dismissible: false,
-  });
-
-  stationId$ = new BehaviorSubject<string | null>(null);
-  ngOnInit(): void {
-    this.reservationService.getOrder(this.context.data.id).subscribe((order: Order) => {
-      console.log(order);
-      this.stationId$.next(order.station.id);
-      this.client = order.client;
-      this.services = order.services.map((service: any) => {
-        service.name = service.classServices.name;
-        this.purchaseAmount += service.price;
-        this.durationAmount += service.duration;
-        return service;
-      });
-      this.status = order.status;
-      this.chargeOffBonuses = order.chargeOffBonuses;
-      this.cdr.detectChanges();
-    });
+  onClientChange(client: Client | null): void {
+    this.newClient = client;
   }
 
-  client!: any;
-  purchaseAmount = 0;
-  durationAmount = 0;
-  bonuses = 0;
-  chargeOffBonuses = false;
+  onSetStatus(status: number) {
+    this.status = status;
+  }
+
+  filterExistServices = (service: Service): boolean => {
+    return this.services.find(s => s.classServices?.id === service?.id) === undefined;
+  };
 
   // Services:
   listServices$: Observable<Service[]> = this.stationId$.pipe(
@@ -81,104 +85,57 @@ export class EditReservationComponent implements OnInit {
     switchMap(stationId =>
       this.stationService.getServicesAll(stationId).pipe(
         map((services: Service[]) => {
-          this.purchaseAmount = 0;
-          this.durationAmount = 0;
           // Преобразовываю к интерфейсу IMergeServices, так удобней
           services = services.map(s => ({
             ...s,
             id: s.classServices.id,
             name: s.classServices.name,
           }));
-          for (const service of this.services) {
-            const stationService = services.find(s => s.id === service.id);
-            if (!stationService) continue;
-            service.price = stationService.price;
-            service.duration = stationService.duration;
-            this.purchaseAmount += service.price;
-            this.durationAmount += service.duration;
-          }
           return services;
-        })
+        }),
       )
     )
   );
 
   serviceStringify(service: Service): string {
-    if (!service.price) {
-      return service.name;
-    }
+    if (!service.price) return service.name;
     return `${service.name} (${service.price} руб.) (${service.duration} мин.)`;
   }
 
-  services!: Service[];
   addService() {
     this.services.push({ name: '' } as Service);
   }
-  changeServices(idx: number) {
-    this.purchaseAmount += this.services[idx].price;
-    this.durationAmount += this.services[idx].duration;
+
+  onServiceChange(idx: any, service: Service): void {
+    this.services[idx] = service;
   }
-  removeService(idx: number) {
-    this.purchaseAmount -= this.services[idx].price;
-    this.durationAmount -= this.services[idx].duration;
+
+  onRemoveService(idx: number) {
     this.services.splice(idx, 1);
   }
 
-  // Status:
-
-  status!: number;
-  setStatus(status: number) {
-    this.status = status;
+  onUpdateReservation() {
+    this.prompt.subscribe(value => value && this._updateReservation({
+      orderId: this.context.data.id,
+      status: this.status,
+      clientId: this.newClient?.id || this.client?.id,
+      servicesIds: this.services.filter(service => service.id).map(service => service.id),
+      chargeOffBonuses: this.chargeOffBonuses,
+    }));
   }
 
-  async save() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    const clientId = this.newClient?.id || this.client.id;
-    this.reservationService
-      .updateReservation({
-        orderId: this.context.data.id,
-        status: this.status,
-        clientId,
-        servicesIds: this.services.filter(service => service.id).map(service => service.id),
-        chargeOffBonuses: this.chargeOffBonuses,
-      })
-      .subscribe(
-        () => {
-          this.context.completeWith({});
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
-  }
-
-  removeOrder() {
-    this.reservationService.removeOrder(this.context.data.id).subscribe(
-      () => {
-        this.context.completeWith({});
-        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-      },
-      error => {
-        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-      }
-    );
+  onRemoveOrder() {
+    this._removeOrder();
   }
 
   exit() {
     this.context.completeWith(1);
   }
 
-  //
-
-  stations$: Observable<Station[]> = this.stationService.getALLStation();
   stationsStringify(station: Station): string {
     return station.name;
   }
-  station!: Station;
+
   changeStation() {
     this.stationId$.next(this.station.id);
     this.searchTimes();
@@ -187,9 +144,11 @@ export class EditReservationComponent implements OnInit {
   listPosts$: Observable<Post[]> = this.stationService.getAllPost({
     stationId: '00000000-0000-0000-0000-000000000000',
   });
+
   postStringify(post: Post): string {
     return post.name;
   }
+
   post!: Post;
 
   // Day:
@@ -245,19 +204,54 @@ export class EditReservationComponent implements OnInit {
         stationId: this.station.id,
         postId: this.post.id,
       })
-      .subscribe(
-        () => {
-          this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
-        },
-        error => {
-          this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
-        }
-      );
+      .subscribe({
+        next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+      });
   }
 
   open = false;
 
   showDialog(): void {
     this.open = true;
+  }
+
+  private _fetchData(): void {
+    this.reservationService.getOrder(this.context.data.id).subscribe((order: Order) => {
+      console.log(order)
+      this.stationId$.next(order.station.id);
+      this.client = order.client;
+      this.services = order.services.map((service: any) => {
+        service.name = service.classServices.name;
+        return service;
+      });
+      this.status = order.status;
+      this.chargeOffBonuses = order.chargeOffBonuses;
+      this.cdr.detectChanges();
+    });
+  }
+
+  private _updateReservation(data: UpdateReservationDto): void {
+    this.reservationService.updateReservation(data).subscribe({
+      next: () => {
+        this.context.completeWith({});
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error: () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    });
+  }
+
+  private _removeOrder() {
+    this.reservationService.removeOrder(this.context.data.id).subscribe({
+      next: () => {
+        this.context.completeWith({});
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
+      },
+      error: () => {
+        this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe();
+      }
+    });
   }
 }

@@ -29,6 +29,11 @@ const START_DATE = '2023-03-26';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableOrderComponent implements OnInit {
+  loading = true;
+  stations: Station[] = [];
+  selectedStation: Station | null = null;
+  day: TuiDay = TuiDay.currentUtc();
+
   constructor(
     private readonly reservationService: ReservationService,
     private readonly stationService: StationService,
@@ -41,6 +46,15 @@ export class TableOrderComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
+  ngOnInit(): void {
+    this._getStations();
+  }
+
+  onStationChange(station: Station): void {
+    this.selectedStation = station;
+    this.change();
+  }
+
   openEditOrder(order: any): void {
     const dialogEditOrder = this.dialogService.open<any>(
       new PolymorpheusComponent(EditReservationComponent, this.injector),
@@ -52,36 +66,19 @@ export class TableOrderComponent implements OnInit {
       }
     );
     dialogEditOrder.subscribe({
-      next: data => {
-        this.change();
-      },
-      complete: () => {
-        console.info('Dialog closed');
-      },
+      next: data => this.change(),
+      complete: () => console.info('Dialog closed'),
     });
   }
 
-  stations$ = this.stationService.getALLStation().pipe(
-    map(stations => {
-      return stations.filter(station => station);
-    }),
-    tap(stations => {
-      // FIXME: а если станций нет?
-      this.station.next(stations[0]);
-      this.getOrders(this.day.toUtcNativeDate(), stations[0].id);
-    })
-  );
   stationsStringify(station: Station): string {
     return station.name;
   }
-  //tap(station => this.getOrders(this.day.toUtcNativeDate(), station?.id))
-  station = new BehaviorSubject<Station | undefined>(undefined);
-  day: TuiDay = TuiDay.currentUtc();
 
   change() {
     this.indexPost = 0;
     this.calendarComponent.getApi().today();
-    this.getOrders(this.day.toUtcNativeDate(), this.station.value!.id);
+    this.getOrders(this.day.toUtcNativeDate(), this.selectedStation!.id);
   }
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
@@ -224,9 +221,11 @@ export class TableOrderComponent implements OnInit {
         this.cdr.detectChanges();
       });
   }
-  loading = true;
-  ngOnInit(): void {
-    console.log(1);
-    //this.getOrders(this.day.toUtcNativeDate(), '00000000-0000-0000-0000-000000000000');
+
+  private _getStations(): void {
+    this.stationService.getALLStation().subscribe(stations => {
+      this.stations = stations;
+      this.getOrders(this.day.toUtcNativeDate(), stations[0].id)
+    });
   }
 }
