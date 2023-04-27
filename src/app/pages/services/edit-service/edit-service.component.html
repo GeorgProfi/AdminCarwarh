@@ -1,5 +1,5 @@
 <tui-island>
-  <form [formGroup]="formEdit">
+  <form [formGroup]="formEdit" class="tui-space_bottom-10">
     <div class="tui-form__row">
       <tui-input formControlName="name"> Название </tui-input>
       <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
@@ -7,113 +7,109 @@
     <div class="tui-form__row">
       <tui-text-area formControlName="description">Описание</tui-text-area>
     </div>
-    <div class="flex-wrap tui-form__row">
-      <button tuiButton class="tui-form__button center" size="s" (click)="onUpdateService()" appearance="primary">
+    <div class="tui-form__buttons tui-space_top-5">
+      <button tuiButton class="tui-form__button" size="m" (click)="onUpdateService()" appearance="primary">
         Сохранить
       </button>
-      <button class="tui-form__button right" tuiButton size="s" (click)="onRemoveServiceClass()" appearance="accent">
+      <button class="tui-form__button" tuiButton size="m" (click)="onRemoveServiceClass()" appearance="accent">
         Удалить
       </button>
     </div>
   </form>
-  <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columnsServices">
-    <thead>
-      <tr tuiThGroup>
-        <th *tuiHead="'action-1'" tuiTh [sorter]="null"></th>
-        <th *tuiHead="'station'" tuiTh [style.width.rem]="100">Станция</th>
-        <th *tuiHead="'duration'" tuiTh>Длительность</th>
-        <th *tuiHead="'bonusPercentage'" tuiTh>Процент бонусов</th>
-        <th *tuiHead="'price'" tuiTh>Цена</th>
-        <th *tuiHead="'discount'" tuiTh>Скидка</th>
-        <th *tuiHead="'action-2'" tuiTh [sorter]="null"></th>
-      </tr>
-    </thead>
-    <tbody *tuiLet="services | tuiTableSort as servicesSort" tuiTbody [data]="servicesSort">
-      <tr tuiTr>
-        <td *tuiCell="'action-1'" tuiTd></td>
-        <td *tuiCell="'station'" tuiTd>
-          <tui-combo-box
-            *tuiLet="listStation$ | async as listStation"
-            class="b-form"
-            [(ngModel)]="station"
-            [stringify]="stationStringify">
-            Выбрать станцию
-            <input tuiTextfield placeholder="Поиск по названию" />
-            <div *ngIf="listStation">
-              <tui-data-list-wrapper
-                *tuiDataList
-                [itemContent]="stationStringify | tuiStringifyContent"
-                [items]="
-                  listStation | tuiFilter : filterExistStation | tuiFilterByInputWith : stationStringify
-                "></tui-data-list-wrapper>
-            </div>
-          </tui-combo-box>
-        </td>
-        <td *tuiCell="'duration'" tuiTd>
-          <tui-input-number [(ngModel)]="duration" [postfix]="'мин.'"></tui-input-number>
-        </td>
-        <td *tuiCell="'bonusPercentage'" tuiTd>
-          <tui-input-number [(ngModel)]="bonusPercentage" [postfix]="'%'"></tui-input-number>
-        </td>
-        <td *tuiCell="'price'" tuiTd>
-          <tui-input-number [(ngModel)]="price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
-        </td>
-        <td *tuiCell="'discount'" tuiTd>
-          <tui-input-number [(ngModel)]="discount" [postfix]="'%'"></tui-input-number>
-        </td>
-        <td *tuiCell="'action-2'" tuiTd>
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconPlus"
-            shape="rounded"
-            (click)="onAddService()"></button>
-        </td>
-      </tr>
-      <tr *ngFor="let service of services; let i = index" tuiTr>
-        <td *tuiCell="'action-1'" tuiTd>
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            [icon]="service.visible ? 'tuiIconEye' : 'tuiIconEyeOff'"
-            shape="rounded"
-            (click)="setVisibleService(i)"></button>
-        </td>
-        <td *tuiCell="'station'" tuiTd>{{ service.station.name }}</td>
-        <td *tuiCell="'duration'" tuiTd>
-          <tui-input-number [(ngModel)]="service.duration" [postfix]="'мин.'"></tui-input-number>
-        </td>
-        <td *tuiCell="'bonusPercentage'" tuiTd>
-          <tui-input-number [(ngModel)]="service.bonusPercentage" [postfix]="'%'"></tui-input-number>
-        </td>
-        <td *tuiCell="'price'" tuiTd>
-          <tui-input-number [(ngModel)]="service.price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
-        </td>
-        <td *tuiCell="'discount'" tuiTd>
-          <tui-input-number [(ngModel)]="service.discount" [postfix]="'%'"></tui-input-number>
-        </td>
-        <td *tuiCell="'action-2'" tuiTd>
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            icon="tuiIconTrash"
-            shape="rounded"
-            (click)="onRemoveService(service.stationId, service.id)"></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="tui-form__buttons">
-    <button
-      tuiButton
-      type="button"
-      appearance="primary"
-      size="xs"
-      class="tui-form__button"
-      (click)="onUpdateServices()">
+  <tui-scrollbar>
+    <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columnsServices">
+      <thead>
+        <tr tuiThGroup>
+          <th *tuiHead="'action-1'" tuiTh [sorter]="null"></th>
+          <th *tuiHead="'station'" tuiTh [style.width.rem]="100">Станция</th>
+          <th *tuiHead="'duration'" tuiTh>Длительность</th>
+          <th *tuiHead="'bonusPercentage'" tuiTh>Процент бонусов</th>
+          <th *tuiHead="'price'" tuiTh>Цена</th>
+          <th *tuiHead="'discount'" tuiTh>Скидка</th>
+          <th *tuiHead="'action-2'" tuiTh [sorter]="null"></th>
+        </tr>
+      </thead>
+      <tbody *tuiLet="services | tuiTableSort as servicesSort" tuiTbody [data]="servicesSort">
+        <tr tuiTr [formGroup]="servicesForm">
+          <td *tuiCell="'action-1'" tuiTd></td>
+          <td *tuiCell="'station'" tuiTd>
+            <tui-combo-box
+              *tuiLet="listStation$ | async as listStation"
+              class="b-form"
+              formControlName="station"
+              [stringify]="stationStringify">
+              Выбрать станцию
+              <input tuiTextfield placeholder="Поиск по названию" />
+              <div *ngIf="listStation">
+                <tui-data-list-wrapper
+                  *tuiDataList
+                  [itemContent]="stationStringify | tuiStringifyContent"
+                  [items]="
+                    listStation | tuiFilter : filterExistStation | tuiFilterByInputWith : stationStringify
+                  "></tui-data-list-wrapper>
+              </div>
+            </tui-combo-box>
+          </td>
+          <td *tuiCell="'duration'" tuiTd>
+            <tui-input-number formControlName="duration" [postfix]="'мин.'"></tui-input-number>
+          </td>
+          <td *tuiCell="'bonusPercentage'" tuiTd>
+            <tui-input-number formControlName="bonusPercentage" [postfix]="'%'"></tui-input-number>
+          </td>
+          <td *tuiCell="'price'" tuiTd>
+            <tui-input-number formControlName="price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
+          </td>
+          <td *tuiCell="'discount'" tuiTd>
+            <tui-input-number formControlName="discount" [postfix]="'%'"></tui-input-number>
+          </td>
+          <td *tuiCell="'action-2'" tuiTd>
+            <button
+              tuiIconButton
+              appearance="flat"
+              size="s"
+              icon="tuiIconPlus"
+              shape="rounded"
+              (click)="onAddService()"></button>
+          </td>
+        </tr>
+        <tr *ngFor="let service of services; let i = index" tuiTr>
+          <td *tuiCell="'action-1'" tuiTd>
+            <button
+              tuiIconButton
+              appearance="flat"
+              size="s"
+              [icon]="service.visible ? 'tuiIconEye' : 'tuiIconEyeOff'"
+              shape="rounded"
+              (click)="setVisibleService(i)"></button>
+          </td>
+          <td *tuiCell="'station'" tuiTd>{{ service.station.name }}</td>
+          <td *tuiCell="'duration'" tuiTd>
+            <tui-input-number [(ngModel)]="service.duration" [postfix]="'мин.'"></tui-input-number>
+          </td>
+          <td *tuiCell="'bonusPercentage'" tuiTd>
+            <tui-input-number [(ngModel)]="service.bonusPercentage" [postfix]="'%'"></tui-input-number>
+          </td>
+          <td *tuiCell="'price'" tuiTd>
+            <tui-input-number [(ngModel)]="service.price" [postfix]="'RUB' | tuiCurrency"></tui-input-number>
+          </td>
+          <td *tuiCell="'discount'" tuiTd>
+            <tui-input-number [(ngModel)]="service.discount" [postfix]="'%'"></tui-input-number>
+          </td>
+          <td *tuiCell="'action-2'" tuiTd>
+            <button
+              tuiIconButton
+              appearance="flat"
+              size="s"
+              icon="tuiIconTrash"
+              shape="rounded"
+              (click)="onRemoveService(service.station.id, service.id)"></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </tui-scrollbar>
+  <div class="tui-form__buttons tui-space_top-5">
+    <button tuiButton type="button" appearance="primary" size="m" class="tui-form__button" (click)="onUpdateServices()">
       Обновить
     </button>
   </div>

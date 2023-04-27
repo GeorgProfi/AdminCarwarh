@@ -1,38 +1,38 @@
-<tui-accordion-item>
-  Создание станции
-  <ng-template tuiAccordionItemContent>
-    <form [formGroup]="formCreateStation">
-      <div class="tui-form__row">
-        <tui-combo-box formControlName="address" (searchChange)="searchAddress$.next($event)">
-          Адрес
-          <input tuiTextfield [formControl]="searchControl" />
-          <tui-data-list-wrapper *tuiDataList [items]="adressList$ | async"></tui-data-list-wrapper>
-        </tui-combo-box>
-        <tui-error formControlName="address" [error]="[] | tuiFieldError | async"></tui-error>
-      </div>
-      <div tuiGroup class="group tui-form__row">
-        <div>
-          <tui-input formControlName="name"> Название </tui-input>
-          <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
-        </div>
-      </div>
-      <div tuiGroup class="group tui-form__row">
-        <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="changeAroundClock()">
-          Круглосуточно
-        </tui-checkbox-block>
-        <tui-input-time *ngIf="!aroundTheClock" tuiUnfinishedValidator formControlName="startWork">
-          Начало работы
-        </tui-input-time>
-        <tui-input-time *ngIf="!aroundTheClock" tuiUnfinishedValidator formControlName="endWork">
-          Окончание работы
-        </tui-input-time>
-      </div>
-      <div class="tui-form__row">
-        <tui-text-area formControlName="description">Описание</tui-text-area>
-      </div>
-      <div class="tui-form__buttons tui-form__buttons_align_center">
-        <button class="tui-form__button" tuiButton (click)="onSubmit()" appearance="primary">Создать</button>
-      </div>
-    </form>
-  </ng-template>
-</tui-accordion-item>
+<form [formGroup]="form">
+  <div class="tui-space_bottom-5">
+    <tui-combo-box formControlName="address" (searchChange)="searchAddress$.next($event)">
+      Адрес
+      <input tuiTextfield [formControl]="searchControl" />
+      <tui-data-list-wrapper *tuiDataList [items]="adressList$ | async"></tui-data-list-wrapper>
+    </tui-combo-box>
+    <tui-error formControlName="address" [error]="[] | tuiFieldError | async"></tui-error>
+  </div>
+  <div class="tui-space_bottom-5">
+    <tui-input formControlName="name"> Название </tui-input>
+    <tui-error formControlName="name" [error]="[] | tuiFieldError | async"></tui-error>
+  </div>
+  <div class="tui-form__row">
+    <div tuiGroup [adaptive]="true" [collapsed]="true">
+      <tui-checkbox-block contentAlign="right" formControlName="aroundClock" (change)="changeAroundClock()">
+        Круглосуточно
+      </tui-checkbox-block>
+      <tui-input-time *ngIf="!aroundTheClock" tuiUnfinishedValidator formControlName="startWork">
+        Начало работы
+      </tui-input-time>
+      <tui-input-time *ngIf="!aroundTheClock" tuiUnfinishedValidator formControlName="endWork">
+        Окончание работы
+      </tui-input-time>
+    </div>
+  </div>
+  <div class="tui-form__row">
+    <tui-text-area formControlName="description">Описание</tui-text-area>
+  </div>
+  <div class="tui-form__buttons tui-form__buttons_align_center">
+    <button (click)="onSubmit()" tuiButton class="tui-form__button" size="m" appearance="primary">
+      {{ submitText }}
+    </button>
+    <button *ngIf="isEdit" tuiButton (click)="onRemove()" class="tui-form__button" size="m" appearance="accent">
+      Удалить
+    </button>
+  </div>
+</form>

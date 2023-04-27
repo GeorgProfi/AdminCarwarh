@@ -6,6 +6,7 @@ import { Station } from '../../../common/entities/station.entity';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AddServiceOnStationDto } from 'src/app/common/dto/station/add-service-on-station.dto';
 
 @Component({
   selector: 'app-edit-service',
@@ -13,14 +14,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditServiceComponent implements OnInit {
-  station!: Station;
   listStation$ = this.stationService.getALLStation();
   id: string = this.activatedRoute.snapshot.params['id'];
   services: any[] = [];
-  duration: number = 0;
-  bonusPercentage: number = 0;
-  price: number = 0;
-  discount: number = 0;
   readonly columnsServices = ['action-1', 'station', 'duration', 'bonusPercentage', 'price', 'discount', 'action-2'];
 
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
@@ -33,6 +29,20 @@ export class EditServiceComponent implements OnInit {
   readonly formEdit = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
+  });
+
+  servicesForm = new FormGroup({
+    station: new FormControl<Station | null>(null, { validators: [Validators.required] }),
+    duration: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
+    bonusPercentage: new FormControl<number>(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(1), Validators.max(100)],
+    }),
+    price: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
+    discount: new FormControl<number>(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(0), Validators.max(100)],
+    }),
   });
 
   readonly filterExistStation = (station: Station): boolean => {
@@ -52,7 +62,20 @@ export class EditServiceComponent implements OnInit {
   ) {}
 
   onAddService() {
-    this.prompt.subscribe({ next: value => value && this._addService() });
+    this.servicesForm.markAllAsTouched();
+    Object.values(this.servicesForm.controls).map(control => control.updateValueAndValidity());
+
+    if (this.servicesForm.valid) {
+      const data: AddServiceOnStationDto = {
+        stationId: this.servicesForm.value.station?.id!,
+        bonusPercentage: this.servicesForm.value.bonusPercentage!,
+        discount: this.servicesForm.value.discount!,
+        duration: this.servicesForm.value.duration!,
+        price: this.servicesForm.value.price!,
+        idClassService: this.id,
+      }
+      this.prompt.subscribe(value => value && this._addService(data));
+    }
   }
 
   onRemoveService(stationId: string, serviceId: string) {
@@ -85,55 +108,32 @@ export class EditServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(({ id }) => {
-      this.servicesService.getServiceById(id).subscribe(data => {
-        this.formEdit.patchValue({
-          name: data.name,
-          description: data.description,
-        });
-      });
-      this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
-        this.services = data;
-        this.cdr.detectChanges();
-      });
-    });
+    this._getData();
   }
 
   onRemoveServiceClass() {
     this.prompt.subscribe({ next: value => value && this._removeServiceClass() });
   }
 
-  private _addService(): void {
-    this.stationService
-      .addServiceOnStation({
-        idClassService: this.id,
-        stationId: this.station.id,
-        bonusPercentage: this.bonusPercentage,
-        price: this.price,
-        discount: this.discount,
-        duration: this.duration,
-      })
-      .subscribe({
-        next: data => this._addServiceSuccess(data),
-        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
-      });
+  private _addService(data: AddServiceOnStationDto): void {
+    this.stationService.addServiceOnStation(data).subscribe({
+      next: () => this._addServiceSuccess(),
+      error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
   }
 
-  private _addServiceSuccess(data: any): void {
-    this.services.push({
-      id: data.id,
-      stationName: data.station.name,
-      bonusPercentage: this.bonusPercentage,
-      price: this.price,
-      discount: this.discount,
-      duration: this.duration,
-    });
+  private _addServiceSuccess(): void {
+    this._getData();
+    this.servicesForm.reset();
     this.alertService.open('успех', { status: TuiNotification.Success }).subscribe();
   }
 
   private _removeService(data: { stationId: string; serviceId: string }): void {
     this.stationService.removeService(data).subscribe({
-      next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
+      next: () => {
+        this._getData();
+        this.alertService.open('успех', { status: TuiNotification.Success }).subscribe()
+      },
       error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
     });
   }
@@ -160,6 +160,21 @@ export class EditServiceComponent implements OnInit {
         this.router.navigateByUrl('services');
       },
       error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
+    });
+  }
+
+  private _getData(): void {
+    this.activatedRoute.params.subscribe(({ id }) => {
+      this.servicesService.getServiceById(id).subscribe(data => {
+        this.formEdit.patchValue({
+          name: data.name,
+          description: data.description,
+        });
+      });
+      this.servicesService.getServicesForClass(id).subscribe((data: any[]) => {
+        this.services = data;
+        this.cdr.detectChanges();
+      });
     });
   }
 }

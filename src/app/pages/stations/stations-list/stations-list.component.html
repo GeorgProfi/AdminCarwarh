@@ -1,61 +1,62 @@
-<app-create-station (eCreate)="onRefreshData()"></app-create-station>
+<tui-accordion-item>
+  Создание станции
+  <ng-template tuiAccordionItemContent>
+    <app-create-station (eUpdate)="onRefreshData()"></app-create-station>
+  </ng-template>
+</tui-accordion-item>
 
 <div tuiGroup class="tui-form__row tui-space_bottom-5" [adaptive]="true" [collapsed]="true">
   <tui-input class="input" tuiTextfieldSize="m" [formControl]="searchControl"> Поиск </tui-input>
 </div>
 
-<tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
-  <table
-    *ngIf="data$ | async as data"
-    tuiTable
-    class="table"
-    [columns]="columns"
-    [tuiSortBy]="sorter$ | async"
-    (tuiSortByChange)="onSortChange($event)"
-    [direction]="(direction$ | async) || 1"
-    (directionChange)="direction$.next($event)">
-    <thead>
-      <tr tuiThGroup>
-        <th tuiTh *tuiHead="'action'" [sorter]="null"></th>
-        <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
-        <th tuiTh *tuiHead="'address'" tuiSortable>Адрес</th>
-        <th tuiTh *tuiHead="'schedule'" tuiSortable>Расписание</th>
-      </tr>
-    </thead>
-    <tbody tuiTbody *tuiLet="data | tuiTableSort as sortedData" [data]="sortedData">
-      <tr tuiTr *ngFor="let item of sortedData">
-        <td *tuiCell="'action'" tuiTd>
-          <button
-            tuiIconButton
-            appearance="flat"
-            size="s"
-            [icon]="item.visible ? 'tuiIconEye' : 'tuiIconEyeOff'"
-            shape="rounded"
-            (click)="onSetVisibleStation(item.id, item.visible)"></button>
-        </td>
-        <td tuiTd *tuiCell="'name'">
-          <a tuiLink [routerLink]="['edit']" [queryParams]="{ id: item.id }">
-            {{ item.name }}
-          </a>
-        </td>
-        <td tuiTd *tuiCell="'address'">
-          {{ item.address }}
-        </td>
-        <td tuiTd *tuiCell="'schedule'">
-          {{ item.aroundClock ? 'Круглосуточно' : (item.startWork | time) + ' - ' + (item.endWork | time) }}
-        </td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td [colSpan]="columns.length">
-          <tui-pagination
-            class="tui-space_top-5"
-            [length]="(total$ | async) || 0"
-            [index]="page$.value"
-            (indexChange)="page$.next($event)"></tui-pagination>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-</tui-loader>
+<tui-scrollbar>
+  <tui-loader [overlay]="true" [showLoader]="!!(loading$ | async)">
+    <table
+      *ngIf="data$ | async as data"
+      tuiTable
+      class="table"
+      [columns]="columns"
+      [tuiSortBy]="sorter$ | async"
+      (tuiSortByChange)="onSortChange($event)"
+      [direction]="(direction$ | async) || 1"
+      (directionChange)="direction$.next($event)">
+      <thead>
+        <tr tuiThGroup>
+          <th tuiTh *tuiHead="'action'" [sorter]="null"></th>
+          <th tuiTh *tuiHead="'name'" tuiSortable>Название</th>
+          <th tuiTh *tuiHead="'address'" tuiSortable>Адрес</th>
+          <th tuiTh *tuiHead="'schedule'" tuiSortable>Расписание</th>
+        </tr>
+      </thead>
+      <tbody tuiTbody *tuiLet="data | tuiTableSort as sortedData" [data]="sortedData">
+        <tr tuiTr *ngFor="let item of sortedData">
+          <td *tuiCell="'action'" tuiTd>
+            <button
+              tuiIconButton
+              appearance="flat"
+              size="s"
+              [icon]="item.visible ? 'tuiIconEye' : 'tuiIconEyeOff'"
+              shape="rounded"
+              (click)="onSetVisibleStation(item.id, item.visible)"></button>
+          </td>
+          <td tuiTd *tuiCell="'name'">
+            <a tuiLink [routerLink]="['edit']" [queryParams]="{ id: item.id }">
+              {{ item.name }}
+            </a>
+          </td>
+          <td tuiTd *tuiCell="'address'">
+            {{ item.address }}
+          </td>
+          <td tuiTd *tuiCell="'schedule'">
+            {{ item.aroundClock ? 'Круглосуточно' : (item.startWork | time) + ' - ' + (item.endWork | time) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </tui-loader>
+</tui-scrollbar>
+<tui-pagination
+  class="tui-space_top-5"
+  [length]="(total$ | async) || 0"
+  [index]="page$.value"
+  (indexChange)="page$.next($event)"></tui-pagination>

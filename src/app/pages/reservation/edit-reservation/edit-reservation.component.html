@@ -1,51 +1,20 @@
-<div [style.margin.px]="40">
-  <div tuiGroup class="group tui-row tui-space_top-5">
-    <button tuiButton type="button" [appearance]="status === 0 ? 'primary' : 'outline'" size="l" (click)="setStatus(0)">
+<div [style.padding.px]="40">
+  <div tuiGroup [adaptive]="true" [collapsed]="true" class="tui-row tui-space_bottom-5">
+    <button tuiButton type="button" [appearance]="getAppearance(0)" size="l" (click)="onSetStatus(0)">
       Ожидание клиента
     </button>
-    <button tuiButton type="button" [appearance]="status === 1 ? 'primary' : 'outline'" size="l" (click)="setStatus(1)">
+    <button tuiButton type="button" [appearance]="getAppearance(1)" size="l" (click)="onSetStatus(1)">
       Клиент пришел
     </button>
-    <button tuiButton type="button" [appearance]="status === 2 ? 'primary' : 'outline'" size="l" (click)="setStatus(2)">
+    <button tuiButton type="button" [appearance]="getAppearance(2)" size="l" (click)="onSetStatus(2)">
       Клиент не пришел
     </button>
-    <button tuiButton type="button" [appearance]="status === 3 ? 'primary' : 'outline'" size="l" (click)="setStatus(3)">
+    <button tuiButton type="button" [appearance]="getAppearance(3)" size="l" (click)="onSetStatus(3)">
       Услуга оказана
     </button>
   </div>
 
-  <tui-island class="tui-row tui-space_top-5 tui-space_bottom-5">
-    <h3 class="tui-island__title">Клиент:</h3>
-    <p class="tui-island__paragraph">Имя: {{ client.name }}</p>
-    <p class="tui-island__paragraph">Телефон: {{ client.phone }}</p>
-    <p class="tui-island__paragraph">Email: {{ client.email }}</p>
-    <p class="tui-island__paragraph">Бонусов: {{ client.card.bonuses }}</p>
-    <tui-combo-box
-      *ngIf="replaceClient"
-      class="b-form tui-form__row"
-      [stringify]="clientStringify"
-      [(ngModel)]="newClient"
-      (searchChange)="searchClient$.next($event)">
-      Поиск клиента
-      <input
-        tuiTextfield
-        placeholder="Поиск по имени/телефону"
-        (input)="searchClient$.next(extractValueFromEvent($event))" />
-      <tui-data-list-wrapper
-        *tuiDataList
-        [itemContent]="clientStringify | tuiStringifyContent"
-        [items]="clients$ | async"></tui-data-list-wrapper>
-    </tui-combo-box>
-    <button
-      tuiButton
-      type="button"
-      [appearance]="replaceClient ? 'accent' : 'flat'"
-      size="m"
-      class="tui-island__footer-button"
-      (click)="replaceClient = !replaceClient">
-      {{ replaceClient ? 'отмена' : 'Замена клиента' }}
-    </button>
-  </tui-island>
+  <app-edit-client [client]="client" (eClientChange)="onClientChange($event)"></app-edit-client>
 
   <tui-island class="tui-row">
     <h3 class="tui-form__header tui-form__header_margin-top_none tui-form__row">Список услуг</h3>
@@ -58,22 +27,26 @@
       <tui-combo-box
         *tuiLet="listServices$ | async as listServices"
         class="b-form"
-        [(ngModel)]="services[idx]"
         [stringify]="serviceStringify"
-        (ngModelChange)="changeServices(idx)">
+        [ngModel]="services[idx]"
+        (ngModelChange)="onServiceChange(idx, $event)">
         Поиск услуги
         <input tuiTextfield placeholder="Поиск по названию" />
-        <tui-data-list-wrapper
-          *tuiDataList
-          [itemContent]="serviceStringify | tuiStringifyContent"
-          [items]="listServices | tuiFilterByInputWith : serviceStringify"></tui-data-list-wrapper>
+        <div *ngIf="listServices">
+          <tui-data-list-wrapper
+            *tuiDataList
+            [itemContent]="serviceStringify | tuiStringifyContent"
+            [items]="
+              listServices | tuiFilter : filterExistServices | tuiFilterByInputWith : serviceStringify
+            "></tui-data-list-wrapper>
+        </div>
       </tui-combo-box>
       <button
         tuiIconButton
         type="button"
         appearance="outline"
         size="l"
-        (click)="removeService(idx)"
+        (click)="onRemoveService(idx)"
         icon="tuiIconCloseLarge"
         class="tui-group__auto-width-item"></button>
     </div>
@@ -84,8 +57,10 @@
 
   <div class="flex-wrap tui-form__row">
     <button tuiButton class="tui-form__button left" (click)="showDialog()">Перенести запись</button>
-    <button tuiButton class="tui-form__button center" (click)="save()">Сохранить</button>
-    <button tuiButton class="tui-form__button right" appearance="accent" (click)="removeOrder()">Удалить запись</button>
+    <button tuiButton class="tui-form__button center" (click)="onUpdateReservation()">Сохранить</button>
+    <button tuiButton class="tui-form__button right" appearance="accent" (click)="onRemoveOrder()">
+      Удалить запись
+    </button>
   </div>
 </div>
 

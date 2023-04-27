@@ -1,10 +1,10 @@
 <div tuiGroup class="tui-form__row tui-space_bottom-5" [adaptive]="true" [collapsed]="true">
   <tui-combo-box
-    *tuiLet="stations$ | async as stations"
+    *tuiLet="stations"
     class="b-form tui-form__row"
     [stringify]="stationsStringify"
-    [ngModel]="station | async"
-    (ngModelChange)="station.next($event); change()">
+    [ngModel]="selectedStation"
+    (ngModelChange)="onStationChange($event)">
     Поиск станции
     <input tuiTextfield placeholder="Поиск по названию" />
     <tui-data-list-wrapper
