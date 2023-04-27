@@ -66,8 +66,11 @@ export class TableOrderComponent implements OnInit {
       }
     );
     dialogEditOrder.subscribe({
-      next: data => this.change(),
-      complete: () => console.info('Dialog closed'),
+      next: () => this.change(),
+      complete: () => {
+        this.change();
+        console.info('Dialog closed');
+      },
     });
   }
 

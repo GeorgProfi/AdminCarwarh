@@ -5,6 +5,7 @@ import {
   TuiCalendarModule,
   TuiDataListModule,
   TuiDialogModule,
+  TuiErrorModule,
   TuiFormatNumberPipeModule,
   TuiGroupModule,
   TuiHostedDropdownModule,
@@ -16,6 +17,7 @@ import {
   TuiCheckboxLabeledModule,
   TuiComboBoxModule,
   TuiDataListWrapperModule,
+  TuiFieldErrorPipeModule,
   TuiFilterByInputPipeModule,
   TuiInputDateModule,
   TuiInputModule,
@@ -37,6 +39,7 @@ import { TableOrderComponent } from './table-order/table-order.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EditClientComponent } from './edit-reservation/edit-client/edit-client.component';
+import {ReorderComponent} from './edit-reservation/reorder/reorder.component';
 
 @NgModule({
   imports: [
@@ -73,6 +76,8 @@ import { EditClientComponent } from './edit-reservation/edit-client/edit-client.
     FullCalendarModule,
     TuiFilterPipeModule,
     TuiCheckboxLabeledModule,
+    TuiErrorModule,
+    TuiFieldErrorPipeModule,
   ],
   declarations: [
     ReservationComponent,
@@ -80,6 +85,7 @@ import { EditClientComponent } from './edit-reservation/edit-client/edit-client.
     EditReservationComponent,
     TableOrderComponent,
     EditClientComponent,
+    ReorderComponent,
   ],
   exports: [ReservationComponent],
 })
