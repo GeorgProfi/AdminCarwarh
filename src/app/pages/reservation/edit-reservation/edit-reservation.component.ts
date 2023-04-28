@@ -1,20 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, OnInit } from '@angular/core';
 import { TuiAlertService, TuiDialogContext, TuiDialogService, TuiNotification } from '@taiga-ui/core';
+import { TUI_PROMPT } from '@taiga-ui/kit';
+import { tuiIsPresent } from '@taiga-ui/cdk';
+import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
 import { Service } from '../../../common/entities/service.entity';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
-import { ServicesService } from '../../../common/services/api/services.service';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject, map, Observable, switchMap, filter } from 'rxjs';
 import { ReservationService } from '../../../common/services/api/reservation.service';
-import { TUI_PROMPT, tuiCreateTimePeriods } from '@taiga-ui/kit';
 import { Order } from '../../../common/entities/order.entity';
-import { TuiDay, tuiIsPresent, TuiTime } from '@taiga-ui/cdk';
 import { StationService } from '../../../common/services/api/station.service';
-import { Station } from '../../../common/entities/station.entity';
-import { Post } from '../../../common/entities/post.entity';
-import { DateTime } from 'luxon';
 import { Client } from 'src/app/common/entities/client.entity';
 import { UpdateReservationDto } from 'src/app/common/dto/reservation/update-reservation.dto';
+import { ReorderComponent } from './reorder/reorder.component';
 
 @Component({
   selector: 'app-dialog-edit-reservation',
@@ -27,9 +24,7 @@ export class EditReservationComponent implements OnInit {
   newClient: Client | null = null;
   services: Service[] = [];
   stationId$ = new BehaviorSubject<string | null>(null);
-  station!: Station;
   chargeOffBonuses = false;
-  stations$: Observable<Station[]> = this.stationService.getALLStation();
 
   readonly prompt = this.dialogService.open<boolean>(TUI_PROMPT, {
     label: 'Вы уверены?',
@@ -38,8 +33,18 @@ export class EditReservationComponent implements OnInit {
     dismissible: false,
   });
 
+  private readonly reorderDialog = this.dialogService.open<number>(
+    new PolymorpheusComponent(ReorderComponent, this.injector), {
+      data: {
+        orderId: this.context.data.id,
+      },
+      dismissible: true,
+      label: 'Перезапись',
+      size: 's',
+    },
+);
+
   constructor(
-    private servicesService: ServicesService,
     private stationService: StationService,
     @Inject(TuiDialogService)
     private readonly dialogService: TuiDialogService,
@@ -49,6 +54,7 @@ export class EditReservationComponent implements OnInit {
     @Inject(TuiAlertService)
     private readonly alertService: TuiAlertService,
     private cdr: ChangeDetectorRef,
+    @Inject(Injector) private readonly injector: Injector,
   ) {}
 
   get purchaseAmount(): number {
@@ -132,93 +138,12 @@ export class EditReservationComponent implements OnInit {
     this.context.completeWith(1);
   }
 
-  stationsStringify(station: Station): string {
-    return station.name;
-  }
-
-  changeStation() {
-    this.stationId$.next(this.station.id);
-    this.searchTimes();
-  }
-
-  listPosts$: Observable<Post[]> = this.stationService.getAllPost({
-    stationId: '00000000-0000-0000-0000-000000000000',
-  });
-
-  postStringify(post: Post): string {
-    return post.name;
-  }
-
-  post!: Post;
-
-  // Day:
-  minDay: TuiDay = TuiDay.currentUtc();
-  maxDay: TuiDay = TuiDay.currentUtc().append({ month: 1 });
-  day = TuiDay.currentUtc();
-
-  // Time:
-  searchTimes() {
-    this.times = null;
-    if (!this.station || this.services.filter(service => service.id).length < 1) {
-      return;
-    }
-    this.reservationService
-      .searchFreeTimes({
-        day: this.day.toUtcNativeDate(),
-        stationId: this.station.id,
-        // Осторожно, здесь id услуги на станции! для получения id класса услуги нужно лезть в classServices.
-        servicesIds: this.services.filter(service => service.classServices.id).map(service => service.id),
-        postId: this.post?.id,
-      })
-      .pipe(
-        map((times: string[]) =>
-          times.map((time: string) => {
-            const t = new Date(time);
-            return new TuiTime(t.getHours(), t.getMinutes());
-          })
-        )
-      )
-      .subscribe(data => {
-        this.times = data;
-      });
-  }
-  time!: TuiTime;
-  times: TuiTime[] | null = null;
-  timesTest = tuiCreateTimePeriods();
-
-  async reOrder() {
-    const p = await this.prompt.toPromise();
-    if (!p) {
-      return;
-    }
-    this.reservationService
-      .reReservation({
-        orderId: this.context.data.id,
-        date: DateTime.fromObject({
-          day: this.day.day,
-          month: this.day.month + 1,
-          year: this.day.year,
-          hour: this.time.hours,
-          minute: this.time.minutes,
-        }).toJSDate(),
-        stationId: this.station.id,
-        postId: this.post.id,
-      })
-      .subscribe({
-        next: () => this.alertService.open('успех', { status: TuiNotification.Success }).subscribe(),
-        error: () => this.alertService.open('ошибка', { status: TuiNotification.Error }).subscribe(),
-      });
-  }
-
-  open = false;
-
-  showDialog(): void {
-    this.open = true;
+  showReorderDialog(): void {
+    this.reorderDialog.subscribe();
   }
 
   private _fetchData(): void {
     this.reservationService.getOrder(this.context.data.id).subscribe((order: Order) => {
-      console.log(order)
       this.stationId$.next(order.station.id);
       this.client = order.client;
       this.services = order.services.map((service: any) => {

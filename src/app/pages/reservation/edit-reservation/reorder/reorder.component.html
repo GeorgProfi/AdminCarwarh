@@ -1,0 +1,43 @@
+<tui-loader [showLoader]="isLoading" [overlay]="true">
+  <form [formGroup]="form" (ngSubmit)="onReorder()">
+    <tui-input-date class="tui-form__row" formControlName="day" (change)="onDateChange()" [min]="minDay" [max]="maxDay">
+      Выбор даты
+    </tui-input-date>
+    <tui-error formControlName="day" [error]="[] | tuiFieldError | async"></tui-error>
+    <div tuiGroup class="group tui-form__row">
+      <tui-combo-box
+        *tuiLet="stations"
+        formControlName="station"
+        [stringify]="stationStringify"
+        (ngModelChange)="onChangeStation($event)">
+        Поиск станции
+        <input tuiTextfield placeholder="Поиск по названию" />
+        <tui-error formControlName="station" [error]="[] | tuiFieldError | async"></tui-error>
+        <tui-data-list-wrapper
+          *tuiDataList
+          [itemContent]="stationStringify | tuiStringifyContent"
+          [items]="stations | tuiFilterByInputWith : stationStringify"></tui-data-list-wrapper>
+      </tui-combo-box>
+      <tui-combo-box
+        *tuiLet="posts"
+        formControlName="post"
+        [stringify]="postStringify"
+        (ngModelChange)="onChangePost()">
+        Поиск поста
+        <input tuiTextfield placeholder="Поиск по названию" />
+        <tui-error formControlName="post" [error]="[] | tuiFieldError | async"></tui-error>
+        <tui-data-list-wrapper
+          *tuiDataList
+          [itemContent]="postStringify | tuiStringifyContent"
+          [items]="posts | tuiFilterByInputWith : postStringify"></tui-data-list-wrapper>
+      </tui-combo-box>
+    </div>
+    <tui-input-time *ngIf="times" class="tui-form__row" formControlName="time" [items]="times">
+      Выбор времени
+    </tui-input-time>
+    <tui-error formControlName="time" [error]="[] | tuiFieldError | async"></tui-error>
+    <div class="tui-form__buttons tui-form__buttons_align_center">
+      <button tuiButton class="tui-form__button">Перезапись</button>
+    </div>
+  </form>
+</tui-loader>

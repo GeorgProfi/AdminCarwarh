@@ -15,6 +15,7 @@ import { AddServiceOnStationDto } from '../../dto/station/add-service-on-station
 import { SetVisibleServiceDto } from '../../dto/station/set-visible-service.dto';
 import { AddServicePostDto } from '../../dto/station/add-service-post.dto';
 import { GetAllPostDto } from '../../dto/station/get-all-post.dto';
+import { UpdatePostDto } from '../../dto/station/update-post.dto';
 
 @Injectable({ providedIn: 'root' })
 export class StationService {
@@ -108,6 +109,10 @@ export class StationService {
 
   removePost(id: string) {
     return this.http.delete(`${environment.apiOwnerUrl}/station/post/${id}`);
+  }
+
+  updatePost(id: string, data: UpdatePostDto) {
+    return this.http.put(`${environment.apiOwnerUrl}/station/update-post/${id}`, data);
   }
 
   addServicePost(data: AddServicePostDto) {

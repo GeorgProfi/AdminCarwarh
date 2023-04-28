@@ -16,8 +16,8 @@
     <ng-template tuiAccordionItemContent>
       <div class="tui-form__row tui-form__row_multi-fields">
         <div class="tui-form__multi-field">
-          <tui-input [formControl]="namePost"> Введите название нового поста </tui-input>
-          <tui-error [formControl]="namePost" [error]="[] | tuiFieldError | async"></tui-error>
+          <tui-input [formControl]="newPostName"> Введите название нового поста </tui-input>
+          <tui-error [formControl]="newPostName" [error]="[] | tuiFieldError | async"></tui-error>
         </div>
         <div class="tui-form__multi-field">
           <button
@@ -39,17 +39,8 @@
         <div [style.width.%]="100">
           <div class="tui-form__row tui-form__row_multi-fields">
             <div class="tui-form__multi-field">
-              <tui-input [(ngModel)]="posts[activePostIndex].name"> Название поста </tui-input>
-            </div>
-            <div class="tui-form__multi-field">
-              <button
-                (click)="onUpdatePostName()"
-                [style.width.%]="100"
-                tuiButton
-                class="tui-form__button"
-                appearance="primary">
-                Сохранить
-              </button>
+              <tui-input [formControl]="activePostName"> Название поста </tui-input>
+              <tui-error [formControl]="activePostName" [error]="[] | tuiFieldError | async"></tui-error>
             </div>
           </div>
           <table tuiTable class="tui-form__row" [style.width.%]="100" [columns]="columnsServicesOnPost">
@@ -87,28 +78,53 @@
               </tr>
               <tr *ngFor="let service of servicesSort; let i = index" tuiTr>
                 <td *tuiCell="'name'" tuiTd>
-                  {{ service.classServices.name }}
+                  <div [ngClass]="{ 'is-removed': isRemoved(service.id) }">
+                    {{ service.classServices.name }}
+                  </div>
                 </td>
                 <td *tuiCell="'actions'" tuiTd [style.width.px]="56">
                   <button
+                    *ngIf="!isRemoved(service.id)"
                     (click)="onRemoveServicePost(service.id)"
                     tuiIconButton
                     appearance="flat"
                     size="s"
                     icon="tuiIconTrash"
+                    tuiHint="Удалить сервис"
+                    shape="rounded"></button>
+                  <button
+                    *ngIf="isRemoved(service.id)"
+                    (click)="onRecoveryServicePost(service.id)"
+                    tuiIconButton
+                    appearance="flat"
+                    size="s"
+                    icon="tuiIconRotateCcw"
+                    tuiHint="Восстановить сервис"
                     shape="rounded"></button>
                 </td>
               </tr>
             </tbody>
           </table>
           <div class="tui-form__buttons">
+            <button (click)="onUpdatePost()" tuiButton size="m" class="tui-form__button" appearance="primary">
+              Сохранить
+            </button>
             <button
+              (click)="onRecoveryPost()"
+              [disabled]="!hasChanges"
+              tuiButton
+              size="m"
+              class="tui-form__button"
+              appearance="primary">
+              Отменить
+            </button>
+            <button
+              (click)="onRemovePost()"
               tuiButton
               type="button"
               appearance="accent"
-              size="xs"
-              class="tui-form__button"
-              (click)="onRemovePost()">
+              size="m"
+              class="tui-form__button">
               Удалить пост
             </button>
           </div>
