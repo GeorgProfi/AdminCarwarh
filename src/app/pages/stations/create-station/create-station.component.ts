@@ -7,8 +7,8 @@ import { DateTime } from 'luxon';
 import { TuiAlertService, TuiDialogService, TuiNotification } from '@taiga-ui/core';
 import { TUI_PROMPT } from '@taiga-ui/kit';
 import { DadataApiService } from '../../../common/services/dadata-api.service';
-import { BehaviorSubject, Observable, Subject, firstValueFrom, switchMap } from 'rxjs';
-import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subject, firstValueFrom, switchMap } from 'rxjs';
+import { debounceTime, map, takeUntil } from 'rxjs/operators';
 import { Station } from 'src/app/common/entities/station.entity';
 import { UpdateStationDto } from 'src/app/common/dto/station/update-station.dto';
 import { Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
 export class CreateStationComponent implements OnInit, OnDestroy {
   @Input() station?: Station;
   @Output() eUpdate = new EventEmitter();
-  adressList$: Observable<string[]> = new Observable();
+  adressList$ = new BehaviorSubject<string[]>([]);
   searchAddress$ = new BehaviorSubject<string | null>('');
   searchControl = new FormControl('');
   isEdit = false;
@@ -200,12 +200,11 @@ export class CreateStationComponent implements OnInit, OnDestroy {
   }
 
   private _sbsSearch(): void {
-    this.adressList$ = this.searchControl.valueChanges.pipe(
+    this.searchControl.valueChanges.pipe(
       debounceTime(300),
-      filter(address => address !== null && address !== ''),
       takeUntil(this._sbs),
-      switchMap(query => this._getAdresses(query)),
-    );
+      switchMap(async query => this.adressList$.next(await this._getAdresses(query)))
+    ).subscribe();
   }
 
   private _unsubscribe(): void {

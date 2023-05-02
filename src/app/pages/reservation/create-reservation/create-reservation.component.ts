@@ -77,8 +77,6 @@ export class CreateReservationComponent {
           // Преобразовываю к интерфейсу IMergeServices, так удобней
           services = services.map(s => ({
             ...s,
-            // сомнительная идея в id пихать id класса услуги, хотя вроде как интерфейс написал. Путаница может быть
-            id: s.classServices.id,
             name: s.classServices.name,
           }));
           for (const service of this.services) {

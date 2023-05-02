@@ -94,7 +94,6 @@ export class EditReservationComponent implements OnInit {
           // Преобразовываю к интерфейсу IMergeServices, так удобней
           services = services.map(s => ({
             ...s,
-            id: s.classServices.id,
             name: s.classServices.name,
           }));
           return services;
