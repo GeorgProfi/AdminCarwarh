@@ -49,7 +49,7 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
       provide: TUI_VALIDATION_ERRORS,
       useValue: {
         required: 'Поле не может быть пустым',
-        email: 'Не валидный email',
+        email: 'E-mail указан неверно',
         matching: 'Пароли не совпадают',
       },
     },

@@ -14,7 +14,7 @@ import { TUI_VALIDATION_ERRORS } from '@taiga-ui/kit/tokens';
       provide: TUI_VALIDATION_ERRORS,
       useValue: {
         required: 'Поле не может быть пустым',
-        email: 'Не валидный email',
+        email: 'E-mail указан неверно',
         matching: 'Пароли не совпадают',
         minlength: 'Минимум 4 символа',
       },
