@@ -84,13 +84,20 @@ export class EditServiceComponent implements OnInit {
 
   setVisibleService(index: number) {
     const service = this.services[index];
+
     this.stationService
       .setVisibleService({
         serviceId: service.id,
         visible: !service.visible,
       })
-      .subscribe(() => {
-        service.visible = !service.visible;
+      .subscribe({
+        next: () => {
+          service.visible = !service.visible;
+          this.cdr.detectChanges();
+        },
+        error: res => this.alertService
+          .open((res?.error?.message || 'Ошибка'), { status: TuiNotification.Error })
+          .subscribe(),
       });
   }
 
