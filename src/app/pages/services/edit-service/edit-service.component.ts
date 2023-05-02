@@ -36,7 +36,7 @@ export class EditServiceComponent implements OnInit {
     duration: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     bonusPercentage: new FormControl<number>(0, {
       nonNullable: true,
-      validators: [Validators.required, Validators.min(1), Validators.max(100)],
+      validators: [Validators.required, Validators.min(0), Validators.max(100)],
     }),
     price: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     discount: new FormControl<number>(0, {

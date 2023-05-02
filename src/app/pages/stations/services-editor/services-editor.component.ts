@@ -23,7 +23,7 @@ export class ServicesEditorComponent {
     duration: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     bonusPercentage: new FormControl(0, {
       nonNullable: true,
-      validators: [Validators.required, Validators.min(1), Validators.max(100)],
+      validators: [Validators.required, Validators.min(0), Validators.max(100)],
     }),
     price: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     discount: new FormControl(0, {
