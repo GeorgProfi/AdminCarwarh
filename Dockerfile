@@ -1,6 +1,6 @@
 ARG HTTP_PORT=80
 
-FROM car_wash_frontend_base_img as build
+FROM car-wash-frontend as build
 
 FROM nginx:1.23.3-alpine
 
