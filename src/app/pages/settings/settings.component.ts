@@ -69,6 +69,7 @@ export class SettingsComponent implements OnInit {
   onRemoveFile(): void {
     this._removeFile();
   }
+  
 
   onClearRejected(): void {
     this._clearRejected();

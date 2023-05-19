@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\common",
+    "\\src\\app\\common\\services",
+    "\\src\\app\\pages",
+    "\\src\\app\\pages\\analitics",
+    "\\src\\app\\pages\\analitics\\data",
+    "\\src\\app\\pages\\analitics\\models",
+    "\\src\\app\\pages\\analitics\\services"
+  ],
+  "SelectedNode": "\\src\\app\\pages\\analitics\\models\\card.ts",
+  "PreviewInSolutionExplorer": false
+}

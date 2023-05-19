@@ -20,6 +20,9 @@ import { MarketingModule } from './pages/marketing/marketing.module';
 import { AngularYandexMapsModule } from 'angular8-yandex-maps';
 import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
 
+import {AnaliticModule} from './pages/analitics/analitic.module'
+import { TuiIslandModule } from '@taiga-ui/kit';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -35,6 +38,7 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
     TuiRootModule,
     TuiDialogModule,
     TuiAlertModule,
+    TuiIslandModule,
     // My app
     Error404Module,
     LayoutModule,
@@ -43,6 +47,8 @@ import { TUI_VALIDATION_ERRORS, TuiInputModule } from '@taiga-ui/kit';
     ReservationModule,
     MarketingModule,
     TuiInputModule,
+    AnaliticModule,
+
   ],
   providers: [
     {

@@ -12,11 +12,17 @@ import { MarketingComponent } from './pages/marketing/marketing.component';
 import { NewsComponent } from './pages/marketing/news/news.component';
 import { EditNewsComponent } from './pages/marketing/news/edit-news/edit-news.component';
 
+import { AnaliticComponent } from './pages/analitics/analitic.component';
+
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
+      {
+        path: 'aboba', component: AnaliticComponent,
+        title: 'Аналитика Станций'
+      },
       {
         path: 'clients',
         loadChildren: () => import('./pages/clients/clients.module').then(m => m.ClientsModule),
@@ -43,6 +49,7 @@ const routes: Routes = [
         component: ReservationComponent,
         title: 'Запись на время',
       },
+
       {
         path: 'marketing',
         component: MarketingComponent,
@@ -61,6 +68,7 @@ const routes: Routes = [
             path: 'news',
             component: NewsComponent,
           },
+
         ],
       },
       {
@@ -104,6 +112,10 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./pages/auth-page/auth-page.module').then(m => m.AuthPageModule),
   },
+  {
+    path: 'aboba', component: AnaliticComponent
+  },
+
   { path: '**', component: Error404Component },
 ];
 

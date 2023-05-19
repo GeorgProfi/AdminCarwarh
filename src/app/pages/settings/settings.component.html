@@ -8,20 +8,18 @@
   <h3 class="tui-form__header">Логотип</h3>
   <img *ngIf="logoUrl" [src]="logoUrl" width="500" height="600" />
   <div class="tui-form__row">
-    <tui-input-files
-      *ngIf="!file.value"
-      accept="image/*"
-      [formControl]="file"
-      (reject)="onReject($event)"></tui-input-files>
+    <tui-input-files *ngIf="!file.value"
+                     accept="image/*"
+                     [formControl]="file"
+                     (reject)="onReject($event)"></tui-input-files>
 
     <tui-files class="tui-space_top-1">
       <tui-file *ngIf="loadedFiles$ | async as file" [file]="file" (removed)="onRemoveFile()"></tui-file>
 
-      <tui-file
-        *ngIf="rejectedFiles$ | async as file"
-        state="error"
-        [file]="file"
-        (removed)="onClearRejected()"></tui-file>
+      <tui-file *ngIf="rejectedFiles$ | async as file"
+                state="error"
+                [file]="file"
+                (removed)="onClearRejected()"></tui-file>
 
       <tui-file *ngIf="loadingFiles$ | async as file" state="loading" [file]="file"></tui-file>
     </tui-files>
@@ -29,4 +27,6 @@
   <div class="tui-form__buttons">
     <button tuiButton class="tui-form__button" type="submit" appearance="primary">Сохранить</button>
   </div>
+
+
 </form>

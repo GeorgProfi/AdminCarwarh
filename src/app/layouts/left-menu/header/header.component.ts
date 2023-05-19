@@ -38,6 +38,11 @@ export class HeaderComponent implements OnInit {
       icon: 'tuiIconUser',
       link: 'setting-profile',
     },
+    {
+      name: 'Аналитика',
+      icon: 'tuiIconBarChart2',
+      link: 'aboba',
+    },
   ];
 
   nameCompany!: string;
