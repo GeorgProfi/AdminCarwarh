@@ -1,4 +1,5 @@
 export interface ICard {
+  sum:number
   count: number
   data: Array<{
     name: string

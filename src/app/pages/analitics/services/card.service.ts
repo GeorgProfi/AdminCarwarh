@@ -12,13 +12,15 @@ export class CardService {
   constructor(private http: HttpClient) {
 
   }
-  GetAllCard(): Observable<ICard> {
+  GetAllCard(datafrom:string,datato:string): Observable<ICard> {
     
-    const body = JSON.stringify( { access: localStorage.getItem("access") })
+    const body = JSON.stringify({
+      access: localStorage.getItem("access"),
+      datastart: datafrom,
+      dataend:datato
+    })
     
     return this.http.post<ICard>('http://127.0.0.1:8000/analitics', body)
     }
-  
-  
 
 }

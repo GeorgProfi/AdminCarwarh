@@ -3,14 +3,14 @@
     "",
     "\\src",
     "\\src\\app",
-    "\\src\\app\\common",
-    "\\src\\app\\common\\services",
     "\\src\\app\\pages",
     "\\src\\app\\pages\\analitics",
-    "\\src\\app\\pages\\analitics\\data",
     "\\src\\app\\pages\\analitics\\models",
-    "\\src\\app\\pages\\analitics\\services"
+    "\\src\\app\\pages\\analitics\\services",
+    "\\src\\app\\pages\\reservation",
+    "\\src\\app\\pages\\reservation\\create-reservation",
+    "\\src\\app\\pages\\services"
   ],
-  "SelectedNode": "\\src\\app\\pages\\analitics\\models\\card.ts",
+  "SelectedNode": "\\src\\app\\pages\\analitics\\analitic.component.ts",
   "PreviewInSolutionExplorer": false
 }
