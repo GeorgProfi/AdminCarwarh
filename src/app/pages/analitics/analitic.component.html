@@ -81,14 +81,14 @@
     <div>
       <tui-axes axisY="none"
                 class="axes"
-                [axisXLabels]="axisXLabels"
+                [axisXLabels]="diagram.dates"
                 [axisYSecondaryLabels]="axisYSecondaryLabels"
                 [horizontalLines]="2"
                 [verticalLines]="4"
                 [horizontalLinesHandler]="horizontalLinesHandler"
                 [verticalLinesHandler]="verticalLinesHandler">
         <tui-bar-chart class="chart"
-                       [value]="value"
+                       [value]="[diagram.workload]"
                        [tuiHintContent]="hint"></tui-bar-chart>
       </tui-axes>
 

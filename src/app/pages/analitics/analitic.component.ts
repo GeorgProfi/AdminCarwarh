@@ -37,8 +37,6 @@ export class AnaliticComponent implements OnInit {
   TopClient$: Observable<ITopClients>;
   cards$: Observable<ICard>;
   diagram$: Observable<IDiagram>;
-
-
   //календарь 
   date: Date = new Date() ;
   readonly testForm = new FormGroup({
@@ -54,13 +52,11 @@ export class AnaliticComponent implements OnInit {
   readonly max = new TuiDay(2040, 2, 20);
   //
 
-  private readonly setNames = ['cdk', 'core', 'kit', 'charts'];
-
+  private readonly setNames = ['общий доход'];
+  
   readonly value: Array<Array<number>> = [
-    [ 7,20,1],
-    [15, 18, 1],
-    [34, 23, 12, 9],
-    [3, 23, 12, 9, 3, 23, 12, 9],
+
+    
 
   ];
 
@@ -70,7 +66,9 @@ export class AnaliticComponent implements OnInit {
     `${this.getMax(this.value)} k`,
   ];
 
-  readonly axisXLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
+  labels = []
+
+  readonly axisXLabels = this.labels;
 
   readonly horizontalLinesHandler = TUI_ALWAYS_DASHED;
 
