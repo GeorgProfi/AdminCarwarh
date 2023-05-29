@@ -37,6 +37,7 @@ export class AnaliticComponent implements OnInit {
   TopClient$: Observable<ITopClients>;
   cards$: Observable<ICard>;
   diagram$: Observable<IDiagram>;
+
   //календарь 
   date: Date = new Date() ;
   readonly testForm = new FormGroup({
@@ -56,7 +57,7 @@ export class AnaliticComponent implements OnInit {
   
   readonly value: Array<Array<number>> = [
 
-    
+     this.diagram$.
 
   ];
 
@@ -117,6 +118,7 @@ export class AnaliticComponent implements OnInit {
       this.cards$ = this.cardService.GetAllCard(datafrom, datato);
       this.TopClient$ = this.topclientService.GetTopClient(datafrom, datato);
       this.diagram$ = this.diagramService.GetAllDays(datafrom, datato);
+      
     }
     
 
