@@ -12,7 +12,7 @@ export class DiagramService {
   constructor(private http: HttpClient) {
 
   }
-  GetAllDays(datafrom: string, datato: string): Observable<IDiagram> {
+GetAllDays(datafrom: string, datato: string): Observable<IDiagram> {
 
     const body = JSON.stringify({
       access: localStorage.getItem("access"),

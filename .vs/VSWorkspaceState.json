@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\pages",
+    "\\src\\app\\pages\\analitics",
+    "\\src\\app\\pages\\analitics\\models",
+    "\\src\\app\\pages\\analitics\\services",
+    "\\src\\app\\pages\\reservation",
+    "\\src\\app\\pages\\reservation\\create-reservation",
+    "\\src\\app\\pages\\services"
   ],
-  "SelectedNode": "\\C:\\Users\\georg\\Source\\Repos\\carwash-front",
+  "SelectedNode": "\\src\\main.ts",
   "PreviewInSolutionExplorer": false
 }

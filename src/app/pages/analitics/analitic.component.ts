@@ -21,6 +21,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import {TUI_ALWAYS_DASHED, TUI_ALWAYS_NONE} from '@taiga-ui/addon-charts';
 import {tuiCeil, tuiPure} from '@taiga-ui/cdk';
+import { dA } from '@fullcalendar/core/internal-common';
 
 	const BENJI = 100;
 
@@ -52,64 +53,64 @@ export class AnaliticComponent implements OnInit {
   readonly min = new TuiDay(2000, 2, 20);
   readonly max = new TuiDay(2040, 2, 20);
   //
-
-  private readonly setNames = ['общий доход'];
   
-  readonly value: Array<Array<number>> = [
-
-     this.diagram$.
-
-  ];
-
-  readonly axisYSecondaryLabels = [
-    '',
-    `${this.getMax(this.value) / 2} k`,
-    `${this.getMax(this.value)} k`,
-  ];
-
-  labels = []
-
-  readonly axisXLabels = this.labels;
-
-  readonly horizontalLinesHandler = TUI_ALWAYS_DASHED;
-
-  readonly verticalLinesHandler = TUI_ALWAYS_NONE;
-
-  getPercent(set: [number, number, number, number]): number {
-    return (BENJI * Math.max(...set)) / this.getMax(this.value);
-  }
-
-  getSetName(index: number): string {
-    return this.setNames[index];
-  }
-
-  getBackground(index: number): string {
-    return `var(--tui-chart-${index})`;
-  }
-
-  @tuiPure
-  private getMax(value: Array<Array<number>>): number {
-    return tuiCeil(
-      value.reduce((max, value) => Math.max(...value, max), 0),
-      -1,
-    );
-  }
+  
+  private readonly setNames = ['посетителей'];
+  abobd :Array<number> = [1]
+   value: Array<Array<number>> = [
+    this.abobd
+    ];
+ 
+    readonly axisYSecondaryLabels = [
+        '',
+        `${this.getMax([this.abobd]) / 2} k`,
+      `${this.getMax([this.abobd])} k`,
+    ];
+ 
+   axisXLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
+ 
+    readonly horizontalLinesHandler = TUI_ALWAYS_DASHED;
+ 
+    readonly verticalLinesHandler = TUI_ALWAYS_NONE;
+ 
+    getPercent(set: [number, number, number, number]): number {
+        return (BENJI * Math.max(...set)) / this.getMax(this.value);
+    }
+ 
+    getSetName(index: number): string {
+        return this.setNames[index];
+    }
+ 
+    getBackground(index: number): string {
+        return `var(--tui-chart-${index})`;
+    }
+ 
+    @tuiPure
+    private getMax(value: Array<Array<number>>): number {
+        return tuiCeil(
+            value.reduce((max, value) => Math.max(...value, max), 0),
+            -1,
+        );
+    }
+  
 
   constructor(private topclientService: TopClientService,
               private cardService: CardService,
-              private diagramService: DiagramService,) { }
-
-
-  ngOnInit(): void {
+    private diagramService: DiagramService,) {
+    this.viewAnalitic
     
+  }
+
+
+ngOnInit():void {
+  
     console.log(this.date)
     this.viewAnalitic();
     
-
-
+    //console.log(this.value)
+    
   }
-   
-  viewAnalitic( ): void {
+ viewAnalitic( ): void {
 
     var datafrom = this.testForm.value.testValue?.from.toLocalNativeDate().toISOString().toString()
     var datato = this.testForm.value.testValue?.to.toLocalNativeDate().toISOString().toString()
@@ -118,11 +119,29 @@ export class AnaliticComponent implements OnInit {
       this.cards$ = this.cardService.GetAllCard(datafrom, datato);
       this.TopClient$ = this.topclientService.GetTopClient(datafrom, datato);
       this.diagram$ = this.diagramService.GetAllDays(datafrom, datato);
+      this.diagram$.subscribe(data => {
+        this.value = [data.workload];
+        this.axisXLabels = data.dates
+      })
       
+
+      console.log(this.diagram$)
+      console.log(this.value)
     }
     
 
 
   }
+  getvalues(): Array<number> {
+    var datafrom = this.testForm.value.testValue?.from.toLocalNativeDate().toISOString().toString()
+    var datato = this.testForm.value.testValue?.to.toLocalNativeDate().toISOString().toString()
+    if (datafrom != undefined && datato != undefined) {
+      this.diagram$ = this.diagramService.GetAllDays(datafrom, datato);
+    }
+    var values: Array<number> = [] ;
+    this.diagram$.subscribe(data => values = data.workload)
+    return (values)
+  }
 
 }
+

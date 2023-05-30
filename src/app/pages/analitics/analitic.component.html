@@ -74,21 +74,21 @@
       </table>
     </div>
   </div>
+  
 
 
-  <div *ngIf="diagram$ | async as diagram">
 
     <div>
       <tui-axes axisY="none"
                 class="axes"
-                [axisXLabels]="diagram.dates"
+                [axisXLabels]="axisXLabels"
                 [axisYSecondaryLabels]="axisYSecondaryLabels"
                 [horizontalLines]="2"
                 [verticalLines]="4"
                 [horizontalLinesHandler]="horizontalLinesHandler"
                 [verticalLinesHandler]="verticalLinesHandler">
         <tui-bar-chart class="chart"
-                       [value]="[diagram.workload]"
+                       [value]="value"
                        [tuiHintContent]="hint"></tui-bar-chart>
       </tui-axes>
 
@@ -99,13 +99,14 @@
           <span class="dot"
                 [style.background]="getBackground(index)"></span>
           <span class="name">{{ getSetName(index) }}</span>
-          <tui-money [singleColor]="true"
-                     [value]="item[setIndex] * 1000"></tui-money>
+          <tui-money [currency]="null"
+                     [singleColor]="true"
+                     [value]="item[setIndex]"></tui-money>
         </p>
       </ng-template>
 
     </div>
-    </div>
+
   </div>
 
 
