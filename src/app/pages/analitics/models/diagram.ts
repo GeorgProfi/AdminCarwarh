@@ -1,7 +1,7 @@
 export interface IDiagram {
-  count: number
+  stationList: Array<string>
   dates: Array<string>
-  workload: Array<number>
+  values: Array<Array<number>>
     
   
 }

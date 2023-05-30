@@ -55,16 +55,15 @@ export class AnaliticComponent implements OnInit {
   //
   
   
-  private readonly setNames = ['посетителей'];
-  abobd :Array<number> = [1]
-   value: Array<Array<number>> = [
-    this.abobd
-    ];
+   setNames = ['посетителей'];
+  abobd: Array<Array<number>> = [[1]]
+   value: Array<Array<number>> = 
+    this.abobd;
  
     readonly axisYSecondaryLabels = [
         '',
-        `${this.getMax([this.abobd]) / 2} k`,
-      `${this.getMax([this.abobd])} k`,
+        `${this.getMax(this.abobd) / 2} k`,
+      `${this.getMax(this.abobd)} k`,
     ];
  
    axisXLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
@@ -120,8 +119,9 @@ ngOnInit():void {
       this.TopClient$ = this.topclientService.GetTopClient(datafrom, datato);
       this.diagram$ = this.diagramService.GetAllDays(datafrom, datato);
       this.diagram$.subscribe(data => {
-        this.value = [data.workload];
-        this.axisXLabels = data.dates
+        this.value = data.values;
+        this.axisXLabels = data.dates;
+        this.setNames = data.stationList
       })
       
 
@@ -132,15 +132,15 @@ ngOnInit():void {
 
 
   }
-  getvalues(): Array<number> {
+  getvalues(): Array<Array<number>> {
     var datafrom = this.testForm.value.testValue?.from.toLocalNativeDate().toISOString().toString()
     var datato = this.testForm.value.testValue?.to.toLocalNativeDate().toISOString().toString()
     if (datafrom != undefined && datato != undefined) {
       this.diagram$ = this.diagramService.GetAllDays(datafrom, datato);
     }
-    var values: Array<number> = [] ;
-    this.diagram$.subscribe(data => values = data.workload)
-    return (values)
+    var valuess: Array<Array<number>> = [] ;
+    this.diagram$.subscribe(data => valuess = data.values)
+    return (valuess)
   }
 
 }
