@@ -6,7 +6,7 @@
                         formControlName="testValue"
                         [min]="min"
                         [max]="max"
-                        (focusedChange) ="viewAnalitic()">
+                        (focusedChange)="viewAnalitic()">
     Выберете период
     <input tuiTextfield
            placeholder="From - To" />
@@ -74,36 +74,70 @@
       </table>
     </div>
   </div>
-  
+
+  <p class="tui-text_h5"> Загруженость станций</p>
 
 
 
- 
-      <tui-axes axisY="none"
-                class="axes"
-                [axisXLabels]="axisXLabels"
-                [axisYSecondaryLabels]="axisYSecondaryLabels"
-                [horizontalLines]="2"
-                [verticalLines]="4"
-                [horizontalLinesHandler]="horizontalLinesHandler"
-                [verticalLinesHandler]="verticalLinesHandler">
-        <tui-bar-chart class="chart"
-                       [value]="value"
-                       [tuiHintContent]="hint"></tui-bar-chart>
-      </tui-axes>
+  <tui-axes axisY="none"
+            class="axes"
+            [axisXLabels]="axisXLabels"
+            [axisYSecondaryLabels]="axisYSecondaryLabels"
+            [horizontalLines]="2"
+            [verticalLines]="4"
+            [horizontalLinesHandler]="horizontalLinesHandler"
+            [verticalLinesHandler]="verticalLinesHandler">
+    <tui-bar-chart class="chart"
+                   [value]="value"
+                   [tuiHintContent]="hint"></tui-bar-chart>
+  </tui-axes>
 
-      <ng-template #hint
-                   let-setIndex>
-        <p *ngFor="let item of value; let index = index"
-           class="hint">
-          <span class="dot"
-                [style.background]="getBackground(index)"></span>
-          <span class="name">{{ getSetName(index) }}</span>
-          <tui-money [currency]="null"
-                     [singleColor]="true"
-                     [value]="item[setIndex]"></tui-money>
-        </p>
-      </ng-template>
+  <ng-template #hint
+               let-setIndex>
+    <p *ngFor="let item of value; let index = index"
+       class="hint">
+      <span class="dot"
+            [style.background]="getBackground(index)"></span>
+      <span class="name">{{ getSetName(index) }}</span>
+      <tui-money [currency]="null"
+                 [singleColor]="true"
+                 [value]="item[setIndex]"></tui-money>
+    </p>
+  </ng-template>
+
+
+
+
+  <p class="tui-text_h5"> Доход станций</p>
+
+
+
+  <tui-axes axisY="none"
+            class="axes"
+            [axisXLabels]="axisXLabels"
+            [axisYSecondaryLabels]="axisYSecondaryLabelsSecond"
+            [horizontalLines]="2"
+            [verticalLines]="4"
+            [horizontalLinesHandler]="horizontalLinesHandler"
+            [verticalLinesHandler]="verticalLinesHandler">
+    <tui-bar-chart class="chart"
+                   [value]="dailyIncome"
+                   [tuiHintContent]="hinti"></tui-bar-chart>
+  </tui-axes>
+   
+  <ng-template #hinti
+               let-asetIndex>
+    <p *ngFor="let i of dailyIncome; let indexx = index"
+       class="hint">
+      <span class="dot"
+            [style.background]="getBackground(indexx)"></span>
+      <span class="name">{{ getSetName(indexx) }}</span>
+      <tui-money 
+                 [singleColor]="true"
+                 [value]="i[asetIndex]"></tui-money>
+    </p>
+  </ng-template>
+
 
     </div>
 

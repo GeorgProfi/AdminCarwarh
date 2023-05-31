@@ -57,15 +57,22 @@ export class AnaliticComponent implements OnInit {
   
    setNames = ['посетителей'];
   abobd: Array<Array<number>> = [[1]]
-   value: Array<Array<number>> = 
-    this.abobd;
+  value: Array<Array<number>> = this.abobd;
+
+  dailyIncome: Array<Array<number>>;
  
-    readonly axisYSecondaryLabels = [
+    axisYSecondaryLabels = [ //for first axes
         '',
-        `${this.getMax(this.abobd) / 2} k`,
-      `${this.getMax(this.abobd)} k`,
+        `${2 / 2} k`,
+      `${2} k`,
     ];
- 
+
+
+  axisYSecondaryLabelsSecond = [ //for second axes
+    '',
+    `${2 / 2} k`,
+    `${2} k`,
+  ];
    axisXLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
  
     readonly horizontalLinesHandler = TUI_ALWAYS_DASHED;
@@ -73,24 +80,20 @@ export class AnaliticComponent implements OnInit {
     readonly verticalLinesHandler = TUI_ALWAYS_NONE;
  
     getPercent(set: [number, number, number, number]): number {
-        return (BENJI * Math.max(...set)) / this.getMax(this.value);
+        return (BENJI * Math.max(...set)) ;
     }
  
     getSetName(index: number): string {
         return this.setNames[index];
     }
- 
+
+
+
     getBackground(index: number): string {
         return `var(--tui-chart-${index})`;
     }
  
-    @tuiPure
-    private getMax(value: Array<Array<number>>): number {
-        return tuiCeil(
-            value.reduce((max, value) => Math.max(...value, max), 0),
-            -1,
-        );
-    }
+   
   
 
   constructor(private topclientService: TopClientService,
@@ -119,9 +122,25 @@ ngOnInit():void {
       this.TopClient$ = this.topclientService.GetTopClient(datafrom, datato);
       this.diagram$ = this.diagramService.GetAllDays(datafrom, datato);
       this.diagram$.subscribe(data => {
-        this.value = data.values;
+        // общие для 2 графиков данные
         this.axisXLabels = data.dates;
         this.setNames = data.stationList
+        // для первого
+        this.value = data.values;
+        this.axisYSecondaryLabels = [
+          '',
+          `${data.maxEl / 2}`,
+          `${data.maxEl}`,
+        ];
+        // для второго 
+        this.dailyIncome = data.dailyIncomes;
+        this.axisYSecondaryLabelsSecond = [
+          '',
+          `${data.maxIncome / 2} ₽`,
+          `${data.maxIncome} ₽`,
+        ];
+
+
       })
       
 
